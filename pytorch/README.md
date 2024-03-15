@@ -187,6 +187,8 @@ $ pip install -r requirements.txt
 
 Download from [Google Drive](https://drive.google.com/drive/folders/1ZEQHc4FLFHK204UJ1iABQVrjQOFmx_gX?usp=sharing) or [Baidu Wangpan](https://pan.baidu.com/s/1U4qzEu-Ijl8hkSCLTr-agA) <- code: m8g4. Each sub-folder is named as 'bat_N_s_64x64x32', where *N* denotes the number of cubes extracted from each patient. You may select the scale of training samples accordingly based on your resources in hand: larger *N* demands longer learning time and more powerful GPUs/CPUs, while may (or may not) result in a more generic visual representation. We have adopted *N*=32 in our MICCAI paper. 
 
+Note: the link does not work and Baidu forces me to download their app. Check out https://github.com/nauyan/Luna16 for the download/extract script because download directly from LUNA16 was a pain 🥖.
+
 - The processed cubes directory structure
 ```
 generated_cubes/
