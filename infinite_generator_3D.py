@@ -18,21 +18,14 @@ done
 import warnings
 warnings.filterwarnings('ignore')
 import os
-import keras
-print("Keras = {}".format(keras.__version__))
-import tensorflow as tf
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 
 import sys
-import math
 import random
 
-import matplotlib.pyplot as plt
 import numpy as np
 import SimpleITK as sitk
 
 from tqdm import tqdm
-from sklearn import metrics
 from optparse import OptionParser
 from glob import glob
 from skimage.transform import resize
