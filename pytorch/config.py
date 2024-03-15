@@ -7,7 +7,7 @@ class models_genesis_config:
     exp_name = model + "-" + suffix
     
     # data
-    data = "/mnt/dataset/shared/zongwei/LUNA16/Self_Learning_Cubes"
+    data = "/storage_bizon/bizon_imagedata/naravich/LUNA16/Self_Learning_Cubes"
     train_fold=[0,1,2,3,4]
     valid_fold=[5,6]
     test_fold=[7,8,9]
