@@ -21,9 +21,11 @@ import os
 
 import sys
 import random
+from pathlib import Path
 
 import numpy as np
 import SimpleITK as sitk
+import cv2 as cv
 
 from tqdm import tqdm
 from optparse import OptionParser
@@ -34,7 +36,7 @@ sys.setrecursionlimit(40000)
 
 parser = OptionParser()
 
-parser.add_option("--fold", dest="fold", help="fold of subset", default=None, type="int")
+parser.add_option("--fold", dest="fold", help="fold of subset", default=None)
 parser.add_option("--input_rows", dest="input_rows", help="input rows", default=64, type="int")
 parser.add_option("--input_cols", dest="input_cols", help="input cols", default=64, type="int")
 parser.add_option("--input_deps", dest="input_deps", help="input deps", default=32, type="int")
@@ -51,7 +53,7 @@ random.seed(seed)
 
 assert options.data is not None
 assert options.save is not None
-assert options.fold >= 0 and options.fold <= 9
+# assert options.fold >= 0 and options.fold <= 9
 
 if not os.path.exists(options.save):
     os.makedirs(options.save)
@@ -74,7 +76,7 @@ class setup_config():
                  valid_fold=[5,6],
                  test_fold=[7,8,9],
                  len_depth=None,
-                 lung_min=0.7,
+                 OCT_threshold=0.7,
                  lung_max=1.0,
                 ):
         self.input_rows = input_rows
@@ -90,7 +92,7 @@ class setup_config():
         self.valid_fold = valid_fold
         self.test_fold = test_fold
         self.len_depth = len_depth
-        self.lung_min = lung_min
+        self.OCT_threshold = OCT_threshold
         self.lung_max = lung_max
 
     def display(self):
@@ -109,10 +111,10 @@ config = setup_config(input_rows=options.input_rows,
                       crop_rows=options.crop_rows,
                       crop_cols=options.crop_cols,
                       scale=options.scale,
-                      len_border=100,
-                      len_border_z=30,
-                      len_depth=3,
-                      lung_min=0.7,
+                      len_border=10,
+                      len_border_z=10,
+                      len_depth=0,
+                      OCT_threshold=0.10,
                       lung_max=0.15,
                       DATA_DIR=options.data,
                      )
@@ -181,35 +183,89 @@ def infinite_generator_from_one_volume(config, img_array):
             
     return np.array(slice_set)
 
+def infinite_OCT_generator_from_one_volume(config, img_array):
+    size_x, size_y, size_z = img_array.shape
+    if size_z-config.input_deps-config.len_depth-1-config.len_border_z < config.len_border_z:
+        return None
 
-def get_self_learning_data(fold, config):
-    slice_set = []
-    for index_subset in fold:
-        luna_subset_path = os.path.join(config.DATA_DIR, "subset"+str(index_subset))
-        file_list = glob(os.path.join(luna_subset_path, "*.mhd"))
+    slice_set = np.zeros((config.scale, config.input_rows, config.input_cols, config.input_deps), dtype=float)
+
+    num_pair = 0
+    cnt = 0
+    while True:
+        cnt += 1
+        if cnt > 50 * config.scale and num_pair == 0:
+            return None
+        elif cnt > 50 * config.scale and num_pair > 0:
+            return np.array(slice_set[:num_pair])
+
+        start_x = random.randint(0+config.len_border, size_x-config.crop_rows-1-config.len_border)
+        start_y = random.randint(0+config.len_border, size_y-config.crop_cols-1-config.len_border)
+        start_z = random.randint(0+config.len_border_z, size_z-config.input_deps-1-config.len_border_z)
         
-        for img_file in tqdm(file_list):
-            
-            itk_img = sitk.ReadImage(img_file) 
-            img_array = sitk.GetArrayFromImage(itk_img)
-            img_array = img_array.transpose(2, 1, 0)
-            
-            x = infinite_generator_from_one_volume(config, img_array)
-            if x is not None:
-                slice_set.extend(x)
+        crop_window = img_array[start_x : start_x+config.crop_rows,
+                                start_y : start_y+config.crop_cols,
+                                start_z : start_z+config.input_deps,
+                               ]
+        if config.crop_rows != config.input_rows or config.crop_cols != config.input_cols:
+            crop_window = resize(crop_window, 
+                                 (config.input_rows, config.input_cols, config.input_deps), 
+                                 preserve_range=True,
+                                )
+        
+        # If the sum of the intensity is too low, then skip this cube
+        if np.sum(crop_window) < config.OCT_threshold * config.input_rows * config.input_cols * config.input_deps:
+            continue
+
+        slice_set[num_pair] = crop_window
+        
+        num_pair += 1
+        if num_pair == config.scale:
+            break
             
     return np.array(slice_set)
 
 
+def get_self_learning_data_OCT(fold, config):
+    """Load our OCT data and return the 3D cubes.
+
+    Args:
+        fold (List(str)): A fold is a list of the patient ID in our case.
+        config (setup_config): The configuration of the generator.
+
+    Returns:
+        np.array: The 3D cubes of the OCT data (N, H, W, D)
+    """
+    folder = Path(config.DATA_DIR) # '/storage_bizon/bizon_imagedata/naravich/longitudinal_view/'
+
+    slice_set = []
+    for index_subset in fold:
+        patient = f'{index_subset}-Pre-MEASREV'
+        oct_path = folder / patient
+        print(oct_path)
+        img_array = []
+        for img_file in tqdm(sorted(oct_path.glob('*.png'))):
+            image_slice = cv.imread(str(img_file), cv.IMREAD_GRAYSCALE)
+            img_array.append(image_slice)
+        img_array = np.stack(img_array, axis=0)
+        img_array = img_array.transpose(2, 1, 0)
+        img_array = img_array / 255.0
+        x = infinite_OCT_generator_from_one_volume(config, img_array)
+        if x is not None:
+            slice_set.extend(x)
+
+    return np.array(slice_set)
+
+
 print(">> Fold {}".format(fold))
-cube = get_self_learning_data([fold], config)
+cube = get_self_learning_data_OCT([fold], config)
 print("cube: {} | {:.2f} ~ {:.2f}".format(cube.shape, np.min(cube), np.max(cube)))
-np.save(os.path.join(options.save, 
+np.savez(os.path.join(options.save, 
                      "bat_"+str(config.scale)+
-                     "_s_"+
+                     "_s"+
                      "_"+str(config.input_rows)+
                      "x"+str(config.input_cols)+
                      "x"+str(config.input_deps)+
-                     "_"+str(fold)+".npy"), 
+                     "_"+str(fold)+".npz"), 
         cube,
        )
