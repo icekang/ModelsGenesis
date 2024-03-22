@@ -13,6 +13,7 @@ from utils import *
 import unet3d
 from config import models_genesis_config
 from tqdm import tqdm
+import wandb
 
 print("torch = {}".format(torch.__version__))
 
@@ -84,6 +85,12 @@ if conf.weights != None:
 	print("Loading weights from ",conf.weights)
 sys.stdout.flush()
 
+wandb.init(
+	project=conf.wandb_project_name,
+	name=conf.wandb_run_name,
+	config=conf,
+	dir=conf.logs_path
+)
 
 for epoch in range(intial_epoch,conf.nb_epoch):
 	scheduler.step(epoch)
@@ -122,6 +129,11 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 	avg_train_losses.append(train_loss)
 	avg_valid_losses.append(valid_loss)
 	print("Epoch {}, validation loss is {:.4f}, training loss is {:.4f}".format(epoch+1,valid_loss,train_loss))
+	wandb.log({
+		"train/loss": train_loss,
+		"valid/loss": valid_loss,
+	}, step=epoch)
+
 	train_losses=[]
 	valid_losses=[]
 	if valid_loss < best_loss:

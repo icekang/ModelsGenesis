@@ -7,10 +7,10 @@ class models_genesis_config:
     exp_name = model + "-" + suffix
     
     # data
-    data = "/storage_bizon/bizon_imagedata/naravich/LUNA16/Self_Learning_Cubes"
-    train_fold=[0,1,2,3,4]
-    valid_fold=[5,6]
-    test_fold=[7,8,9]
+    data = "generated_cubes"
+    train_fold=["02-005"]
+    valid_fold=["02-005"]
+    test_fold=["02-005"]
     hu_min = -1000.0
     hu_max = 1000.0
     scale = 32
@@ -47,6 +47,9 @@ class models_genesis_config:
     if not os.path.exists(logs_path):
         os.makedirs(logs_path)
     
+    # wandb
+    wandb_project_name = "Genesis_Project"
+    wandb_run_name = None
     def display(self):
         """Display Configuration values."""
         print("\nConfigurations:")
