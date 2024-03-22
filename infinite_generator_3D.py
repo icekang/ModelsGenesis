@@ -240,19 +240,19 @@ def get_self_learning_data_OCT(fold, config):
 
     slice_set = []
     for index_subset in fold:
-        patient = f'{index_subset}-Pre-MEASREV'
-        oct_path = folder / patient
-        print(oct_path)
-        img_array = []
-        for img_file in tqdm(sorted(oct_path.glob('*.png'))):
-            image_slice = cv.imread(str(img_file), cv.IMREAD_GRAYSCALE)
-            img_array.append(image_slice)
-        img_array = np.stack(img_array, axis=0)
-        img_array = img_array.transpose(2, 1, 0)
-        img_array = img_array / 255.0
-        x = infinite_OCT_generator_from_one_volume(config, img_array)
-        if x is not None:
-            slice_set.extend(x)
+        patient_modalities = folder.glob(f'{index_subset}*')
+        for oct_path in patient_modalities:
+            print(oct_path)
+            img_array = []
+            for img_file in tqdm(sorted(oct_path.glob('*.png'))):
+                image_slice = cv.imread(str(img_file), cv.IMREAD_GRAYSCALE)
+                img_array.append(image_slice)
+            img_array = np.stack(img_array, axis=0)
+            img_array = img_array.transpose(2, 1, 0)
+            img_array = img_array / 255.0
+            x = infinite_OCT_generator_from_one_volume(config, img_array)
+            if x is not None:
+                slice_set.extend(x)
 
     return np.array(slice_set)
 
@@ -260,12 +260,12 @@ def get_self_learning_data_OCT(fold, config):
 print(">> Fold {}".format(fold))
 cube = get_self_learning_data_OCT([fold], config)
 print("cube: {} | {:.2f} ~ {:.2f}".format(cube.shape, np.min(cube), np.max(cube)))
-np.savez(os.path.join(options.save, 
-                     "bat_"+str(config.scale)+
-                     "_s"+
-                     "_"+str(config.input_rows)+
-                     "x"+str(config.input_cols)+
-                     "x"+str(config.input_deps)+
-                     "_"+str(fold)+".npz"), 
-        cube,
-       )
+# np.savez(os.path.join(options.save, 
+#                      "bat_"+str(config.scale)+
+#                      "_s"+
+#                      "_"+str(config.input_rows)+
+#                      "x"+str(config.input_cols)+
+#                      "x"+str(config.input_deps)+
+#                      "_"+str(fold)+".npz"), 
+#         cube,
+#        )
