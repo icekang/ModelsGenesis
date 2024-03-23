@@ -8,10 +8,17 @@ import imageio
 import string
 import numpy as np
 from skimage.transform import resize
+import torch
 try:  # SciPy >= 0.19
     from scipy.special import comb
 except ImportError:
     from scipy.misc import comb
+
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    torch.manual_seed(seed)
 
 def bernstein_poly(i, n, t):
     """

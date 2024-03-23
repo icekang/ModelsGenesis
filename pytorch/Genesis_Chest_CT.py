@@ -19,9 +19,13 @@ print("torch = {}".format(torch.__version__))
 
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-
 conf = models_genesis_config()
+
+if conf.wandb_run_id == None:
+	conf.wandb_run_id = wandb.util.generate_id()
+
 conf.display()
+set_seed(conf.seed)
 
 x_train = []
 for i,fold in enumerate(tqdm(conf.train_fold)):
