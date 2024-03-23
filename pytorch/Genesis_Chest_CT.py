@@ -181,9 +181,10 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 	avg_valid_losses.append(valid_loss)
 	print("Epoch {}, validation loss is {:.4f}, training loss is {:.4f}".format(epoch+1,valid_loss,train_loss))
 	wandb.log({
-		"train/loss": train_loss,
-		"valid/loss": valid_loss,
+		"train/epoch_loss": train_loss,
+		"valid/epoch_loss": valid_loss,
 	}, step=epoch)
+
 
 	train_losses=[]
 	valid_losses=[]
