@@ -260,12 +260,12 @@ def get_self_learning_data_OCT(fold, config):
 print(">> Fold {}".format(fold))
 cube = get_self_learning_data_OCT([fold], config)
 print("cube: {} | {:.2f} ~ {:.2f}".format(cube.shape, np.min(cube), np.max(cube)))
-# np.savez(os.path.join(options.save, 
-#                      "bat_"+str(config.scale)+
-#                      "_s"+
-#                      "_"+str(config.input_rows)+
-#                      "x"+str(config.input_cols)+
-#                      "x"+str(config.input_deps)+
-#                      "_"+str(fold)+".npz"), 
-#         cube,
-#        )
+np.save(os.path.join(options.save, 
+                     "bat_"+str(config.scale)+
+                     "_s"+
+                     "_"+str(config.input_rows)+
+                     "x"+str(config.input_cols)+
+                     "x"+str(config.input_deps)+
+                     "_"+str(fold)+".npy"), 
+        cube,
+       )
