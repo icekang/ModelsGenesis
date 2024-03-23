@@ -196,7 +196,9 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 		torch.save({
 			'epoch': epoch+1,
 			'state_dict' : model.state_dict(),
-			'optimizer_state_dict': optimizer.state_dict()
+			'optimizer_state_dict': optimizer.state_dict(),
+			'best_loss': best_loss,
+			'worst_loss': worst_loss,
 		},os.path.join(conf.model_path, "Genesis_Chest_CT.pt"))
 		print("Saving model ",os.path.join(conf.model_path,"Genesis_Chest_CT.pt"))
 	else:
