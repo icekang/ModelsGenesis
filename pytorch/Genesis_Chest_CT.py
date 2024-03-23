@@ -77,6 +77,7 @@ avg_train_losses = []
 # to track the average validation loss per epoch as the model trains
 avg_valid_losses = []
 best_loss = 100000
+worst_loss = -100000
 intial_epoch =0
 num_epoch_no_improvement = 0
 sys.stdout.flush()
@@ -117,6 +118,7 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 	with torch.no_grad():
 		model.eval()
 		print("validating....")
+		should_save_visual_logs = epoch % 10 == 0
 		for i in range(int(x_valid.shape[0]//conf.batch_size)):
 			x,y = next(validation_generator)
 			y = np.repeat(y,conf.nb_class,axis=1)
@@ -126,6 +128,47 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 			pred=model(image)
 			loss = criterion(pred,gt)
 			valid_losses.append(loss.item())
+
+			if should_save_visual_logs == 0:
+				import matplotlib.pyplot as plt
+				import torchio as tio
+
+				# Save the best/worst validation 
+				if loss.item() > worst_loss:
+					worst_loss = loss.item()
+					worst_pred = pred.cpu()[0]
+					worst_gt = torch.from_numpy(y[0])
+					worst_image = torch.from_numpy(x[0])
+				if loss.item() < best_loss:
+					best_loss = loss.item()
+					best_pred = pred.cpu()[0]
+					best_gt = torch.from_numpy(y[0])
+					best_image = torch.from_numpy(x[0])
+				
+				worst_sample = tio.Subject(
+					image=tio.ScalarImage(tensor=worst_image),
+					prediction=tio.ScalarImage(tensor=worst_pred),
+					target=tio.ScalarImage(tensor=worst_gt),
+				)
+				best_sample = tio.Subject(
+					image=tio.ScalarImage(tensor=best_image),
+					prediction=tio.ScalarImage(tensor=best_pred),
+					target=tio.ScalarImage(tensor=best_gt),
+				)
+				worst_sample.plot()
+				plt.title("Worst Sample Loss {:.4f}".format(worst_loss))
+				plt.savefig("worst_sample.png")
+				plt.close()
+				best_sample.plot()
+				plt.title("Best Sample Loss {:.4f}".format(best_loss))
+				plt.savefig("best_sample.png")
+				plt.close()
+				wandb.log({
+					"valid/worst_loss": worst_loss,
+					"valid/worst_sample": [wandb.Image(plt.imread("worst_sample.png"))],
+					"valid/best_loss": best_loss,
+					"valid/best_sample": [wandb.Image(plt.imread("best_sample.png"))],
+				}, step=epoch)
 	
 	#logging
 	train_loss=np.average(train_losses)
