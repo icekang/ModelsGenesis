@@ -93,7 +93,7 @@ sys.stdout.flush()
 wandb.init(
 	project=conf.wandb_project_name,
 	name=conf.wandb_run_name,
-	config=conf,
+	config=conf.to_dict(),
 	dir=conf.logs_path
 )
 
