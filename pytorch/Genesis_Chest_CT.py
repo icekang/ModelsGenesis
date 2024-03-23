@@ -111,9 +111,13 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 		optimizer.step()
 		train_losses.append(round(loss.item(), 2))
 		if (iteration + 1) % 5 ==0:
+			iteration_train_loss = np.average(train_losses)
 			print('Epoch [{}/{}], iteration {}, Loss: {:.6f}'
-				.format(epoch + 1, conf.nb_epoch, iteration + 1, np.average(train_losses)))
+				.format(epoch + 1, conf.nb_epoch, iteration + 1, iteration_train_loss))
 			sys.stdout.flush()
+			wandb.log({
+				"train/loss": iteration_train_loss,
+			})
 
 	with torch.no_grad():
 		model.eval()
