@@ -76,8 +76,8 @@ valid_losses = []
 avg_train_losses = []
 # to track the average validation loss per epoch as the model trains
 avg_valid_losses = []
-best_loss = 100000
-worst_loss = -100000
+best_epoch_loss = 100000
+
 intial_epoch =0
 num_epoch_no_improvement = 0
 sys.stdout.flush()
@@ -134,9 +134,10 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 			valid_losses.append(loss.item())
 
 			if should_save_visual_logs == 0:
-				import matplotlib.pyplot as plt
-				import torchio as tio
-
+				# Save the best/worst validation of the epoch
+				# Initialize every validation
+				best_loss = 100000
+				worst_loss = -100000
 				# Save the best/worst validation 
 				if loss.item() > worst_loss:
 					worst_loss = loss.item()
@@ -148,32 +149,43 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 					best_pred = pred.cpu()[0]
 					best_gt = torch.from_numpy(y[0])
 					best_image = torch.from_numpy(x[0])
-				
-				worst_sample = tio.Subject(
-					image=tio.ScalarImage(tensor=worst_image),
-					prediction=tio.ScalarImage(tensor=worst_pred),
-					target=tio.ScalarImage(tensor=worst_gt),
-				)
-				best_sample = tio.Subject(
-					image=tio.ScalarImage(tensor=best_image),
-					prediction=tio.ScalarImage(tensor=best_pred),
-					target=tio.ScalarImage(tensor=best_gt),
-				)
+		if should_save_visual_logs == 0:
+			import matplotlib.pyplot as plt
+			import torchio as tio
+			worst_sample = tio.Subject(
+				image=tio.ScalarImage(tensor=worst_image),
+				prediction=tio.ScalarImage(tensor=worst_pred),
+				target=tio.ScalarImage(tensor=worst_gt),
+			)
+			best_sample = tio.Subject(
+				image=tio.ScalarImage(tensor=best_image),
+				prediction=tio.ScalarImage(tensor=best_pred),
+				target=tio.ScalarImage(tensor=best_gt),
+			)
+			
+			try:
 				worst_sample.plot()
 				plt.title("Worst Sample Loss {:.4f}".format(worst_loss))
 				plt.savefig("worst_sample.png")
 				plt.close()
+			except np.linalg.LinAlgError:
+				print("Error plotting worst sample")
+				np.save(f"worst_sample_error_{wandb.util.generate_id()}.npy", worst_sample)
+			try:
 				best_sample.plot()
 				plt.title("Best Sample Loss {:.4f}".format(best_loss))
 				plt.savefig("best_sample.png")
 				plt.close()
-				wandb.log({
-					"valid/worst_loss": worst_loss,
-					"valid/worst_sample": [wandb.Image(plt.imread("worst_sample.png"))],
-					"valid/best_loss": best_loss,
-					"valid/best_sample": [wandb.Image(plt.imread("best_sample.png"))],
-				}, step=epoch)
-	
+			except np.linalg.LinAlgError:
+				print("Error plotting best sample")
+				np.save(f"best_sample_error_{wandb.util.generate_id()}.npy", best_sample)
+			wandb.log({
+				"valid/worst_loss": worst_loss,
+				"valid/worst_sample": [wandb.Image(plt.imread("worst_sample.png"))],
+				"valid/best_loss": best_loss,
+				"valid/best_sample": [wandb.Image(plt.imread("best_sample.png"))],
+			})
+
 	#logging
 	train_loss=np.average(train_losses)
 	valid_loss=np.average(valid_losses)
@@ -183,26 +195,25 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 	wandb.log({
 		"train/epoch_loss": train_loss,
 		"valid/epoch_loss": valid_loss,
-	}, step=epoch)
+	})
 
 
 	train_losses=[]
 	valid_losses=[]
-	if valid_loss < best_loss:
-		print("Validation loss decreases from {:.4f} to {:.4f}".format(best_loss, valid_loss))
-		best_loss = valid_loss
+	if valid_loss < best_epoch_loss:
+		print("Validation loss decreases from {:.4f} to {:.4f}".format(best_epoch_loss, valid_loss))
+		best_epoch_loss = valid_loss
 		num_epoch_no_improvement = 0
 		#save model
 		torch.save({
 			'epoch': epoch+1,
 			'state_dict' : model.state_dict(),
 			'optimizer_state_dict': optimizer.state_dict(),
-			'best_loss': best_loss,
-			'worst_loss': worst_loss,
+			'best_epoch_loss': best_epoch_loss,
 		},os.path.join(conf.model_path, "Genesis_Chest_CT.pt"))
 		print("Saving model ",os.path.join(conf.model_path,"Genesis_Chest_CT.pt"))
 	else:
-		print("Validation loss does not decrease from {:.4f}, num_epoch_no_improvement {}".format(best_loss,num_epoch_no_improvement))
+		print("Validation loss does not decrease from {:.4f}, num_epoch_no_improvement {}".format(best_epoch_loss,num_epoch_no_improvement))
 		num_epoch_no_improvement += 1
 	if num_epoch_no_improvement == conf.patience:
 		print("Early Stopping")
