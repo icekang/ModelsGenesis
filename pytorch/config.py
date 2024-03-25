@@ -24,7 +24,7 @@ class models_genesis_config:
     
     # model pre-training
     verbose = 1
-    weights = None
+    weights = "/storage_bizon/naravich/ModelGenesisPretraining/Genesis_Chest_CT.pt"
     batch_size = 12
     optimizer = "sgd"
     workers = 10
@@ -53,7 +53,7 @@ class models_genesis_config:
     # wandb
     wandb_project_name = "Genesis_Pretraing"
     wandb_run_name = None
-    wandb_run_id = None # for a new run, it will be auto generated, otherwise, specify the run id to resume
+    wandb_run_id = "i9gcmh43" # for a new run, it will be auto generated, otherwise, specify the run id to resume
 
     def display(self):
         """Display Configuration values."""

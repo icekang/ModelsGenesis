@@ -21,6 +21,7 @@ print("torch = {}".format(torch.__version__))
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 conf = models_genesis_config()
 
+wandb_resume = conf.wandb_run_id is not None
 if conf.wandb_run_id == None:
 	conf.wandb_run_id = wandb.util.generate_id()
 
@@ -87,15 +88,28 @@ if conf.weights != None:
 	model.load_state_dict(checkpoint['state_dict'])
 	optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 	intial_epoch=checkpoint['epoch']
+	best_epoch_loss = checkpoint['best_epoch_loss']
 	print("Loading weights from ",conf.weights)
 sys.stdout.flush()
 
-wandb.init(
-	project=conf.wandb_project_name,
-	name=conf.wandb_run_name,
-	config=conf.to_dict(),
-	dir=conf.logs_path
-)
+if not wandb_resume:
+	wandb.init(
+		id=conf.wandb_run_id,
+		project=conf.wandb_project_name,
+		name=conf.wandb_run_name,
+		config=conf.to_dict(),
+		dir=conf.logs_path
+	)
+else:
+	wandb.init(
+		id=conf.wandb_run_id,
+		resume='must',
+		project=conf.wandb_project_name,
+		name=conf.wandb_run_name,
+		config=conf.to_dict(),
+		dir=conf.logs_path
+	)
+
 
 for epoch in range(intial_epoch,conf.nb_epoch):
 	scheduler.step(epoch)
