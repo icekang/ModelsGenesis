@@ -176,20 +176,23 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 				prediction=tio.ScalarImage(tensor=best_pred),
 				target=tio.ScalarImage(tensor=best_gt),
 			)
-			
 			try:
+				fig = plt.figure(num=1, clear=True)
+				ax = fig.add_subplot()
 				worst_sample.plot()
 				plt.title("Worst Sample Loss {:.4f}".format(worst_loss))
 				plt.savefig("worst_sample.png")
-				plt.close()
+				plt.close("all")
 			except np.linalg.LinAlgError:
 				print("Error plotting worst sample")
 				np.save(f"worst_sample_error_{wandb.util.generate_id()}.npy", worst_sample)
 			try:
+				fig = plt.figure(num=1, clear=True)
+				ax = fig.add_subplot()
 				best_sample.plot()
 				plt.title("Best Sample Loss {:.4f}".format(best_loss))
 				plt.savefig("best_sample.png")
-				plt.close()
+				plt.close("all")
 			except np.linalg.LinAlgError:
 				print("Error plotting best sample")
 				np.save(f"best_sample_error_{wandb.util.generate_id()}.npy", best_sample)
