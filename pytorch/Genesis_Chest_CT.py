@@ -14,6 +14,7 @@ import unet3d
 from config import models_genesis_config
 from tqdm import tqdm
 import wandb
+from torch.utils.data import DataLoader
 
 print("torch = {}".format(torch.__version__))
 
@@ -45,8 +46,10 @@ x_valid = np.expand_dims(np.array(x_valid), axis=1)
 print("x_train: {} | {:.2f} ~ {:.2f}".format(x_train.shape, np.min(x_train), np.max(x_train)))
 print("x_valid: {} | {:.2f} ~ {:.2f}".format(x_valid.shape, np.min(x_valid), np.max(x_valid)))
 
-training_generator = generate_pair(x_train,conf.batch_size, conf)
-validation_generator = generate_pair(x_valid,conf.batch_size, conf)
+train_dataloader = PairDataGenerator(x_train, conf)
+train_dataloader = DataLoader(train_dataloader, batch_size=conf.batch_size, shuffle=True, num_workers=conf.workers)
+valid_dataloader = PairDataGenerator(x_valid, conf)
+valid_dataloader = DataLoader(valid_dataloader, batch_size=conf.batch_size, shuffle=False, num_workers=conf.workers)
 
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -114,10 +117,10 @@ else:
 for epoch in range(intial_epoch,conf.nb_epoch):
 	scheduler.step(epoch)
 	model.train()
-	for iteration in range(int(x_train.shape[0]//conf.batch_size)):
-		image, gt = next(training_generator)
-		gt = np.repeat(gt,conf.nb_class,axis=1)
-		image,gt = torch.from_numpy(image).float().to(device), torch.from_numpy(gt).float().to(device)
+	for iteration, data in enumerate(train_dataloader):
+		image, gt = data
+		gt = torch.repeat_interleave(gt,conf.nb_class,axis=1)
+		image,gt = image.float().to(device), gt.float().to(device)
 		pred=model(image)
 		loss = criterion(pred,gt)
 		optimizer.zero_grad()
@@ -137,33 +140,31 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 		model.eval()
 		print("validating....")
 		should_save_visual_logs = epoch % 10 == 0
-		for i in range(int(x_valid.shape[0]//conf.batch_size)):
-			x,y = next(validation_generator)
-			y = np.repeat(y,conf.nb_class,axis=1)
-			image,gt = torch.from_numpy(x).float(), torch.from_numpy(y).float()
-			image=image.to(device)
+		# Save the best/worst validation of the epoch
+		# Initialize every validation
+		best_loss = 100000
+		worst_loss = -100000
+		for x, y in valid_dataloader:
+			y = torch.repeat_interleave(y,conf.nb_class,axis=1)
+			image, gt = x.float(), y.float()
 			gt=gt.to(device)
 			pred=model(image)
 			loss = criterion(pred,gt)
 			valid_losses.append(loss.item())
 
-			if should_save_visual_logs == 0:
-				# Save the best/worst validation of the epoch
-				# Initialize every validation
-				best_loss = 100000
-				worst_loss = -100000
+			if should_save_visual_logs:
 				# Save the best/worst validation 
 				if loss.item() > worst_loss:
 					worst_loss = loss.item()
-					worst_pred = pred.cpu()[0]
-					worst_gt = torch.from_numpy(y[0])
-					worst_image = torch.from_numpy(x[0])
+					worst_pred = pred[0].cpu()
+					worst_gt = y[0].cpu()
+					worst_image = x[0].cpu()
 				if loss.item() < best_loss:
 					best_loss = loss.item()
-					best_pred = pred.cpu()[0]
-					best_gt = torch.from_numpy(y[0])
-					best_image = torch.from_numpy(x[0])
-		if should_save_visual_logs == 0:
+					best_pred = pred[0].cpu()
+					best_gt = y[0].cpu()
+					best_image = x[0].cpu()
+		if should_save_visual_logs:
 			import matplotlib.pyplot as plt
 			import torchio as tio
 			worst_sample = tio.Subject(

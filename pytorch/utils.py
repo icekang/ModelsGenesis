@@ -9,6 +9,9 @@ import string
 import numpy as np
 from skimage.transform import resize
 import torch
+from torch.utils.data import Dataset
+from typing import Tuple
+
 try:  # SciPy >= 0.19
     from scipy.special import comb
 except ImportError:
@@ -162,6 +165,44 @@ def image_out_painting(x):
         cnt -= 1
     return x
                 
+class PairDataGenerator(Dataset):
+    def __init__(self, img, config) -> None:
+        self.img = img
+        self.flip_rate = config.flip_rate
+        self.local_rate = config.local_rate
+        self.nonlinear_rate = config.nonlinear_rate
+        self.paint_rate = config.paint_rate
+        self.inpaint_rate = config.inpaint_rate
+
+    def __len__(self):
+        return len(self.img)
+
+    def __getitem__(self, index) -> Tuple[torch.Tensor, torch.Tensor]:
+        y = self.img[index]
+        x = copy.deepcopy(y)
+        
+        # Autoencoder
+        x = copy.deepcopy(y)
+        
+        # Flip
+        x, y = data_augmentation(x, y, self.flip_rate)
+
+        # Local Shuffle Pixel
+        x = local_pixel_shuffling(x, prob=self.local_rate)
+        
+        # Apply non-Linear transformation with an assigned probability
+        x = nonlinear_transformation(x, self.nonlinear_rate)
+        
+        # Inpainting & Outpainting
+        if random.random() < self.paint_rate:
+            if random.random() < self.inpaint_rate:
+                # Inpainting
+                x = image_in_painting(x)
+            else:
+                # Outpainting
+                x = image_out_painting(x)
+
+        return torch.Tensor(x.copy()), torch.Tensor(y.copy())
 
 
 def generate_pair(img, batch_size, config, status="test"):
