@@ -224,11 +224,18 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 			'state_dict' : model.state_dict(),
 			'optimizer_state_dict': optimizer.state_dict(),
 			'best_epoch_loss': best_epoch_loss,
-		},os.path.join(conf.model_path, "Genesis_Chest_CT.pt"))
-		print("Saving model ",os.path.join(conf.model_path,"Genesis_Chest_CT.pt"))
+		},os.path.join(conf.model_path, "Genesis_OCT_Best.pt"))
+		print("Saving model ",os.path.join(conf.model_path,"Genesis_OCT_Best.pt"))
 	else:
 		print("Validation loss does not decrease from {:.4f}, num_epoch_no_improvement {}".format(best_epoch_loss,num_epoch_no_improvement))
 		num_epoch_no_improvement += 1
+		torch.save({
+			'epoch': epoch+1,
+			'state_dict' : model.state_dict(),
+			'optimizer_state_dict': optimizer.state_dict(),
+			'best_epoch_loss': best_epoch_loss,
+		},os.path.join(conf.model_path, "Genesis_OCT_Latest.pt"))
+		print("Saving model ",os.path.join(conf.model_path,"Genesis_OCT_Latest.pt"))
 	if num_epoch_no_improvement == conf.patience:
 		print("Early Stopping")
 		break
