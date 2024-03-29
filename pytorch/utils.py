@@ -166,6 +166,8 @@ def image_out_painting(x):
     return x
                 
 class PairDataGenerator(Dataset):
+    """Re-implementation of a functional pair data generator, to avoid irreproduciable computer freezes, using PyTorch's Dataset class which has a built-in memory management.
+    """
     def __init__(self, img, config) -> None:
         self.img = img
         self.flip_rate = config.flip_rate
