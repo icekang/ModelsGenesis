@@ -168,8 +168,10 @@ def image_out_painting(x):
 class PairDataGenerator(Dataset):
     """Re-implementation of a functional pair data generator, to avoid irreproduciable computer freezes, using PyTorch's Dataset class which has a built-in memory management.
     """
-    def __init__(self, img, config) -> None:
+    def __init__(self, img, config, mean = None, std = None) -> None:
         self.img = img
+        self.mean = self.img.mean() if mean is None else mean
+        self.std = max(self.img.std(), 1e-8) if std is None else std
         self.flip_rate = config.flip_rate
         self.local_rate = config.local_rate
         self.nonlinear_rate = config.nonlinear_rate
@@ -179,12 +181,21 @@ class PairDataGenerator(Dataset):
     def __len__(self):
         return len(self.img)
 
+    def _zscore_normalize(self, image: np.array) -> np.array:
+        image -= self.mean
+        image /= (max(self.std, 1e-8))
+        return image
+
     def __getitem__(self, index) -> Tuple[torch.Tensor, torch.Tensor]:
         y = self.img[index]
-        x = copy.deepcopy(y)
-        
+        y = copy.deepcopy(y)
+
         # Autoencoder
         x = copy.deepcopy(y)
+
+        # Z-score Normalization
+        x = self._zscore_normalize(x)
+        y = self._zscore_normalize(y)
         
         # Flip
         x, y = data_augmentation(x, y, self.flip_rate)
