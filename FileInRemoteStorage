@@ -9,10 +9,13 @@ labelled data:
     shockwave 3d dataset:
         images: Z:\shared\Computational_Group\Sohee\3DL\Shockwave\Calcium
         labels: Z:\shared\Computational_Group\Sohee\3DL\Shockwave\Image
+        /nfs/erelab001/shared/Computational_Group/mazeller/data/shockwave/labels-calcium-segmask-sohee-expert/
+        /storage_bizon/naravich/3D_Shockwave
 
 unlabelled data:
     Z:\shared\Computational_Group\Yiqing\longitudinal view
     /nfs/erelab001/shared/Computational_Group/Yiqing/longitudinal view/
+    /storage_bizon/naravich/Unlabeled_OCT_cubes
 
 remote storage: naravich@eofe8.mit.edu (additional documentation https://engaging-web.mit.edu/eofe-wiki/logging_in/ssh/linux/)
 webapp: https://engaging-ood.mit.edu/pun/sys/files/fs/nfs/erelab001/shared/Computational_Group/
