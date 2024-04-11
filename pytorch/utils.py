@@ -3,6 +3,7 @@ import math
 import os
 import random
 import copy
+from lightning.pytorch.utilities.types import TRAIN_DATALOADERS
 import scipy
 import imageio
 import string
@@ -10,7 +11,13 @@ import numpy as np
 from skimage.transform import resize
 import torch
 from torch.utils.data import Dataset
-from typing import Tuple
+import torchio as tio
+from typing import Tuple, List, Union
+from pathlib import Path
+import json
+import lightning as L
+from torch.utils.data import DataLoader
+
 
 try:  # SciPy >= 0.19
     from scipy.special import comb
@@ -168,35 +175,38 @@ def image_out_painting(x):
 class PairDataGenerator(Dataset):
     """Re-implementation of a functional pair data generator, to avoid irreproduciable computer freezes, using PyTorch's Dataset class which has a built-in memory management.
     """
-    def __init__(self, img, config, mean = None, std = None) -> None:
-        self.img = img
-        self.mean = self.img.mean() if mean is None else mean
-        self.std = max(self.img.std(), 1e-8) if std is None else std
+    def __init__(self, img_path, config) -> None:
+        self.img_paths = img_path
         self.flip_rate = config.flip_rate
         self.local_rate = config.local_rate
         self.nonlinear_rate = config.nonlinear_rate
         self.paint_rate = config.paint_rate
         self.inpaint_rate = config.inpaint_rate
+        # self.img_index = []
+        # self.generate_index()
 
+    def generate_index(self):
+        for image_path in self.img_paths:
+            offset = len(self.img_index)
+            s = np.load(image_path)
+            indices_and_path = [(offset, image_path) for i in range(s.shape[0])]
+            self.img_index.extend(indices_and_path)
+            del s
+        
     def __len__(self):
-        return len(self.img)
-
-    def _zscore_normalize(self, image: np.array) -> np.array:
-        image -= self.mean
-        image /= (max(self.std, 1e-8))
-        return image
+        return len(self.img_paths)
+        # return len(self.img_index)
 
     def __getitem__(self, index) -> Tuple[torch.Tensor, torch.Tensor]:
-        y = self.img[index]
+        # offset, image_path = self.img_index[index]
+        # y = np.load(image_path)[index - offset][np.newaxis, ...]
+        y = self.img_paths[index]
+
         y = copy.deepcopy(y)
 
         # Autoencoder
         x = copy.deepcopy(y)
 
-        # Z-score Normalization
-        x = self._zscore_normalize(x)
-        y = self._zscore_normalize(y)
-        
         # Flip
         x, y = data_augmentation(x, y, self.flip_rate)
 
@@ -262,3 +272,193 @@ def generate_pair(img, batch_size, config, status="test"):
             imageio.imwrite(os.path.join(config.sample_path, config.exp_name, file_name), final_sample)
 
         yield (x, y)
+
+
+class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
+    def __init__(self,
+                 fold: int,
+                 dataDir: Union[Path | str]) -> None:
+        self.fold = fold
+        self.dataDir = dataDir # /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT
+        if isinstance(dataDir, str):
+            self.dataDir = Path(dataDir)
+
+        self.num_workers = 4
+        self.batch_size = 4
+
+    def setup(self, stage: str) -> None:
+        """Define the split and data before putting them into dataloader
+
+        Args:
+            stage (str): Torch Lightning stage ('fit', 'validate', 'predict', ...), not used in the LightningDataModule
+        """
+        #TODO: Make tio.Queue and define the augmentation and preprocessing transformation for this dataset
+        self.preprocess = self.getAugmentationTransform()
+        self.augment = self.getAugmentationTransform()
+        self.transform = tio.Compose([self.preprocess, self.augment])
+
+        if stage == 'fit' or stage is None:
+            trainImages, trainLabels = self._getImagesAndLabels('train')
+            valImages, valLabels = self._getImagesAndLabels('val')
+
+            trainSubjects = self._filesToSubject(trainImages, trainLabels)
+            valSubjects = self._filesToSubject(valImages, valLabels)
+
+            self.trainSet = tio.SubjectsDataset(trainSubjects, transform=self.transform)
+            
+            # TODO: Define hyperparameters as a config file
+            self.sampler = tio.data.UniformSampler(patch_size=(128, 128, 64))
+            self.patchesTrainSet = tio.Queue(
+                subjects_dataset=self.trainSet,
+                max_length=100,
+                samples_per_volume=10,
+                sampler=self.sampler,
+                num_workers=self.num_workers,
+                shuffle_subjects=True,
+                shuffle_patches=True,
+            )
+
+            if len(valSubjects) == 0:
+                valSubjects = trainSubjects
+                print("Warning: Validation set is empty, using training set for validation")
+            self.valSet = tio.SubjectsDataset(valSubjects, transform=self.preprocess)
+            self.patchesValSet = tio.Queue(
+                subjects_dataset=self.valSet,
+                max_length=100,
+                samples_per_volume=10,
+                sampler=self.sampler,
+                num_workers=self.num_workers,
+                shuffle_subjects=False,
+                shuffle_patches=False,
+            )
+
+        if stage == 'test':
+            testImages, testLabels = self._getImagesAndLabels('test')
+
+            testSubjects = self._filesToSubject(testImages, testLabels)
+
+            self.testSet = tio.SubjectsDataset(testSubjects, transform=self.preprocess)
+            self.patchesTestSet = tio.Queue(
+                subjects_dataset=self.testSet,
+                max_length=100,
+                samples_per_volume=10,
+                sampler=tio.data.GridSampler(patch_size=(1, 128, 128, 64)),
+                num_workers=self.num_workers,
+                shuffle_subjects=False,
+                shuffle_patches=False,
+            )
+
+    def train_dataloader(self):
+        return DataLoader(self.patchesTrainSet, batch_size=self.batch_size, num_workers=0)
+    
+    def val_dataloader(self):
+        return DataLoader(self.patchesValSet, batch_size=self.batch_size, num_workers=0)
+
+    def test_dataloader(self):
+        return DataLoader(self.patchesTestSet, batch_size=self.batch_size, num_workers=0)
+
+    def getAugmentationTransform(self):
+        preprocess =tio.Compose([])
+        return preprocess
+
+    def getAugmentationTransform(self):
+        augment = tio.Compose([])
+        return augment
+    
+    def _filesToSubject(self, imageFiles: List[Path], labelFiles: List[Path]) -> List[tio.Subject]:
+        """Convert image and label files to TorchIO subjects
+
+        Args:
+            imageFiles (List[Path]): List of image files
+            labelFiles (List[Path]): List of label files
+
+        Returns:
+            List[tio.Subject]: List of TorchIO subjects
+        """
+        subjects = []
+        for imageFile, labelFile in zip(imageFiles, labelFiles):
+            subject = tio.Subject(
+                image=tio.ScalarImage(imageFile),
+                label=tio.LabelMap(labelFile),
+                name=imageFile.stem.split('_')[0]
+            )
+            subjects.append(subject)
+        return subjects
+
+    def _getSplit(self) -> Tuple[List[str], List[str]]:
+        """Get the train and validation split for the current fold and split
+
+        Returns:
+            Tuple[List[str], List[str]]: List of train and validation unique case IDs
+        """
+        dataSetName = self.dataDir.stem
+        splitPath = self.dataDir / '..' / '..' / 'nnUNet_preprocessed' / dataSetName / 'splits_final.json'
+        assert splitPath.exists(), f"Split file {splitPath} does not exist"
+        with open(splitPath, 'r') as f:
+            splits = json.load(f)
+            train = splits[self.fold]['train']
+            val = splits[self.fold]['val']
+
+        return train, val
+
+    def _getImagesAndLabels(self, split: str) -> Tuple[List[Path], List[Path]]:
+        """Get the image and label files for the current fold and split
+
+        Args:
+            split (str): 'train', 'val', or 'test'
+
+        Returns:
+            Tuple[List[Path], List[Path]]: List of image and label path files
+        """
+        train, val = self._getSplit()
+        train.sort()
+        val.sort()
+
+        if split in {'train', 'val'}:
+            imageDir = self.dataDir / 'imagesTr'
+            labelDir = self.dataDir / 'labelsTr'
+        else:
+            imageDir = self.dataDir / 'imagesTs'
+            labelDir = self.dataDir / 'labelsTs'
+        
+        assert imageDir.exists(), f"Image directory {imageDir} does not exist"
+        assert labelDir.exists(), f"Label directory {labelDir} does not exist"
+
+        imageFiles = sorted(list(imageDir.glob('*.nii.gz')))
+        labelFiles = sorted(list(labelDir.glob('*.nii.gz')))
+
+        assert len(imageFiles) == len(labelFiles), f"Number of images and labels do not match: {len(imageFiles)} != {len(labelFiles)}"
+
+        if split == 'train':
+            caseFilter = train
+        elif split == 'val':
+            caseFilter = val
+        else:
+            caseFilter = None
+        if caseFilter is not None:
+            imageFiles = [f for f in imageFiles if f.stem.split('_')[0] in caseFilter]
+            labelFiles = [f for f in labelFiles if f.stem.replace('.nii', '') in caseFilter]
+
+        assert len(imageFiles) == len(labelFiles), f"Number of images and labels AFTER filtering do not match: {len(imageFiles)} != {len(labelFiles)}, filter={caseFilter}"
+
+        return imageFiles, labelFiles
+
+
+"""
+ls /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT/imagesTr/
+101-019_0000.nii.gz  101-044_0000.nii.gz  101-045_0000.nii.gz  106-002_0000.nii.gz  401-004_0000.nii.gz  701-013_0000.nii.gz  704-003_0000.nii.gz
+
+ls /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT/labelsTr/
+101-019.nii.gz  101-044.nii.gz  101-045.nii.gz  106-002.nii.gz  401-004.nii.gz  701-013.nii.gz  704-003.nii.gz
+
+
+ls /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT/imagesTs/
+706-005_0000.nii.gz  707-003_0000.nii.gz
+
+ls /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT/labelsTs/
+706-005.nii.gz  707-003.nii.gz
+"""
+
+def convert_nnUNet_to_Genesis(model):
+    model.decoder.seg_layers[-1] = torch.nn.Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1))
+    return model

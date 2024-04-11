@@ -20,23 +20,6 @@ import torch
 from time import time
 
 
-def convert_nnUNet_to_Genesis(model):
-    class GenesisNNUNetWrapper(torch.nn.Module):
-        def __init__(self, model):
-            super(GenesisNNUNetWrapper, self).__init__()
-            self.nnUNet = model
-            self.identity = torch.nn.Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1)) # Like MLP for the feature 
-            self.final_conv = torch.nn.Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1))
-            self.nnUNet.decoder.seg_layers[-1] = self.identity
-
-        def forward(self, x):
-            out = self.nnUNet(x)
-            out = self.final_conv(out)
-            return out
-
-    return GenesisNNUNetWrapper(model)
-
-
 print("torch = {}".format(torch.__version__))
 
 
@@ -45,7 +28,7 @@ conf = models_genesis_config()
 
 wandb_resume = conf.wandb_run_id is not None
 if conf.wandb_run_id == None:
-	conf.wandb_run_id = wandb.util.generate_id()
+    conf.wandb_run_id = wandb.util.generate_id()
 
 conf.display()
 set_seed(conf.seed)
@@ -53,6 +36,7 @@ set_seed(conf.seed)
 x_train = []
 for i,fold in enumerate(tqdm(conf.train_fold)):
     file_name = "bat_"+str(conf.scale)+"_s_"+str(conf.input_rows)+"x"+str(conf.input_cols)+"x"+str(conf.input_deps)+"_"+str(fold)+".npy"
+    # x_train.append(os.path.join(conf.data, file_name))
     s = np.load(os.path.join(conf.data, file_name))
     x_train.extend(s)
 x_train = np.expand_dims(np.array(x_train), axis=1)
@@ -60,6 +44,7 @@ x_train = np.expand_dims(np.array(x_train), axis=1)
 x_valid = []
 for i,fold in enumerate(tqdm(conf.valid_fold)):
     file_name = "bat_"+str(conf.scale)+"_s_"+str(conf.input_rows)+"x"+str(conf.input_cols)+"x"+str(conf.input_deps)+"_"+str(fold)+".npy"
+    # x_valid.append(os.path.join(conf.data, file_name))
     s = np.load(os.path.join(conf.data, file_name))
     x_valid.extend(s)
 x_valid = np.expand_dims(np.array(x_valid), axis=1)
@@ -70,7 +55,7 @@ print("x_valid: {} | {:.2f} ~ {:.2f}".format(x_valid.shape, np.min(x_valid), np.
 train_dataloader = PairDataGenerator(x_train, conf)
 train_dataloader = DataLoader(train_dataloader, batch_size=conf.batch_size, shuffle=True, num_workers=conf.workers)
 
-valid_dataloader = PairDataGenerator(x_valid, conf, mean=x_train.mean(), std=max(x_train.std(), 1e-8))
+valid_dataloader = PairDataGenerator(x_valid, conf)
 valid_dataloader = DataLoader(valid_dataloader, batch_size=conf.batch_size, shuffle=False, num_workers=conf.workers)
 
 
@@ -162,7 +147,7 @@ for epoch in range(intial_epoch,conf.nb_epoch):
 		scaler.step(optimizer)
 		scaler.update()
 		optimizer.zero_grad(set_to_none=True)
-		train_losses.append(round(loss.item(), 2))
+		train_losses.append(loss.item())
 		if (iteration + 1) % 5 ==0:
 			iteration_train_loss = np.average(train_losses)
 			print('Epoch [{}/{}], iteration {}, Loss: {:.6f}'
