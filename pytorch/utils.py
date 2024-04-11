@@ -17,6 +17,8 @@ from pathlib import Path
 import json
 import lightning as L
 from torch.utils.data import DataLoader
+from torchmetrics import Dice, MetricCollection
+from nnunetv2.run.run_training import get_trainer_from_args
 
 
 try:  # SciPy >= 0.19
@@ -341,15 +343,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             testSubjects = self._filesToSubject(testImages, testLabels)
 
             self.testSet = tio.SubjectsDataset(testSubjects, transform=self.preprocess)
-            self.patchesTestSet = tio.Queue(
-                subjects_dataset=self.testSet,
-                max_length=100,
-                samples_per_volume=10,
-                sampler=tio.data.GridSampler(patch_size=(1, 128, 128, 64)),
-                num_workers=self.num_workers,
-                shuffle_subjects=False,
-                shuffle_patches=False,
-            )
+            self.patchesTestSet = tio.data.GridSampler(subject=self.testSet, patch_size=(128, 128, 64))
 
     def train_dataloader(self):
         return DataLoader(self.patchesTrainSet, batch_size=self.batch_size, num_workers=0)
@@ -465,3 +459,94 @@ ls /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT/lab
 def convert_nnUNet_to_Genesis(model):
     model.decoder.seg_layers[-1] = torch.nn.Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1))
     return model
+
+#Declare the Dice Loss
+def torch_dice_coef_loss(y_true,y_pred, smooth=1.):
+    y_true_f = torch.flatten(y_true)
+    y_pred_f = torch.flatten(y_pred)
+    intersection = torch.sum(y_true_f * y_pred_f)
+    return 1. - ((2. * intersection + smooth) / (torch.sum(y_true_f) + torch.sum(y_pred_f) + smooth))
+
+class GenesisSegmentation(L.LightningModule):
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+        self.model = self.build_network()
+
+        metrics = MetricCollection({
+            'dice': Dice(num_classes=1)
+        })
+        self.train_metrics = metrics.clone('train_')
+        self.val_metrics = metrics.clone('val_')
+        self.test_metrics = metrics.clone('test_')
+
+    def build_network(self):
+        # prepare the 3D model
+        # Initalize the model from nnUNet
+        trainer = get_trainer_from_args(
+            dataset_name_or_id=self.config['nnUNet']['dataset_name_or_id'],
+            configuration=self.config['nnUNet']['configuration'],
+            fold=self.config['nnUNet']['fold'],
+            trainer_name=self.config['nnUNet']['trainer_name'],
+            plans_identifier=self.config['nnUNet']['plans_identifier'])
+        trainer.initialize()
+        model = convert_nnUNet_to_Genesis(trainer.network)
+        pytorch_total_params = sum(p.numel() for p in model.parameters())
+        print("Total number of parameters in the model: ", pytorch_total_params)
+
+        #Load pre-trained weights
+        weight_dir = self.config['pre_trained_weight_path']
+        checkpoint = torch.load(weight_dir, map_location=torch.device('cpu'))
+        state_dict = checkpoint['state_dict']
+        unParalled_state_dict = {}
+        for key in state_dict.keys():
+            unParalled_state_dict[key.replace("module.", "")] = state_dict[key]
+        model.load_state_dict(unParalled_state_dict)
+        return model
+
+    def training_step(self, batch, batch_idx):
+        x, y = batch['image'][tio.DATA], batch['label'][tio.DATA]
+        x = x.float()
+        y = y.long()
+        y_hat = self.model(x)
+        y_hat = y_hat.sigmoid()
+
+        loss = torch_dice_coef_loss(y_hat, y)
+        self.train_metrics.update(y_hat.view(-1), y.view(-1))
+        self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
+        self.log_dict(self.train_metrics, on_step=False, on_epoch=True)
+        return loss
+
+    def configure_optimizers(self):
+        optimizer = torch.optim.SGD(self.parameters(), lr=self.config['optimizer']['learning_rate'])
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=self.config['optimizer']['scheduler_step_size'], gamma=self.config['optimizer']['scheduler_gamma'])
+        return {
+            'optimizer': optimizer,
+            'lr_scheduler': scheduler,
+        }
+    
+    def validation_step(self, batch, batch_idx):
+        x, y = batch['image'][tio.DATA], batch['label'][tio.DATA]
+        x = x.float()
+        y = y.long()
+        y_hat = self.model(x)
+        y_hat = y_hat.sigmoid()
+
+        loss = torch_dice_coef_loss(y_hat, y)
+        self.val_metrics.update(y_hat.view(-1), y.view(-1))
+        self.log('val_loss', loss)
+        self.log_dict(self.val_metrics, on_step=False, on_epoch=True)
+        return loss
+
+    def test_step(self, batch, batch_idx):
+        x, y = batch['image'][tio.DATA], batch['label'][tio.DATA]
+        x = x.float()
+        y = y.long()
+        y_hat = self.model(x)
+        y_hat = y_hat.sigmoid()
+
+        loss = torch_dice_coef_loss(y_hat, y)
+        self.test_metrics.update(y_hat.view(-1), y.view(-1))
+        self.log('test_loss', loss, on_step=False, on_epoch=True)
+        self.log_dict(self.test_metrics, on_step=False, on_epoch=True)
+        return loss
