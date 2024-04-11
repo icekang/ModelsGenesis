@@ -307,7 +307,10 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             self.trainSet = tio.SubjectsDataset(trainSubjects, transform=self.transform)
             
             # TODO: Define hyperparameters as a config file
-            self.sampler = tio.data.UniformSampler(patch_size=(128, 128, 64))
+            self.sampler = tio.data.LabelSampler(
+                patch_size=(128, 128, 64),
+                label_name = 'label',
+            )
             self.patchesTrainSet = tio.Queue(
                 subjects_dataset=self.trainSet,
                 max_length=100,
