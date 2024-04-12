@@ -3,6 +3,8 @@ import torch
 from utils import KFoldNNUNetSegmentationDataModule, GenesisSegmentation
 from utils import *
 from lightning.pytorch.loggers import WandbLogger
+from lightning.pytorch.callbacks.early_stopping import EarlyStopping
+from lightning.pytorch.callbacks.model_checkpoint import ModelCheckpoint
 import wandb
 import yaml
 
@@ -38,7 +40,8 @@ def main(config=None):
         project=config['wandb']['wandb_project_name'],
         name=config['wandb']['wandb_run_name'],
         config=config,
-        dir=config['wandb']['logs_path']
+        dir=config['wandb']['logs_path'],
+        save_dir=config['wandb']['logs_path'],
     )
 
     # Trainer
@@ -46,13 +49,18 @@ def main(config=None):
         max_epochs=5,
         deterministic=True,
         precision="16-mixed",
-        logger=wandb_logger
+        logger=wandb_logger,
+        default_root_dir=Path(config['wandb']['logs_path']) / f'fold_{config["fold"]}',
+        callbacks=[
+            ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["fold"]}', monitor="val_loss", mode="min", save_top_k=1, save_last=True, verbose=True, filename='best_model-{val_loss:.2f}'),
+            ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["fold"]}', filename="last_model"),
+            EarlyStopping(monitor="val_loss", mode="min", patience=50, verbose=True)
+        ],
         )
-    trainer.fit(model, train_loader, val_loader)
+    # trainer.fit(model, train_loader, val_loader)
 
     dm.setup('test')
-    test_loader = dm.test_dataloader()
-    trainer.test(model, test_loader)
+    trainer.test(model, test_loader, ckpt_path="best")
     # for epoch in range(intial_epoch, config.nb_epoch):
     #     model.train()
     #     sum_train_loss = 0.0
