@@ -341,9 +341,8 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             testImages, testLabels = self._getImagesAndLabels('test')
 
             testSubjects = self._filesToSubject(testImages, testLabels)
-
-            self.testSet = tio.SubjectsDataset(testSubjects, transform=self.preprocess)
-            self.patchesTestSet = tio.data.GridSampler(subject=self.testSet, patch_size=(128, 128, 64))
+            self.testSubjectGridSamplers = [tio.inference.GridSampler(subject=testSubject, patch_size=(128, 128, 64)) for testSubject in testSubjects]
+            self.testAggregators = [tio.inference.GridAggregator(gridSampler) for gridSampler in self.testSubjectGridSamplers]
 
     def train_dataloader(self):
         return DataLoader(self.patchesTrainSet, batch_size=self.batch_size, num_workers=0)
@@ -351,8 +350,8 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
     def val_dataloader(self):
         return DataLoader(self.patchesValSet, batch_size=self.batch_size, num_workers=0)
 
-    def test_dataloader(self):
-        return DataLoader(self.patchesTestSet, batch_size=self.batch_size, num_workers=0)
+    def test_dataloader(self) -> Tuple[List[DataLoader], List[tio.GridSampler]]:
+        return [DataLoader(testSubjectGridSampler, batch_size=self.batch_size, num_workers=0) for testSubjectGridSampler in self.testSubjectGridSamplers], self.testSubjectGridSamplers
 
     def getAugmentationTransform(self):
         preprocess =tio.Compose([])
@@ -464,6 +463,24 @@ class GenesisSegmentation(L.LightningModule):
         self.val_metrics = metrics.clone('val_')
         self.test_metrics = metrics.clone('test_')
 
+        self.test_grid_samplers: List[tio.GridSampler] = None
+        self.prediction_aggregators: List[tio.GridAggregator] = None
+        self.label_aggregators: List[tio.GridAggregator] = None
+
+    def set_test_grid_samplers(self, test_grid_samplers: List[tio.GridSampler]):
+        """Set the test grid samplers for the model
+        Initialize the prediction and label aggregators for the test grid samplers
+        This function should be called before running the test step
+        The prediction and label aggregators are used to aggregate the predictions and labels from the test grid samplers
+        Then, the aggregated predictions and labels can be used to calculate the test metrics
+
+        Args:
+            test_grid_samplers (List[tio.GridSampler]): _description_
+        """
+        self.test_grid_samplers = test_grid_samplers
+        self.prediction_aggregators = [tio.inference.GridAggregator(grid_sampler) for grid_sampler in self.test_grid_samplers]
+        self.label_aggregators = [tio.inference.GridAggregator(grid_sampler) for grid_sampler in self.test_grid_samplers]
+
     def build_network(self):
         # prepare the 3D model
         # Initalize the model from nnUNet
@@ -522,15 +539,24 @@ class GenesisSegmentation(L.LightningModule):
         self.log_dict(self.val_metrics, on_step=False, on_epoch=True)
         return loss
 
-    def test_step(self, batch, batch_idx):
+    def test_step(self, batch, batch_idx, dataloader_idx):
         x, y = batch['image'][tio.DATA], batch['label'][tio.DATA]
+        location = batch[tio.LOCATION]
         x = x.float()
         y = y.long()
         y_hat = self.model(x)
         y_hat = y_hat.sigmoid()
+        y_hat[y_hat > 0.5] = 1
+        y_hat[y_hat <= 0.5] = 0
 
-        loss = torch_dice_coef_loss(y_hat, y)
-        self.test_metrics.update(y_hat.view(-1), y.view(-1))
-        self.log('test_loss', loss, on_step=False, on_epoch=True)
+        # Don't worry about this being in GPU, the aggregators are will put the data in the CPU
+        self.prediction_aggregators[dataloader_idx].add_batch(y_hat, location)
+        self.label_aggregators[dataloader_idx].add_batch(y, location)
+        return None
+    
+    def on_test_epoch_end(self):
+        for idx, (prediction_aggregator, label_aggregator) in enumerate(zip(self.prediction_aggregators, self.label_aggregators)):
+            torch.save(prediction_aggregator.get_output_tensor(), Path(self.trainer.log_dir) / self.config['fold'] / f'prediction_{i}.pt')
+            torch.save(label_aggregator.get_output_tensor(), Path(self.trainer.log_dir) / self.config['fold'] / f'label_{i}.pt')
+            self.test_metrics.update(prediction_aggregator.get_output_tensor().view(-1), label_aggregator.get_output_tensor().view(-1))
         self.log_dict(self.test_metrics, on_step=False, on_epoch=True)
-        return loss

@@ -60,6 +60,8 @@ def main(config=None):
     # trainer.fit(model, train_loader, val_loader)
 
     dm.setup('test')
+    test_loader, test_grid_samplers = dm.test_dataloader()
+    model.set_test_grid_samplers(test_grid_samplers)
     trainer.test(model, test_loader, ckpt_path="best")
     # for epoch in range(intial_epoch, config.nb_epoch):
     #     model.train()
