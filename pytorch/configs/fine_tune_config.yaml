@@ -1,0 +1,30 @@
+# Reproducibility
+seed: 42
+
+# WandB
+wandb:
+  wandb_run_id: null
+  wandb_run_name: null
+  wandb_project_name: GenesisFinetuneTest
+  logs_path: /storage_bizon/naravich/ModelGenesisNNUNetFinetuningV2_noNorm/Logs
+
+# Data
+fold: 0
+data_directory: /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset302_Calcium_OCTv2/
+
+# Pre-trained
+pre_trained_weight_path: pretrained_weights/Genesis_Chest_Best.pt
+
+# Optimizer
+optimizer:
+  learning_rate: 0.001
+  scheduler_step_size: 30
+  scheduler_gamma: 0.1
+
+# nnUNet architecutre
+nnUNet:
+  dataset_name_or_id: "301"
+  configuration: 3d_fullres
+  trainer_name: nnUNetTrainer
+  plans_identifier: nnUNetPlans
+  fold: 0
