@@ -316,7 +316,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             self.patchesTrainSet = tio.Queue(
                 subjects_dataset=self.trainSet,
                 max_length=100,
-                samples_per_volume=10,
+                samples_per_volume=75,
                 sampler=self.sampler,
                 num_workers=self.num_workers,
                 shuffle_subjects=True,
@@ -330,7 +330,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             self.patchesValSet = tio.Queue(
                 subjects_dataset=self.valSet,
                 max_length=100,
-                samples_per_volume=10,
+                samples_per_volume=75,
                 sampler=self.sampler,
                 num_workers=self.num_workers,
                 shuffle_subjects=False,
