@@ -440,22 +440,6 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
 
         return imageFiles, labelFiles
 
-
-"""
-ls /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT/imagesTr/
-101-019_0000.nii.gz  101-044_0000.nii.gz  101-045_0000.nii.gz  106-002_0000.nii.gz  401-004_0000.nii.gz  701-013_0000.nii.gz  704-003_0000.nii.gz
-
-ls /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT/labelsTr/
-101-019.nii.gz  101-044.nii.gz  101-045.nii.gz  106-002.nii.gz  401-004.nii.gz  701-013.nii.gz  704-003.nii.gz
-
-
-ls /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT/imagesTs/
-706-005_0000.nii.gz  707-003_0000.nii.gz
-
-ls /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT/labelsTs/
-706-005.nii.gz  707-003.nii.gz
-"""
-
 def convert_nnUNet_to_Genesis(model):
     model.decoder.seg_layers[-1] = torch.nn.Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1))
     return model
