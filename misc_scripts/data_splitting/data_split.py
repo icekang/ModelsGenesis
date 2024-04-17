@@ -7,6 +7,8 @@ with open('UIDs.txt', 'r') as f:
     # Remove the newline character from each line
     UIDs = [UID.strip() for UID in UIDs]
 
+UIDs = ['101-019', '101-044', '101-045', '106-002', '401-004', '701-013', '704-003', '706-005', '707-003']
+
 train, test = train_test_split(UIDs, random_state=42, test_size=0.2, shuffle=False, stratify=None)
 
 with open('train.txt', 'w') as f:
