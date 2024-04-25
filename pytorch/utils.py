@@ -344,11 +344,18 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             self.testSubjectGridSamplers = [tio.inference.GridSampler(subject=testSubject, patch_size=(128, 128, 64)) for testSubject in testSubjects]
             self.testAggregators = [tio.inference.GridAggregator(gridSampler) for gridSampler in self.testSubjectGridSamplers]
 
+    @staticmethod
+    def collate_fn(batch):
+        print('Collating batch')
+        batch = [{'image': ['image'][tio.DATA], 'label': data['label'][tio.DATA]} for data in batch]
+        print('Batch collated', len(batch), batch)
+        return batch
+
     def train_dataloader(self):
-        return DataLoader(self.patchesTrainSet, batch_size=self.batch_size, num_workers=0)
+        return DataLoader(self.patchesTrainSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
     
     def val_dataloader(self):
-        return DataLoader(self.patchesValSet, batch_size=self.batch_size, num_workers=0)
+        return DataLoader(self.patchesValSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
 
     def test_dataloader(self) -> Tuple[List[DataLoader], List[tio.GridSampler]]:
         return [DataLoader(testSubjectGridSampler, batch_size=self.batch_size, num_workers=0) for testSubjectGridSampler in self.testSubjectGridSamplers], self.testSubjectGridSamplers
