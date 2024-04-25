@@ -34,7 +34,7 @@ def main(config=None):
     if config['wandb']['wandb_run_id'] == None:
         config['wandb']['wandb_run_id'] = wandb.util.generate_id()
     if config['wandb']['wandb_run_name'] == None:
-        config['wandb']['wandb_run_name'] = f'fold_{config["fold"]}'
+        config['wandb']['wandb_run_name'] = f'fold_{config["data"]["fold"]}'
     wandb_logger = WandbLogger(
         id=config['wandb']['wandb_run_id'],
         project=config['wandb']['wandb_project_name'],
@@ -50,10 +50,10 @@ def main(config=None):
         deterministic=True,
         precision="16-mixed",
         logger=wandb_logger,
-        default_root_dir=Path(config['wandb']['logs_path']) / f'fold_{config["fold"]}',
+        default_root_dir=Path(config['wandb']['logs_path']) / f'fold_{config["data"]["fold"]}',
         callbacks=[
-            ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["fold"]}', monitor="val_loss", mode="min", save_top_k=1, save_last=True, verbose=True, filename='best_model-{val_loss:.2f}'),
-            ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["fold"]}', filename="last_model"),
+            ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["data"]["fold"]}', monitor="val_loss", mode="min", save_top_k=1, save_last=True, verbose=True, filename='best_model-{val_loss:.2f}'),
+            ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["data"]["fold"]}', filename="last_model"),
             EarlyStopping(monitor="val_loss", mode="min", patience=config['train']['patience'], verbose=True)
         ],
         )
