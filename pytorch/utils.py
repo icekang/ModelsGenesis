@@ -345,11 +345,16 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             self.testAggregators = [tio.inference.GridAggregator(gridSampler) for gridSampler in self.testSubjectGridSamplers]
 
     @staticmethod
-    def collate_fn(batch):
-        batch = {
+    def collate_fn(batch, test=False):
+        collated_batch = {
             'image': torch.stack([data['image'][tio.DATA] for data in batch], dim=0),
             'label': torch.stack([data['label'][tio.DATA] for data in batch], dim=0),
         }
+        if test:
+            print("Test")
+            print(batch)
+            collated_batch['location'] = torch.stack([data[tio.LOCATION] for data in batch], dim=0),
+
         return batch
 
     def train_dataloader(self):
@@ -552,7 +557,7 @@ class GenesisSegmentation(L.LightningModule):
         return loss
 
     def test_step(self, batch, batch_idx, dataloader_idx):
-        x, y = batch['image'][tio.DATA], batch['label'][tio.DATA]
+        x, y = batch['image'], batch['label']
         location = batch[tio.LOCATION]
         x = x.float()
         y = y.long()
