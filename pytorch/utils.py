@@ -347,8 +347,8 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
     @staticmethod
     def collate_fn(batch):
         batch = {
-            'image': [data['image'][[tio.DATA]] for data in batch],
-            'label': [data['label'][[tio.DATA]] for data in batch],
+            'image': [data['image'][tio.DATA] for data in batch],
+            'label': [data['label'][tio.DATA] for data in batch],
         }
         return batch
 
