@@ -46,7 +46,7 @@ def main(config=None):
 
     # Trainer
     trainer = L.Trainer(
-        max_epochs=5,
+        max_epochs=1000,
         deterministic=True,
         precision="16-mixed",
         logger=wandb_logger,
@@ -57,7 +57,7 @@ def main(config=None):
             EarlyStopping(monitor="val_loss", mode="min", patience=50, verbose=True)
         ],
         )
-    # trainer.fit(model, train_loader, val_loader)
+    trainer.fit(model, train_loader, val_loader)
 
     dm.setup('test')
     test_loader, test_grid_samplers = dm.test_dataloader()
