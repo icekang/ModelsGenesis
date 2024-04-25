@@ -373,9 +373,10 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
         """
         subjects = []
         for imageFile, labelFile in zip(imageFiles, labelFiles):
+            print('Loading image ', str(labelFile))
             subject = tio.Subject(
-                image=tio.ScalarImage(imageFile),
-                label=tio.LabelMap(labelFile),
+                image=tio.ScalarImage(str(imageFile)),
+                label=tio.LabelMap(str(labelFile)),
                 name=imageFile.stem.split('_')[0]
             )
             subjects.append(subject)
