@@ -365,7 +365,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
         return DataLoader(self.patchesValSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
 
     def test_dataloader(self) -> Tuple[List[DataLoader], List[tio.GridSampler]]:
-        return [DataLoader(testSubjectGridSampler, batch_size=self.batch_size, num_workers=0, collate_fn=partial(self.collate_fn), test=True) for testSubjectGridSampler in self.testSubjectGridSamplers], self.testSubjectGridSamplers
+        return [DataLoader(testSubjectGridSampler, batch_size=self.batch_size, num_workers=0, collate_fn=partial(self.collate_fn, test=True)) for testSubjectGridSampler in self.testSubjectGridSamplers], self.testSubjectGridSamplers
 
     def getAugmentationTransform(self):
         preprocess =tio.Compose([])
