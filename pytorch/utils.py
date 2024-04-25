@@ -350,7 +350,6 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             'image': torch.stack([data['image'][tio.DATA] for data in batch], dim=0),
             'label': torch.stack([data['label'][tio.DATA] for data in batch], dim=0),
         }
-        print('Batch size: ', batch['image'].shape, batch['label'].shape)
         return batch
 
     def train_dataloader(self):
