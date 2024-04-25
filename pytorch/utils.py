@@ -518,7 +518,7 @@ class GenesisSegmentation(L.LightningModule):
         return model
 
     def training_step(self, batch, batch_idx):
-        x, y = batch['image'][tio.DATA], batch['label'][tio.DATA]
+        x, y = batch['image'], batch['label']
         x = x.float()
         y = y.long()
         y_hat = self.model(x)
@@ -539,7 +539,7 @@ class GenesisSegmentation(L.LightningModule):
         }
     
     def validation_step(self, batch, batch_idx):
-        x, y = batch['image'][tio.DATA], batch['label'][tio.DATA]
+        x, y = batch['image'], batch['label']
         x = x.float()
         y = y.long()
         y_hat = self.model(x)
