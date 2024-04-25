@@ -279,15 +279,15 @@ def generate_pair(img, batch_size, config, status="test"):
 
 class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
     def __init__(self,
-                 fold: int,
-                 dataDir: Union[Path,str]) -> None:
-        self.fold = fold
-        self.dataDir = dataDir # /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT
-        if isinstance(dataDir, str):
-            self.dataDir = Path(dataDir)
+                 config: dict) -> None:
+        self.config = config
+        self.fold = self.config['data']['fold']
+        self.dataDir = self.config['data']['data_directory'] # /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT
+        if isinstance(self.dataDir, str):
+            self.dataDir = Path(self.dataDir)
 
-        self.num_workers = 4
-        self.batch_size = 4
+        self.num_workers = self.config['data']['num_workers']
+        self.batch_size = self.config['data']['batch_size']
 
     def setup(self, stage: str) -> None:
         """Define the split and data before putting them into dataloader
@@ -311,13 +311,13 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             
             # TODO: Define hyperparameters as a config file
             self.sampler = tio.data.LabelSampler(
-                patch_size=(128, 128, 64),
+                patch_size=self.config['data']['patch_size'],
                 label_name = 'label',
             )
             self.patchesTrainSet = tio.Queue(
                 subjects_dataset=self.trainSet,
-                max_length=100,
-                samples_per_volume=75,
+                max_length=self.config['data']['queue_max_length'],
+                samples_per_volume=self.config['data']['samples_per_volume'],
                 sampler=self.sampler,
                 num_workers=self.num_workers,
                 shuffle_subjects=True,
@@ -330,8 +330,8 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             self.valSet = tio.SubjectsDataset(valSubjects, transform=self.preprocess)
             self.patchesValSet = tio.Queue(
                 subjects_dataset=self.valSet,
-                max_length=100,
-                samples_per_volume=75,
+                max_length=self.config['data']['queue_max_length'],
+                samples_per_volume=self.config['data']['samples_per_volume'],
                 sampler=self.sampler,
                 num_workers=self.num_workers,
                 shuffle_subjects=False,
@@ -342,7 +342,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             testImages, testLabels = self._getImagesAndLabels('test')
 
             testSubjects = self._filesToSubject(testImages, testLabels)
-            self.testSubjectGridSamplers = [tio.inference.GridSampler(subject=testSubject, patch_size=(128, 128, 64)) for testSubject in testSubjects]
+            self.testSubjectGridSamplers = [tio.inference.GridSampler(subject=testSubject, patch_size=self.config['data']['patch_size']) for testSubject in testSubjects]
             self.testAggregators = [tio.inference.GridAggregator(gridSampler) for gridSampler in self.testSubjectGridSamplers]
 
     @staticmethod

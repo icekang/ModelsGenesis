@@ -9,8 +9,19 @@ wandb:
   logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/Logs
 
 # Data
-fold: 0
-data_directory: /home/gridsan/nchutisilp/datasets/nnUNet_Datasets/nnUNet_raw/Dataset303_Calcium_OCTv2/
+data:
+  fold: 0
+  data_directory: /home/gridsan/nchutisilp/datasets/nnUNet_Datasets/nnUNet_raw/Dataset303_Calcium_OCTv2/
+  patch_size: [128, 128, 64]
+  queue_max_length: 1000
+  samples_per_volume: 100
+  num_workers: 39
+  batch_size: 64
+
+# Train
+train:
+  max_epochs: 1000
+  patience: 50
 
 # Pre-trained
 pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt

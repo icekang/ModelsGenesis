@@ -17,7 +17,7 @@ def main(config=None):
 
 
     # Data
-    dm = KFoldNNUNetSegmentationDataModule(fold=config['fold'], dataDir=config['data_directory'])
+    dm = KFoldNNUNetSegmentationDataModule(config=config)
     dm.setup('fit')
     train_loader = dm.train_dataloader()
     val_loader = dm.val_dataloader()
@@ -46,7 +46,7 @@ def main(config=None):
 
     # Trainer
     trainer = L.Trainer(
-        max_epochs=1,
+        max_epochs=config['train']['max_epochs'],
         deterministic=True,
         precision="16-mixed",
         logger=wandb_logger,
@@ -54,7 +54,7 @@ def main(config=None):
         callbacks=[
             ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["fold"]}', monitor="val_loss", mode="min", save_top_k=1, save_last=True, verbose=True, filename='best_model-{val_loss:.2f}'),
             ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["fold"]}', filename="last_model"),
-            EarlyStopping(monitor="val_loss", mode="min", patience=50, verbose=True)
+            EarlyStopping(monitor="val_loss", mode="min", patience=config['train']['patience'], verbose=True)
         ],
         )
     trainer.fit(model, train_loader, val_loader)
