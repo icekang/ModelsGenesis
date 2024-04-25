@@ -352,9 +352,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             'label': torch.stack([data['label'][tio.DATA] for data in batch], dim=0),
         }
         if test:
-            print("Test")
-            print(batch)
-            collated_batch['location'] = torch.stack([data[tio.LOCATION] for data in batch], dim=0),
+            collated_batch['location'] = torch.stack([data[tio.LOCATION] for data in batch], dim=0)
 
         return collated_batch
 
@@ -559,7 +557,7 @@ class GenesisSegmentation(L.LightningModule):
 
     def test_step(self, batch, batch_idx, dataloader_idx):
         x, y = batch['image'], batch['label']
-        location = batch[tio.LOCATION]
+        location = batch['location']
         x = x.float()
         y = y.long()
         y_hat = self.model(x)
