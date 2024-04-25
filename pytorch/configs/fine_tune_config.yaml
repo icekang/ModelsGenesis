@@ -10,7 +10,7 @@ wandb:
 
 # Data
 data:
-  fold: 0
+  fold: 0 # should change when doing different folds
   data_directory: /home/gridsan/nchutisilp/datasets/nnUNet_Datasets/nnUNet_raw/Dataset303_Calcium_OCTv2/
   patch_size: [128, 128, 64]
   queue_max_length: 1000
@@ -38,4 +38,4 @@ nnUNet:
   configuration: 3d_fullres
   trainer_name: nnUNetTrainer
   plans_identifier: nnUNetPlans
-  fold: 0
+  fold: 0 # any fold would do
