@@ -1,4 +1,5 @@
 from __future__ import print_function
+from functools import partial
 import math
 import os
 import random
@@ -355,7 +356,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             print(batch)
             collated_batch['location'] = torch.stack([data[tio.LOCATION] for data in batch], dim=0),
 
-        return batch
+        return collated_batch
 
     def train_dataloader(self):
         return DataLoader(self.patchesTrainSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
@@ -364,7 +365,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
         return DataLoader(self.patchesValSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
 
     def test_dataloader(self) -> Tuple[List[DataLoader], List[tio.GridSampler]]:
-        return [DataLoader(testSubjectGridSampler, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn) for testSubjectGridSampler in self.testSubjectGridSamplers], self.testSubjectGridSamplers
+        return [DataLoader(testSubjectGridSampler, batch_size=self.batch_size, num_workers=0, collate_fn=partial(self.collate_fn), test=True) for testSubjectGridSampler in self.testSubjectGridSamplers], self.testSubjectGridSamplers
 
     def getAugmentationTransform(self):
         preprocess =tio.Compose([])
