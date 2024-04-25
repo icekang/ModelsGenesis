@@ -572,7 +572,7 @@ class GenesisSegmentation(L.LightningModule):
     
     def on_test_epoch_end(self):
         for idx, (prediction_aggregator, label_aggregator) in enumerate(zip(self.prediction_aggregators, self.label_aggregators)):
-            torch.save(prediction_aggregator.get_output_tensor(), Path(self.trainer.log_dir) / str(self.config['fold']) / f'prediction_{idx}.pt')
-            torch.save(label_aggregator.get_output_tensor(), Path(self.trainer.log_dir) / str(self.config['fold']) / f'label_{idx}.pt')
+            torch.save(prediction_aggregator.get_output_tensor(), Path(self.trainer.log_dir) / f"fold_{self.config['fold']}" / f'prediction_{idx}.pt')
+            torch.save(label_aggregator.get_output_tensor(), Path(self.trainer.log_dir) / f"fold_{self.config['fold']}" / f'label_{idx}.pt')
             self.test_metrics.update(prediction_aggregator.get_output_tensor().view(-1), label_aggregator.get_output_tensor().view(-1))
         self.log_dict(self.test_metrics, on_step=False, on_epoch=True)
