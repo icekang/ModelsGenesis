@@ -346,9 +346,10 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
 
     @staticmethod
     def collate_fn(batch):
-        print('Collating batch')
-        batch = [{'image': data['image'][tio.DATA], 'label': data['label'][tio.DATA]} for data in batch]
-        print('Batch collated', len(batch), batch)
+        batch = {
+            'image': [data['image'][[tio.DATA]] for data in batch],
+            'label': [data['label'][[tio.DATA]] for data in batch],
+        }
         return batch
 
     def train_dataloader(self):
@@ -380,7 +381,6 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
         """
         subjects = []
         for imageFile, labelFile in zip(imageFiles, labelFiles):
-            print('Loading image ', str(labelFile))
             subject = tio.Subject(
                 image=tio.ScalarImage(str(imageFile)),
                 label=tio.LabelMap(str(labelFile)),
