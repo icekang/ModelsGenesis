@@ -6,7 +6,7 @@ wandb:
   wandb_run_id: null
   wandb_run_name: null
   wandb_project_name: GenesisFinetuneTest
-  logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisNNUNetFinetuningV2_noNorm/Logs
+  logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/Logs
 
 # Data
 fold: 0
