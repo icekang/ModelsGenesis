@@ -46,7 +46,7 @@ def main(config=None):
 
     # Trainer
     trainer = L.Trainer(
-        max_epochs=1000,
+        max_epochs=5,
         deterministic=True,
         precision="16-mixed",
         logger=wandb_logger,
