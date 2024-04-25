@@ -279,7 +279,7 @@ def generate_pair(img, batch_size, config, status="test"):
 class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
     def __init__(self,
                  fold: int,
-                 dataDir: Union[Path | str]) -> None:
+                 dataDir: Union[Path,str]) -> None:
         self.fold = fold
         self.dataDir = dataDir # /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset301_Calcium_OCT
         if isinstance(dataDir, str):
