@@ -347,9 +347,10 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
     @staticmethod
     def collate_fn(batch):
         batch = {
-            'image': [data['image'][tio.DATA] for data in batch],
-            'label': [data['label'][tio.DATA] for data in batch],
+            'image': torch.tensor([data['image'][tio.DATA] for data in batch]),
+            'label': torch.tensor([data['label'][tio.DATA] for data in batch]),
         }
+        print('Batch size: ', batch['image'].shape, batch['label'].shape)
         return batch
 
     def train_dataloader(self):
