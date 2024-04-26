@@ -55,7 +55,7 @@ def main(config=None):
     dm.setup('test')
     test_loader, test_grid_samplers = dm.test_dataloader()
     model.set_test_grid_samplers(test_grid_samplers)
-    trainer.test(dataloaders=test_loader, ckpt_path="best")
+    trainer.test(dataloaders=test_loader, ckpt_path="/home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/Logs/fold_0/best_model-val_loss=0.57.ckpt")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
