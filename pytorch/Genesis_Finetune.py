@@ -63,7 +63,7 @@ def main(config=None):
     dm.setup('test')
     test_loader, test_grid_samplers = dm.test_dataloader()
     model.set_test_grid_samplers(test_grid_samplers)
-    trainer.test(model, test_loader, ckpt_path="best")
+    trainer.test(dataloaders=test_loader, ckpt_path="best")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
