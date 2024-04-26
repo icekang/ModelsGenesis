@@ -528,7 +528,7 @@ class GenesisSegmentation(L.LightningModule):
         y_hat = self.model(x)
         y_hat = y_hat.sigmoid()
 
-        loss = 0.5 * torch_dice_coef_loss(y_hat, y) + 0.5 * torch.nn.functional.binary_cross_entropy(y_hat, y)
+        loss = 0.5 * torch_dice_coef_loss(y_hat, y.float()) + 0.5 * torch.nn.functional.binary_cross_entropy(y_hat, y.float())
         self.train_metrics.update(y_hat.view(-1), y.view(-1))
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
         self.log_dict(self.train_metrics, on_step=False, on_epoch=True)
@@ -549,7 +549,7 @@ class GenesisSegmentation(L.LightningModule):
         y_hat = self.model(x)
         y_hat = y_hat.sigmoid()
 
-        loss = 0.5 * torch_dice_coef_loss(y_hat, y) + 0.5 * torch.nn.functional.binary_cross_entropy(y_hat, y)
+        loss = 0.5 * torch_dice_coef_loss(y_hat, y.float()) + 0.5 * torch.nn.functional.binary_cross_entropy(y_hat, y.float())
         self.val_metrics.update(y_hat.view(-1), y.view(-1))
         self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
         self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
