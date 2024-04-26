@@ -6,7 +6,7 @@ wandb:
   wandb_run_id: null
   wandb_run_name: null
   wandb_project_name: GenesisFinetuneTest
-  logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/Logs
+  logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/LogsBCE
 
 # Data
 data:
@@ -16,7 +16,7 @@ data:
   queue_max_length: 1000
   samples_per_volume: 100
   num_workers: 39
-  batch_size: 64
+  batch_size: 16
 
 # Train
 train:
@@ -28,9 +28,9 @@ pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/M
 
 # Optimizer
 optimizer:
-  learning_rate: 0.001
+  learning_rate: 1
   scheduler_step_size: 30
-  scheduler_gamma: 0.1
+  scheduler_gamma: 0.5
 
 # nnUNet architecutre
 nnUNet:
