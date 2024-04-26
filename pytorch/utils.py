@@ -537,9 +537,9 @@ class GenesisSegmentation(L.LightningModule):
             x_np = x.detach().cpu().numpy()
             y_np = y.detach().cpu().numpy()
             y_hat_np = y_hat.detach().cpu().numpy()
-            torch.save(x_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'x_{batch_idx}_{self.training_step}.pt')
-            torch.save(y_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_{batch_idx}_{self.training_step}.pt')
-            torch.save(y_hat_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_hat_{batch_idx}_{self.training_step}.pt')
+            torch.save(x_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'x_{batch_idx}_{self.global_step}.pt')
+            torch.save(y_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_{batch_idx}_{self.global_step}.pt')
+            torch.save(y_hat_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_hat_{batch_idx}_{self.global_step}.pt')
 
         loss = 0.5 * torch_dice_coef_loss(y_hat, y.float()) + 0.5 * torch.nn.functional.binary_cross_entropy_with_logits(y_hat_logits, y.float())
         self.train_metrics.update(y_hat.view(-1), y.view(-1))
