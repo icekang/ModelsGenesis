@@ -591,7 +591,9 @@ class GenesisSegmentation(L.LightningModule):
                 plt.title("Sample Val Loss {:.4f}".format(loss.item()))
                 plt.savefig("sample.png")
                 plt.close("all")
-                self.log('val_sample', wandb.Image(plt.imread("worst_sample.png")), on_step=True, on_epoch=False, prog_bar=False)
+                self.logger.experiment.log(
+                    {'val_sample': [wandb.Image(plt.imread("worst_sample.png"))]}
+                )
             except np.linalg.LinAlgError:
                 print("Error plotting sample")
                 np.save(f"sample_error_{self.validation_step}.npy", sample)
