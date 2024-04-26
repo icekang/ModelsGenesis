@@ -296,7 +296,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             stage (str): Torch Lightning stage ('fit', 'validate', 'predict', ...), not used in the LightningDataModule
         """
         #TODO: Make tio.Queue and define the augmentation and preprocessing transformation for this dataset
-        self.preprocess = self.getAugmentationTransform()
+        self.preprocess = self.getPreprocessTransform()
         self.augment = self.getAugmentationTransform()
         self.transform = tio.Compose([self.preprocess, self.augment])
 
