@@ -308,9 +308,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             valSubjects = self._filesToSubject(valImages, valLabels)
 
             self.trainSet = tio.SubjectsDataset(trainSubjects, transform=self.transform)
-            
-            # TODO: Define hyperparameters as a config file
-            self.sampler = tio.data.LabelSampler(
+            trainSampler = tio.data.UniformSampler(
                 patch_size=self.config['data']['patch_size'],
                 label_name = 'label',
             )
@@ -318,7 +316,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
                 subjects_dataset=self.trainSet,
                 max_length=self.config['data']['queue_max_length'],
                 samples_per_volume=self.config['data']['samples_per_volume'],
-                sampler=self.sampler,
+                sampler=trainSampler,
                 num_workers=self.num_workers,
                 shuffle_subjects=True,
                 shuffle_patches=True,
@@ -328,11 +326,15 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
                 valSubjects = trainSubjects
                 print("Warning: Validation set is empty, using training set for validation")
             self.valSet = tio.SubjectsDataset(valSubjects, transform=self.preprocess)
+            valSampler = tio.data.UniformSampler(
+                patch_size=self.config['data']['patch_size'],
+                label_name = 'label',
+            )
             self.patchesValSet = tio.Queue(
                 subjects_dataset=self.valSet,
                 max_length=self.config['data']['queue_max_length'],
                 samples_per_volume=self.config['data']['samples_per_volume'],
-                sampler=self.sampler,
+                sampler=valSampler,
                 num_workers=self.num_workers,
                 shuffle_subjects=False,
                 shuffle_patches=False,
