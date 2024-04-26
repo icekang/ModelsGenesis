@@ -534,9 +534,9 @@ class GenesisSegmentation(L.LightningModule):
         y_hat = y_hat_logits.sigmoid()
 
         if self.global_step % 100 == 0:
-            x_np = x.cpu().numpy()
-            y_np = y.cpu().numpy()
-            y_hat_np = y_hat.cpu().numpy()
+            x_np = x.detach().cpu().numpy()
+            y_np = y.detach().cpu().numpy()
+            y_hat_np = y_hat.detach().cpu().numpy()
             torch.save(x_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'x_{batch_idx}_{self.training_step}.pt')
             torch.save(y_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_{batch_idx}_{self.training_step}.pt')
             torch.save(y_hat_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_hat_{batch_idx}_{self.training_step}.pt')
@@ -580,9 +580,9 @@ class GenesisSegmentation(L.LightningModule):
             import matplotlib.pyplot as plt
             import wandb
             sample = tio.Subject(
-                image=tio.ScalarImage(tensor=x[0].cpu()),
-                label=tio.LabelMap(tensor=y[0].cpu()),
-                prediction=tio.ScalarImage(tensor=y_hat[0].cpu()),
+                image=tio.ScalarImage(tensor=x[0].detach().cpu()),
+                label=tio.LabelMap(tensor=y[0].detach().cpu()),
+                prediction=tio.ScalarImage(tensor=y_hat[0].detach().cpu()),
             )
             try:
                 fig = plt.figure(num=1, clear=True, figsize=(10, 10))
