@@ -1,12 +1,12 @@
 # Reproducibility
-seed: 42
+seed: 0
 
 # WandB
 wandb:
   wandb_run_id: null
   wandb_run_name: null
   wandb_project_name: GenesisFinetuneTest
-  logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/LogsBCEAug
+  logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/LogsBCEAugUniform
 
 # Data
 data:
