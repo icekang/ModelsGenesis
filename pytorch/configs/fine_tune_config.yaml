@@ -13,8 +13,8 @@ data:
   fold: 0 # should change when doing different folds
   data_directory: /home/gridsan/nchutisilp/datasets/nnUNet_Datasets/nnUNet_raw/Dataset303_Calcium_OCTv2/
   patch_size: [128, 128, 64]
-  queue_max_length: 100
-  samples_per_volume: 2
+  queue_max_length: 700 # 90 (patches per volume) x 7 (training volumes)
+  samples_per_volume: 90 # (500x500x375) / (128x128x64) ~ 89.4
   num_workers: 39
   batch_size: 16
 
