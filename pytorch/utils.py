@@ -528,7 +528,7 @@ class GenesisSegmentation(L.LightningModule):
         y_hat = self.model(x)
         y_hat = y_hat.sigmoid()
 
-        loss = torch_dice_coef_loss(y_hat, y)
+        loss = 0.5 * torch_dice_coef_loss(y_hat, y) + 0.5 * torch.nn.functional.binary_cross_entropy(y_hat, y)
         self.train_metrics.update(y_hat.view(-1), y.view(-1))
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
         self.log_dict(self.train_metrics, on_step=False, on_epoch=True)
@@ -536,7 +536,7 @@ class GenesisSegmentation(L.LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.SGD(self.parameters(), lr=self.config['optimizer']['learning_rate'])
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=self.config['optimizer']['scheduler_step_size'], gamma=self.config['optimizer']['scheduler_gamma'])
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=self.config['optimizer']['scheduler_step_size'], gamma=self.config['optimizer']['scheduler_gamma'], verbose=True)
         return {
             'optimizer': optimizer,
             'lr_scheduler': scheduler,
@@ -549,10 +549,10 @@ class GenesisSegmentation(L.LightningModule):
         y_hat = self.model(x)
         y_hat = y_hat.sigmoid()
 
-        loss = torch_dice_coef_loss(y_hat, y)
+        loss = 0.5 * torch_dice_coef_loss(y_hat, y) + 0.5 * torch.nn.functional.binary_cross_entropy(y_hat, y)
         self.val_metrics.update(y_hat.view(-1), y.view(-1))
-        self.log('val_loss', loss)
-        self.log_dict(self.val_metrics, on_step=False, on_epoch=True)
+        self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
+        self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
         return loss
 
     def test_step(self, batch, batch_idx, dataloader_idx):
@@ -575,4 +575,4 @@ class GenesisSegmentation(L.LightningModule):
             torch.save(prediction_aggregator.get_output_tensor(), Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'prediction_{idx}.pt')
             torch.save(label_aggregator.get_output_tensor(), Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'label_{idx}.pt')
             self.test_metrics.update(prediction_aggregator.get_output_tensor().view(-1), label_aggregator.get_output_tensor().view(-1))
-        self.log_dict(self.test_metrics, on_step=False, on_epoch=True)
+        self.log_dict(self.test_metrics, on_step=False, on_epoch=True, prog_bar=True)
