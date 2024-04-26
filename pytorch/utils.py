@@ -367,12 +367,16 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
     def test_dataloader(self) -> Tuple[List[DataLoader], List[tio.GridSampler]]:
         return [DataLoader(testSubjectGridSampler, batch_size=self.batch_size, num_workers=0, collate_fn=partial(self.collate_fn, test=True)) for testSubjectGridSampler in self.testSubjectGridSamplers], self.testSubjectGridSamplers
 
-    def getAugmentationTransform(self):
-        preprocess =tio.Compose([])
+    def getPreprocessTransform(self):
+        preprocess = tio.Compose([])
         return preprocess
 
     def getAugmentationTransform(self):
-        augment = tio.Compose([])
+        augment = tio.Compose([
+            tio.RandomFlip(axes=(0, 1, 2), flip_probability=0.5),
+            tio.RandomAffine(scales=(0.9, 1.1), degrees=10, isotropic=True, default_pad_value='minimum'),
+            tio.RandomNoise(std=(0, 0.1)),
+        ])
         return augment
     
     def _filesToSubject(self, imageFiles: List[Path], labelFiles: List[Path]) -> List[tio.Subject]:
