@@ -13,15 +13,15 @@ data:
   fold: 0 # should change when doing different folds
   data_directory: /home/gridsan/nchutisilp/datasets/nnUNet_Datasets/nnUNet_raw/Dataset303_Calcium_OCTv2/
   patch_size: [128, 128, 64]
-  queue_max_length: 1000
-  samples_per_volume: 100
+  queue_max_length: 100
+  samples_per_volume: 2
   num_workers: 39
   batch_size: 16
 
 # Train
 train:
   max_epochs: 1000
-  patience: 50
+  patience: 75
 
 # Pre-trained
 pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt
@@ -29,7 +29,10 @@ pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/M
 # Optimizer
 optimizer:
   learning_rate: 1
-  scheduler_step_size: 30
+  momentum: 0.9
+  weight_decay: 0.0
+  nesterov: False
+  scheduler_step_size: 60
   scheduler_gamma: 0.5
 
 # nnUNet architecutre

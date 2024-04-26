@@ -371,7 +371,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
 
     def getAugmentationTransform(self):
         augment = tio.Compose([
-            tio.RandomFlip(axes=(0, 1, 2), flip_probability=0.5),
+            tio.RandomFlip(axes=(0, 1, 2), flip_probability=0.1),
             tio.RandomAffine(scales=(0.9, 1.1), degrees=10, isotropic=True, default_pad_value='minimum'),
             tio.RandomNoise(std=(0, 0.1)),
         ])
@@ -533,6 +533,14 @@ class GenesisSegmentation(L.LightningModule):
         y_hat_logits = self.model(x)
         y_hat = y_hat_logits.sigmoid()
 
+        if self.training_step % 100 == 0:
+            x_np = x.cpu().numpy()
+            y_np = y.cpu().numpy()
+            y_hat_np = y_hat.cpu().numpy()
+            torch.save(x_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'x_{batch_idx}_{self.training_step}.pt')
+            torch.save(y_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_{batch_idx}_{self.training_step}.pt')
+            torch.save(y_hat_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_hat_{batch_idx}_{self.training_step}.pt')
+
         loss = 0.5 * torch_dice_coef_loss(y_hat, y.float()) + 0.5 * torch.nn.functional.binary_cross_entropy_with_logits(y_hat_logits, y.float())
         self.train_metrics.update(y_hat.view(-1), y.view(-1))
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
@@ -540,8 +548,17 @@ class GenesisSegmentation(L.LightningModule):
         return loss
 
     def configure_optimizers(self):
-        optimizer = torch.optim.SGD(self.parameters(), lr=self.config['optimizer']['learning_rate'])
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=self.config['optimizer']['scheduler_step_size'], gamma=self.config['optimizer']['scheduler_gamma'], verbose=True)
+        optimizer = torch.optim.SGD(
+            self.parameters(),
+            lr=self.config['optimizer']['learning_rate'],
+            momentum=self.config['optimizer']['momentum'],
+            weight_decay=self.config['optimizer']['weight_decay'],
+            nesterov=self.config['optimizer']['nesterov'])
+        scheduler = torch.optim.lr_scheduler.StepLR(
+            optimizer, 
+            step_size=self.config['optimizer']['scheduler_step_size'], 
+            gamma=self.config['optimizer']['scheduler_gamma'], 
+            verbose=True)
         return {
             'optimizer': optimizer,
             'lr_scheduler': scheduler,
@@ -558,9 +575,30 @@ class GenesisSegmentation(L.LightningModule):
         self.val_metrics.update(y_hat.view(-1), y.view(-1))
         self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
         self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
+
+        if self.validation_step % 100 == 0:
+            import matplotlib.pyplot as plt
+            import wandb
+            sample = tio.Subject(
+                image=tio.ScalarImage(tensor=x[0].cpu()),
+                label=tio.LabelMap(tensor=y[0].cpu()),
+                prediction=tio.ScalarImage(tensor=y_hat[0].cpu()),
+            )
+            try:
+                fig = plt.figure(num=1, clear=True, figsize=(10, 10))
+                ax = fig.add_subplot()
+                sample.plot()
+                plt.title("Sample Val Loss {:.4f}".format(loss.item()))
+                plt.savefig("sample.png")
+                plt.close("all")
+                self.log('val_sample', [wandb.Image(plt.imread("worst_sample.png"))], on_step=True, on_epoch=False, prog_bar=False)
+            except np.linalg.LinAlgError:
+                print("Error plotting sample")
+                np.save(f"sample_error_{self.validation_step}.npy", sample)
         return loss
 
     def test_step(self, batch, batch_idx, dataloader_idx):
+        #TODO: even validation yields super low dice score, need to check the test step
         x, y = batch['image'], batch['label']
         location = batch['location']
         x = x.float()
