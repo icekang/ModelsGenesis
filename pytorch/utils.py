@@ -533,7 +533,7 @@ class GenesisSegmentation(L.LightningModule):
         y_hat_logits = self.model(x)
         y_hat = y_hat_logits.sigmoid()
 
-        if self.training_step % 100 == 0:
+        if self.global_step % 100 == 0:
             x_np = x.cpu().numpy()
             y_np = y.cpu().numpy()
             y_hat_np = y_hat.cpu().numpy()
@@ -576,7 +576,7 @@ class GenesisSegmentation(L.LightningModule):
         self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
         self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
 
-        if self.validation_step % 100 == 0:
+        if self.global_step % 100 == 0:
             import matplotlib.pyplot as plt
             import wandb
             sample = tio.Subject(
