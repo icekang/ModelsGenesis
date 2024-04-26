@@ -310,7 +310,6 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             self.trainSet = tio.SubjectsDataset(trainSubjects, transform=self.transform)
             trainSampler = tio.data.UniformSampler(
                 patch_size=self.config['data']['patch_size'],
-                label_name = 'label',
             )
             self.patchesTrainSet = tio.Queue(
                 subjects_dataset=self.trainSet,
@@ -328,7 +327,6 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             self.valSet = tio.SubjectsDataset(valSubjects, transform=self.preprocess)
             valSampler = tio.data.UniformSampler(
                 patch_size=self.config['data']['patch_size'],
-                label_name = 'label',
             )
             self.patchesValSet = tio.Queue(
                 subjects_dataset=self.valSet,
