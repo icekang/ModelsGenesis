@@ -1,0 +1,3 @@
+LLsub finetune_submission.sh -g volta:1 -s 40 -N 1
+LLsub finetune_submission-fold1.sh -g volta:1 -s 40 -N 1
+LLsub finetune_submission-fold2.sh -g volta:1 -s 40 -N 1

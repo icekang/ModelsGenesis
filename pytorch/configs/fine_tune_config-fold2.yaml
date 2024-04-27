@@ -10,7 +10,7 @@ wandb:
 
 # Data
 data:
-  fold: 0 # should change when doing different folds
+  fold: 2 # should change when doing different folds
   data_directory: /home/gridsan/nchutisilp/datasets/nnUNet_Datasets/nnUNet_raw/Dataset303_Calcium_OCTv2/
   patch_size: [128, 128, 64]
   queue_max_length: 720 # 180 (patches per volume) x 4 (training volumes)
