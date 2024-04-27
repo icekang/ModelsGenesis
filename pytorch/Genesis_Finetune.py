@@ -46,6 +46,7 @@ def main(config=None):
 
     # Trainer
     trainer = L.Trainer(
+        overfit_batches=1,
         max_epochs=config['train']['max_epochs'],
         deterministic=True,
         precision="16-mixed",
