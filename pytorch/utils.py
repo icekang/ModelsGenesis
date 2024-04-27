@@ -497,7 +497,7 @@ class GenesisSegmentation(L.LightningModule):
         self.prediction_aggregators = [tio.inference.GridAggregator(grid_sampler) for grid_sampler in self.test_grid_samplers]
         self.label_aggregators = [tio.inference.GridAggregator(grid_sampler) for grid_sampler in self.test_grid_samplers]
 
-    def build_network(self):
+    def build_network(self) -> torch.nn.Module:
         # prepare the 3D model
         # Initalize the model from nnUNet
         trainer = get_trainer_from_args(
