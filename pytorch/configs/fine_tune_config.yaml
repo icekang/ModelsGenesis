@@ -4,7 +4,7 @@ seed: 0
 # WandB
 wandb:
   wandb_run_id: null
-  wandb_run_name: null
+  wandb_run_name: fold_0_freeze_enc
   wandb_project_name: GenesisFinetuneTest
   logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/LogsBCEAugUniform
 
@@ -25,6 +25,10 @@ train:
 
 # Pre-trained
 pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt
+
+# Model
+model:
+  freeze_encoder: True
 
 # Optimizer
 optimizer:

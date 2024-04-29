@@ -28,7 +28,7 @@ def main(config=None):
 
     # Model
     model = GenesisSegmentation(config=config)
-    model.requires_grad_(True)
+    # model.requires_grad_(True)
     for param in model.parameters():
         # Check if the parameter has requires_grad
         if not param.requires_grad:

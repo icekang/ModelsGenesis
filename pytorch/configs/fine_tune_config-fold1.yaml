@@ -26,6 +26,10 @@ train:
 # Pre-trained
 pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt
 
+# Model
+model:
+  freeze_encoder: True
+
 # Optimizer
 optimizer:
   learning_rate: 2

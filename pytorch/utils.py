@@ -320,6 +320,9 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
                 shuffle_subjects=True,
                 shuffle_patches=True,
             )
+            print('=====================================================================================================================\n')
+            print('self.patchesTrainSet.iterations_per_epoch', self.patchesTrainSet.iterations_per_epoch)
+            print('\n=====================================================================================================================')
 
             if len(valSubjects) == 0:
                 valSubjects = trainSubjects
@@ -472,6 +475,9 @@ class GenesisSegmentation(L.LightningModule):
         self.config = config
         self.model = self.build_network()
 
+        if 'model' in config and 'freeze_encoder' in config['model'] and config['model']['freeze_encoder']:
+            self.model.encoder.requires_grad_(False)
+
         metrics = MetricCollection({
             'dice': Dice(num_classes=1)
         })
@@ -549,7 +555,7 @@ class GenesisSegmentation(L.LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.SGD(
-            self.parameters(),
+            filter(lambda p: p.requires_grad, self.parameters()), # Make sure to filter the parameters based on `requires_grad`
             lr=self.config['optimizer']['learning_rate'],
             momentum=self.config['optimizer']['momentum'],
             weight_decay=self.config['optimizer']['weight_decay'],
