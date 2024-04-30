@@ -29,11 +29,10 @@ def main(config=None):
     # Model
     model = GenesisSegmentation(config=config)
     # model.requires_grad_(True)
-    for param in model.parameters():
+    for name, param in model.named_parameters():
         # Check if the parameter has requires_grad
         if not param.requires_grad:
-            print('Parameter is not requires_grad')
-            print(param)
+            print(f'Parameter {name} is not requires_grad')
 
     # Logger
     if config['wandb']['wandb_run_id'] == None:
