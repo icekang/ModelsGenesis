@@ -528,7 +528,8 @@ class GenesisSegmentation(L.LightningModule):
             configuration=self.config['nnUNet']['configuration'],
             fold=self.config['nnUNet']['fold'],
             trainer_name=self.config['nnUNet']['trainer_name'],
-            plans_identifier=self.config['nnUNet']['plans_identifier'])
+            plans_identifier=self.config['nnUNet']['plans_identifier'],
+            device=torch.device('cpu'))
         trainer.initialize()
         model = convert_nnUNet_to_Genesis(trainer.network)
         pytorch_total_params = sum(p.numel() for p in model.parameters())
@@ -606,15 +607,15 @@ class GenesisSegmentation(L.LightningModule):
             import wandb
             import os
 
-            sum_label = torch.sum(y, dim=0)
-            positive_sample_idx = torch.where(sum_label > 0)
+            sum_label = torch.sum(y, dim=(1,2,3,4))
+            positive_sample_idx = torch.where(sum_label > 0)[0]
             if len(positive_sample_idx):
                 positive_sample_idx = positive_sample_idx[0].item()
             else:
                 print('No positive sample found in the validation set, using the first item in the validation batch')
                 positive_sample_idx = 0
 
-            negative_sample_idx = torch.where(sum_label == 0)
+            negative_sample_idx = torch.where(sum_label == 0)[0]
             if len(negative_sample_idx):
                 negative_sample_idx = negative_sample_idx[0].item()
             else:
