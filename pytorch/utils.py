@@ -20,6 +20,7 @@ import lightning as L
 from torch.utils.data import DataLoader
 from torchmetrics import Dice, MetricCollection
 from nnunetv2.run.run_training import get_trainer_from_args
+import wandb.util
 
 
 try:  # SciPy >= 0.19
@@ -311,17 +312,29 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             trainSampler = tio.data.UniformSampler(
                 patch_size=self.config['data']['patch_size'],
             )
-            self.patchesTrainSet = tio.Queue(
+            self.patchesTrainSet = [
+                tio.Queue(
                 subjects_dataset=self.trainSet,
                 max_length=self.config['data']['queue_max_length'],
                 samples_per_volume=self.config['data']['samples_per_volume'],
                 sampler=trainSampler,
                 num_workers=self.num_workers,
                 shuffle_subjects=True,
-                shuffle_patches=True,
-            )
+                shuffle_patches=True,),
+                tio.Queue(
+                subjects_dataset=self.trainSet,
+                max_length=self.config['data']['queue_max_length'],
+                samples_per_volume=self.config['data']['samples_per_volume'],
+                sampler=tio.data.LabelSampler(
+                    patch_size=self.config['data']['patch_size'],
+                    label_name='label'
+                ),
+                num_workers=self.num_workers,
+                shuffle_subjects=True,
+                shuffle_patches=True,),
+                 ]
             print('=====================================================================================================================\n')
-            print('self.patchesTrainSet.iterations_per_epoch', self.patchesTrainSet.iterations_per_epoch)
+            print('self.patchesTrainSet.iterations_per_epoch', self.patchesTrainSet[0].iterations_per_epoch)
             print('\n=====================================================================================================================')
 
             if len(valSubjects) == 0:
@@ -360,6 +373,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
         return collated_batch
 
     def train_dataloader(self):
+        return torch.utils.data.ConcatDataset([DataLoader(patchesTrainSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn) for patchesTrainSet in self.patchesTrainSet])
         return DataLoader(self.patchesTrainSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
     
     def val_dataloader(self):
@@ -407,7 +421,10 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             Tuple[List[str], List[str]]: List of train and validation unique case IDs
         """
         dataSetName = self.dataDir.stem
-        splitPath = self.dataDir / '..' / '..' / 'nnUNet_preprocessed' / dataSetName / 'splits_final.json'
+        if 'scale_path' in self.config['data']:
+            splitPath = self.config['data']['scale_path']
+        else:
+            splitPath = self.dataDir / '..' / '..' / 'nnUNet_preprocessed' / dataSetName / 'splits_final.json'
         assert splitPath.exists(), f"Split file {splitPath} does not exist"
         with open(splitPath, 'r') as f:
             splits = json.load(f)
@@ -585,24 +602,45 @@ class GenesisSegmentation(L.LightningModule):
         if self.global_step % 100 == 0:
             import matplotlib.pyplot as plt
             import wandb
-            sample = tio.Subject(
-                image=tio.ScalarImage(tensor=x[0].detach().cpu()),
-                label=tio.LabelMap(tensor=y[0].detach().cpu()),
-                prediction=tio.ScalarImage(tensor=y_hat[0].detach().cpu()),
-            )
-            try:
-                fig = plt.figure(num=1, clear=True, figsize=(10, 10))
-                ax = fig.add_subplot()
-                sample.plot()
-                plt.title("Sample Val Loss {:.4f}".format(loss.item()))
-                plt.savefig("sample.png")
-                plt.close("all")
-                self.logger.experiment.log(
-                    {'val_sample': [wandb.Image(plt.imread("sample.png"))]}
+            import os
+
+            sum_label = torch.sum(y, dim=0)
+            positive_sample_idx = torch.where(sum_label > 0)
+            if len(positive_sample_idx):
+                positive_sample_idx = positive_sample_idx[0].item()
+            else:
+                print('No positive sample found in the validation set, using the first item in the validation batch')
+                positive_sample_idx = 0
+
+            negative_sample_idx = torch.where(sum_label == 0)
+            if len(negative_sample_idx):
+                negative_sample_idx = negative_sample_idx[0].item()
+            else:
+                print('No negative sample found in the validation set, using the first item in the validation batch')
+                negative_sample_idx = 0
+            for i, kind in zip([positive_sample_idx, negative_sample_idx], ['Positive', 'Negative']):
+                sample = tio.Subject(
+                    image=tio.ScalarImage(tensor=x[i].detach().cpu()),
+                    label=tio.LabelMap(tensor=y[i].detach().cpu()),
+                    prediction=tio.ScalarImage(tensor=y_hat[i].detach().cpu()),
                 )
-            except np.linalg.LinAlgError:
-                print("Error plotting sample")
-                np.save(f"sample_error_{self.validation_step}.npy", sample)
+                try:
+                    fig = plt.figure(num=1, clear=True, figsize=(10, 10))
+                    ax = fig.add_subplot()
+                    sample.plot()
+                    ax.set_title(f"{kind} Validation Sample Loss {loss.item():.4f}")
+                    random_string = wandb.util.generate_id()
+                    image_name = f"sample_{random_string}.png"
+                    plt.savefig(image_name)
+                    sample_image = plt.imread(image_name)
+                    os.remove(image_name)
+                    plt.close("all")
+                    self.logger.experiment.log(
+                        {'val_sample': [wandb.Image(sample_image)]}
+                    )
+                except np.linalg.LinAlgError:
+                    print("Error plotting sample")
+                    np.save(f"sample_error_{self.validation_step}.npy", sample)
         return loss
 
     def test_step(self, batch, batch_idx, dataloader_idx):

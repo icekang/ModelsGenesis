@@ -1,0 +1,49 @@
+# Reproducibility
+seed: 0
+
+# WandB
+wandb:
+  wandb_run_id: null
+  wandb_run_name: fold_0_scale66
+  wandb_project_name: GenesisFinetuneTest
+  logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/LogsBCEAugUniform
+
+# Data
+data:
+  fold: 0 # should change when doing different folds
+  data_directory: /home/gridsan/nchutisilp/datasets/nnUNet_Datasets/nnUNet_raw/Dataset302_Calcium_OCTv2/ # `raw` 302 and 303 are the same
+  scale_path: /home/gridsan/nchutisilp/datasets/nnUNet_Datasets/nnUNet_preprocessed/Dataset302_Calcium_OCTv2/splits_final_4.json
+  patch_size: [128, 128, 64]
+  queue_max_length: 180 # 180 (patches per volume) x 1 (training volumes)
+  samples_per_volume: 180 # (500x500x375) / (128x128x64) ~ 89.4
+  num_workers: 20
+  batch_size: 16
+
+# Train
+train:
+  max_epochs: 1
+  patience: 100
+
+# Pre-trained
+pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt
+
+# Model
+model:
+  freeze_encoder: False
+
+# Optimizer
+optimizer:
+  learning_rate: 2
+  momentum: 0.9
+  weight_decay: 0.0
+  nesterov: False
+  scheduler_step_size: 60
+  scheduler_gamma: 0.5
+
+# nnUNet architecutre
+nnUNet:
+  dataset_name_or_id: "301"
+  configuration: 3d_fullres
+  trainer_name: nnUNetTrainer
+  plans_identifier: nnUNetPlans
+  fold: 0 # any fold would do

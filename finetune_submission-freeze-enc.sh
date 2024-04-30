@@ -1,12 +1,7 @@
 #!/bin/bash
 
-# Loading the required module
-source /etc/profile
-module load anaconda/2023a-pytorch
-
 # Activating the conda environment
 source activate genesis
-conda activate genesis
 which python
 
 # Setup env variables nn_UNet
