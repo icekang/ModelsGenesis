@@ -21,7 +21,7 @@ data:
 # Train
 train:
   max_epochs: 2000
-  patience: 300
+  patience: 100
 
 # Pre-trained
 pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt
