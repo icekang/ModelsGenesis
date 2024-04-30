@@ -542,8 +542,10 @@ class GenesisSegmentation(L.LightningModule):
         for key in state_dict.keys():
             unParalled_state_dict[key.replace("module.", "")] = state_dict[key]
         
-        # Since torch.optimized is used we need to add "_orig_mod." from the keys
-        unParalled_state_dict = {f"_orig_mod.{k}": v for k, v in unParalled_state_dict.items()}
+        if '_orig_mod.' in list(model.state_dict().keys())[0]:
+            # Since torch.optimized is used we need to add "_orig_mod." from the keys
+            print("Adding _orig_mod. to the state_dict")
+            unParalled_state_dict = {f"_orig_mod.{k}": v for k, v in unParalled_state_dict.items()}
 
         model.load_state_dict(unParalled_state_dict)
         return model
