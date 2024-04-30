@@ -318,7 +318,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
                 max_length=self.config['data']['queue_max_length'],
                 samples_per_volume=self.config['data']['samples_per_volume'],
                 sampler=trainSampler,
-                num_workers=self.num_workers,
+                num_workers=self.num_workers // 2,
                 shuffle_subjects=True,
                 shuffle_patches=True,),
                 tio.Queue(
@@ -329,7 +329,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
                     patch_size=self.config['data']['patch_size'],
                     label_name='label'
                 ),
-                num_workers=self.num_workers,
+                num_workers=self.num_workers // 2,
                 shuffle_subjects=True,
                 shuffle_patches=True,),
                  ]
@@ -358,7 +358,10 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
             testImages, testLabels = self._getImagesAndLabels('test')
 
             testSubjects = self._filesToSubject(testImages, testLabels)
-            self.testSubjectGridSamplers = [tio.inference.GridSampler(subject=testSubject, patch_size=self.config['data']['patch_size']) for testSubject in testSubjects]
+            self.testSubjectGridSamplers = [tio.inference.GridSampler(
+                subject=testSubject,
+                patch_size=self.config['data']['patch_size'],
+                patch_overlap=(s//2 for s in self.config['data']['patch_size'])) for testSubject in testSubjects]
             self.testAggregators = [tio.inference.GridAggregator(gridSampler) for gridSampler in self.testSubjectGridSamplers]
 
     @staticmethod
@@ -373,7 +376,8 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
         return collated_batch
 
     def train_dataloader(self):
-        return torch.utils.data.ConcatDataset([DataLoader(patchesTrainSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn) for patchesTrainSet in self.patchesTrainSet])
+        concatenated_dataset = torch.utils.data.ConcatDataset(self.patchesTrainSet)
+        return DataLoader(concatenated_dataset, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
         return DataLoader(self.patchesTrainSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
     
     def val_dataloader(self):
@@ -559,13 +563,13 @@ class GenesisSegmentation(L.LightningModule):
         y_hat_logits = self.model(x)
         y_hat = y_hat_logits.sigmoid()
 
-        if self.global_step % 100 == 0:
-            x_np = x.detach().cpu().numpy()
-            y_np = y.detach().cpu().numpy()
-            y_hat_np = y_hat.detach().cpu().numpy()
-            torch.save(x_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'x_{batch_idx}_{self.global_step}.pt')
-            torch.save(y_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_{batch_idx}_{self.global_step}.pt')
-            torch.save(y_hat_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_hat_{batch_idx}_{self.global_step}.pt')
+        # if self.global_step % 100 == 0:
+        #     x_np = x.detach().cpu().numpy()
+        #     y_np = y.detach().cpu().numpy()
+        #     y_hat_np = y_hat.detach().cpu().numpy()
+        #     torch.save(x_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'x_{batch_idx}_{self.global_step}.pt')
+        #     torch.save(y_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_{batch_idx}_{self.global_step}.pt')
+        #     torch.save(y_hat_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_hat_{batch_idx}_{self.global_step}.pt')
 
         loss = 0.5 * torch_dice_coef_loss(y_hat, y.float()) + 0.5 * torch.nn.functional.binary_cross_entropy_with_logits(y_hat_logits, y.float())
         self.train_metrics.update(y_hat.view(-1), y.view(-1))
@@ -639,7 +643,7 @@ class GenesisSegmentation(L.LightningModule):
                     os.remove(image_name)
                     plt.close("all")
                     self.logger.experiment.log(
-                        {'val_sample': [wandb.Image(sample_image)]}
+                        {f'val_sample_{kind}': [wandb.Image(sample_image)]}
                     )
                 except np.linalg.LinAlgError:
                     print("Error plotting sample")
