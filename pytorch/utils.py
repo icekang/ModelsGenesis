@@ -18,7 +18,7 @@ from pathlib import Path
 import json
 import lightning as L
 from torch.utils.data import DataLoader
-from torchmetrics import Dice, MetricCollection
+from torchmetrics import Dice, MetricCollection, MeanSquaredError, F1Score, Accuracy, Precision, Recall
 from nnunetv2.run.run_training import get_trainer_from_args
 import wandb.util
 
@@ -651,7 +651,6 @@ class GenesisSegmentation(L.LightningModule):
         return loss
 
     def test_step(self, batch, batch_idx, dataloader_idx):
-        #TODO: even validation yields super low dice score, need to check the test step
         x, y = batch['image'], batch['label']
         location = batch['location']
         x = x.float()
@@ -672,3 +671,143 @@ class GenesisSegmentation(L.LightningModule):
             torch.save(label_aggregator.get_output_tensor(), Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'label_{idx}.pt')
             self.test_metrics.update(prediction_aggregator.get_output_tensor().view(-1), label_aggregator.get_output_tensor().view(-1))
         self.log_dict(self.test_metrics, on_step=False, on_epoch=True, prog_bar=True)
+
+# Define the UNetRegressor
+class UNetRegressorHead(torch.nn.Module):
+    def __init__(self, in_channels: int, n_classes: int, pooling="avg", dropout=0.2, task: str = 'regression'):
+        super(UNetRegressorHead, self).__init__()
+        """
+        >>> input_sample = torch.randn(1, 1, 512, 512, 384)
+        >>> output_sample = encoder(input_sample)
+        >>> [feat.shape for feat in output_sample]
+        >>> [torch.Size([1, 32, 512, 512, 384]),
+             torch.Size([1, 64, 256, 256, 192]),
+             torch.Size([1, 128, 128, 128, 96]),
+             torch.Size([1, 256, 64, 64, 48]),
+             torch.Size([1, 320, 32, 32, 24]),
+             torch.Size([1, 320, 32, 16, 12])]
+        """
+        if pooling not in ("max", "avg"):
+            raise ValueError("Pooling should be one of ('max', 'avg'), got {}.".format(pooling))
+
+        if task not in ("regression", "classification"):
+            raise ValueError("Task should be one of ('regression', 'classification'), got {}.".format(task))
+
+        self.regressor = torch.nn.Sequential(
+            torch.nn.AdaptiveAvgPool3d(1) if pooling == "avg" else torch.nn.AdaptiveMaxPool3d(1),
+            torch.nn.Flatten(),
+            torch.nn.Dropout(p=dropout, inplace=True) if dropout > 0 else torch.nn.Identity(),
+            torch.nn.Linear(in_channels, n_classes, bias=True),
+            torch.nn.ReLU() if task == 'regression' else torch.nn.Softmax(dim=1)
+        )
+
+    def forward(self, x):
+        x = self.regressor(x)
+        return x
+
+class nnUNetRegressionClassification(L.LightningModule):
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+        self.encoder = self.build_network().encoder
+        self.head = UNetRegressorHead(
+            in_channels=self.config['model']['head']['in_channels'], 
+            n_classes=self.config['data']['num_classes'], 
+            pooling=self.config['model']['head']['pooling'], 
+            dropout=self.config['model']['head']['dropout'], 
+            task=self.config['model']['head']['task'])
+
+        if 'model' in config and 'freeze_encoder' in config['model'] and config['model']['freeze_encoder']:
+            self.encoder.requires_grad_(False)
+
+        if self.config['model']['head']['task'] == 'regression':
+            metrics = MetricCollection({
+                'mse': MeanSquaredError(),
+            })
+            self.criterion = torch.nn.MSELoss()
+
+        else:
+            metrics = MetricCollection({
+                'accuracy': Accuracy(),
+                'f1': F1Score(num_classes=self.config['data']['num_classes']),
+                'precision': Precision(num_classes=self.config['data']['num_classes']),
+                'recall': Recall(num_classes=self.config['data']['num_classes']),
+            })
+            self.criterion = torch.nn.CrossEntropyLoss()
+
+        self.train_metrics = metrics.clone('train_')
+        self.val_metrics = metrics.clone('val_')
+        self.test_metrics = metrics.clone('test_')
+
+        self.test_grid_samplers: List[tio.GridSampler] = None
+        self.prediction_aggregators: List[tio.GridAggregator] = None
+        self.label_aggregators: List[tio.GridAggregator] = None
+
+    def build_network(self) -> torch.nn.Module:
+        # prepare the 3D model
+        # Initalize the model from nnUNet
+        trainer = get_trainer_from_args(
+            dataset_name_or_id=self.config['nnUNet']['dataset_name_or_id'],
+            configuration=self.config['nnUNet']['configuration'],
+            fold=self.config['nnUNet']['fold'],
+            trainer_name=self.config['nnUNet']['trainer_name'],
+            plans_identifier=self.config['nnUNet']['plans_identifier'],
+            device=torch.device('cpu'))
+        trainer.initialize()
+        model = trainer.network
+        pytorch_total_params = sum(p.numel() for p in model.parameters())
+        print("Total number of parameters in the model: ", pytorch_total_params)
+
+        if 'pre_trained_weight_path' in self.config and self.config['pre_trained_weight_path'] is not None:
+            #Load pre-trained weights
+            weight_dir = self.config['pre_trained_weight_path']
+            checkpoint = torch.load(weight_dir, map_location=torch.device('cpu'))
+            state_dict = checkpoint['state_dict']
+            unParalled_state_dict = {}
+            for key in state_dict.keys():
+                unParalled_state_dict[key.replace("module.", "")] = state_dict[key]
+            
+            if '_orig_mod.' in list(model.state_dict().keys())[0]:
+                # Since torch.optimized is used we need to add "_orig_mod." from the keys
+                print("Adding _orig_mod. to the state_dict")
+                unParalled_state_dict = {f"_orig_mod.{k}": v for k, v in unParalled_state_dict.items()}
+
+            model.load_state_dict(unParalled_state_dict)
+        return model
+
+    def training_step(self, batch, batch_idx):
+        x, y = batch['image'], batch['label']
+        x = x.float()
+        y = y.long()
+        y_hat = self.encoder(x)
+        y_hat = self.head(y_hat[-1])
+
+        loss = self.criterion(y_hat, y)
+        self.train_metrics.update(y_hat.view(-1), y.view(-1))
+        self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
+        self.log_dict(self.train_metrics, on_step=False, on_epoch=True)
+        return loss
+    
+    def validation_step(self, batch, batch_idx):
+        x, y = batch['image'], batch['label']
+        x = x.float()
+        y = y.long()
+        y_hat = self.encoder(x)
+        y_hat = self.head(y_hat[-1])
+
+        loss = self.criterion(y_hat, y)
+        self.val_metrics.update(y_hat.view(-1), y.view(-1))
+        self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
+        self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
+        return loss
+
+    def test_step(self, batch, batch_idx, dataloader_idx):
+        x, y = batch['image'], batch['label']
+        x = x.float()
+        y = y.long()
+        y_hat = self.encoder(x)
+        y_hat = self.head(y_hat[-1])
+
+        self.test_metrics.update(y_hat.view(-1), y.view(-1))
+        self.log_dict(self.test_metrics, on_step=False, on_epoch=True, prog_bar=True)
+        return None
