@@ -426,7 +426,7 @@ class KFoldNNUNetSegmentationDataModule(L.LightningDataModule):
         """
         dataSetName = self.dataDir.stem
         if 'scale_path' in self.config['data']:
-            splitPath = self.config['data']['scale_path']
+            splitPath = Path(self.config['data']['scale_path'])
         else:
             splitPath = self.dataDir / '..' / '..' / 'nnUNet_preprocessed' / dataSetName / 'splits_final.json'
         assert splitPath.exists(), f"Split file {splitPath} does not exist"
