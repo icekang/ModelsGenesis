@@ -20,6 +20,7 @@ import lightning as L
 from torch.utils.data import DataLoader
 from torchmetrics import Dice, MetricCollection, MeanSquaredError, F1Score, Accuracy, Precision, Recall
 from nnunetv2.run.run_training import get_trainer_from_args
+from nnunetv2.run.load_pretrained_weights import load_pretrained_weights
 import wandb.util
 
 
@@ -535,24 +536,23 @@ class GenesisSegmentation(L.LightningModule):
             plans_identifier=self.config['nnUNet']['plans_identifier'],
             device=torch.device('cpu'))
         trainer.initialize()
-        model = convert_nnUNet_to_Genesis(trainer.network)
+
+        model = trainer.network
+
+        load_pretrained_weights(model, self.config['pre_trained_weight_path'], verbose=True)
+
         pytorch_total_params = sum(p.numel() for p in model.parameters())
         print("Total number of parameters in the model: ", pytorch_total_params)
 
-        #Load pre-trained weights
-        weight_dir = self.config['pre_trained_weight_path']
-        checkpoint = torch.load(weight_dir, map_location=torch.device('cpu'))
-        state_dict = checkpoint['state_dict']
-        unParalled_state_dict = {}
-        for key in state_dict.keys():
-            unParalled_state_dict[key.replace("module.", "")] = state_dict[key]
-        
-        if '_orig_mod.' in list(model.state_dict().keys())[0]:
-            # Since torch.optimized is used we need to add "_orig_mod." from the keys
-            print("Adding _orig_mod. to the state_dict")
-            unParalled_state_dict = {f"_orig_mod.{k}": v for k, v in unParalled_state_dict.items()}
-
-        model.load_state_dict(unParalled_state_dict)
+        print("########## Check if the weights are loaded correctly (should ONLY print *.seg_layers.* in the keys) ##########")
+        checkpoint = torch.load(self.config['pre_trained_weight_path'], map_location=torch.device('cpu'))
+        for key in model.state_dict().keys():
+            if not torch.equal(checkpoint['network_weights'][key], model.state_dict()[key]):
+                print(key)
+                print((checkpoint['network_weights'][key] - model.state_dict()[key]).sum())
+                print('')
+                assert '.seg_layers.' in key, 'Weights are not loaded correctly'
+        print("########## Weights are loaded correctly ##########")
         return model
 
     def training_step(self, batch, batch_idx):
@@ -560,18 +560,9 @@ class GenesisSegmentation(L.LightningModule):
         x = x.float()
         y = y.long()
         y_hat = self.model(x)
-        y_hat_logits = self.model(x)
-        y_hat = y_hat_logits.sigmoid()
+        y_hat = torch.nn.functional.softmax(y_hat, dim=1)
 
-        # if self.global_step % 100 == 0:
-        #     x_np = x.detach().cpu().numpy()
-        #     y_np = y.detach().cpu().numpy()
-        #     y_hat_np = y_hat.detach().cpu().numpy()
-        #     torch.save(x_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'x_{batch_idx}_{self.global_step}.pt')
-        #     torch.save(y_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_{batch_idx}_{self.global_step}.pt')
-        #     torch.save(y_hat_np, Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'y_hat_{batch_idx}_{self.global_step}.pt')
-
-        loss = 0.5 * torch_dice_coef_loss(y_hat, y.float()) + 0.5 * torch.nn.functional.binary_cross_entropy_with_logits(y_hat_logits, y.float())
+        loss = 0.5 * torch_dice_coef_loss(y_hat[:, 1, :, :], y.float()) + 0.5 * torch.nn.functional.cross_entropy(y_hat, torch.squeeze(y, dim=1))
         self.train_metrics.update(y_hat.view(-1), y.view(-1))
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
         self.log_dict(self.train_metrics, on_step=False, on_epoch=True)
@@ -598,10 +589,10 @@ class GenesisSegmentation(L.LightningModule):
         x, y = batch['image'], batch['label']
         x = x.float()
         y = y.long()
-        y_hat_logits = self.model(x)
-        y_hat = y_hat_logits.sigmoid()
+        y_hat = self.model(x)
+        y_hat = torch.nn.functional.softmax(y_hat, dim=1)
 
-        loss = 0.5 * torch_dice_coef_loss(y_hat, y.float()) + 0.5 * torch.nn.functional.binary_cross_entropy_with_logits(y_hat_logits, y.float())
+        loss = 0.5 * torch_dice_coef_loss(y_hat[:, 1, :, :], y.float()) + 0.5 * torch.nn.functional.cross_entropy(y_hat, torch.squeeze(y, dim=1))
         self.val_metrics.update(y_hat.view(-1), y.view(-1))
         self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
         self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
@@ -656,9 +647,8 @@ class GenesisSegmentation(L.LightningModule):
         x = x.float()
         y = y.long()
         y_hat = self.model(x)
-        y_hat = y_hat.sigmoid()
-        y_hat[y_hat > 0.5] = 1
-        y_hat[y_hat <= 0.5] = 0
+        y_hat = torch.nn.functional.softmax(y_hat, dim=1)
+        y_hat = torch.argmax(y_hat, dim=1)
 
         # Don't worry about this being in GPU, the aggregators are will put the data in the CPU
         self.prediction_aggregators[dataloader_idx].add_batch(y_hat, location)
