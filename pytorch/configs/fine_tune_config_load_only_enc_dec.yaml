@@ -6,7 +6,7 @@ wandb:
   wandb_run_id: null
   wandb_run_name: fold_0_load_only_enc_dec
   wandb_project_name: GenesisFinetuneTest
-  logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/LogsBCEAugUniform
+  logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/LogsBCEAugUniform_LoadEncDec
   # logs_path: logs # Bizon
 
 # Data
@@ -26,7 +26,7 @@ train:
   patience: 100
 
 # Pre-trained
-pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/renamed_key_Genesis_OCT_Best.pt # SuperCloud
+pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/renamed_key_Genesis_OCT_Best_cpu.pt # SuperCloud
 # pre_trained_weight_path: /storage_bizon/naravich/ModelGenesisNNUNetPretrainingV2_noNorm/renamed_key_Genesis_OCT_Best.pt # Bizon
 
 # Model

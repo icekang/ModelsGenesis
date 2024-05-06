@@ -547,9 +547,18 @@ class GenesisSegmentation(L.LightningModule):
         print("########## Check if the weights are loaded correctly (should ONLY print *.seg_layers.* in the keys) ##########")
         checkpoint = torch.load(self.config['pre_trained_weight_path'], map_location=torch.device('cpu'))
         for key in model.state_dict().keys():
-            if not torch.equal(checkpoint['network_weights'][key], model.state_dict()[key]):
-                print(key)
-                print((checkpoint['network_weights'][key] - model.state_dict()[key]).sum())
+            checkpoint_key = None
+            for _checkpoint_key in checkpoint['network_weights'].keys():
+                if _checkpoint_key.endswith(key) or key.endswith(_checkpoint_key):
+                    checkpoint_key = _checkpoint_key
+                    print('_checkpoint_key', checkpoint_key, '<->', key)
+                    break
+            if checkpoint_key is None:
+                print('Cannot find a matching key in the checkpoing, skipping.')
+                continue
+            if not torch.equal(checkpoint['network_weights'][checkpoint_key], model.state_dict()[key]):
+                print('key, checkpoint_key', key, checkpoint_key)
+                print((checkpoint['network_weights'][checkpoint_key] - model.state_dict()[key]).sum())
                 print('')
                 assert '.seg_layers.' in key, 'Weights are not loaded correctly'
         print("########## Weights are loaded correctly ##########")
@@ -562,8 +571,8 @@ class GenesisSegmentation(L.LightningModule):
         y_hat = self.model(x)
         y_hat = torch.nn.functional.softmax(y_hat, dim=1)
 
-        loss = 0.5 * torch_dice_coef_loss(y_hat[:, 1, :, :], y.float()) + 0.5 * torch.nn.functional.cross_entropy(y_hat, torch.squeeze(y, dim=1))
-        self.train_metrics.update(y_hat.view(-1), y.view(-1))
+        loss = 0.5 * torch_dice_coef_loss(y_hat[:, 1, :, :], y.float()) + 0.5 * torch.nn.functional.cross_entropy(y_hat, torch.squeeze(y, dim=1), reduction="none").mean()
+        self.train_metrics.update(y_hat[:, 1, :, :].reshape(-1), y.reshape(-1))
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
         self.log_dict(self.train_metrics, on_step=False, on_epoch=True)
         return loss
@@ -592,8 +601,8 @@ class GenesisSegmentation(L.LightningModule):
         y_hat = self.model(x)
         y_hat = torch.nn.functional.softmax(y_hat, dim=1)
 
-        loss = 0.5 * torch_dice_coef_loss(y_hat[:, 1, :, :], y.float()) + 0.5 * torch.nn.functional.cross_entropy(y_hat, torch.squeeze(y, dim=1))
-        self.val_metrics.update(y_hat.view(-1), y.view(-1))
+        loss = 0.5 * torch_dice_coef_loss(y_hat[:, 1, :, :], y.float()) + 0.5 * torch.nn.functional.cross_entropy(y_hat, torch.squeeze(y, dim=1), reduction="none").mean()
+        self.val_metrics.update(y_hat[:, 1, :, :].reshape(-1), y.reshape(-1))
         self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
         self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
 
@@ -648,7 +657,7 @@ class GenesisSegmentation(L.LightningModule):
         y = y.long()
         y_hat = self.model(x)
         y_hat = torch.nn.functional.softmax(y_hat, dim=1)
-        y_hat = torch.argmax(y_hat, dim=1)
+        y_hat = torch.argmax(y_hat, dim=1).unsqueeze(dim=1)
 
         # Don't worry about this being in GPU, the aggregators are will put the data in the CPU
         self.prediction_aggregators[dataloader_idx].add_batch(y_hat, location)
@@ -659,7 +668,7 @@ class GenesisSegmentation(L.LightningModule):
         for idx, (prediction_aggregator, label_aggregator) in enumerate(zip(self.prediction_aggregators, self.label_aggregators)):
             torch.save(prediction_aggregator.get_output_tensor(), Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'prediction_{idx}.pt')
             torch.save(label_aggregator.get_output_tensor(), Path(self.trainer.log_dir) / f"fold_{self.config['data']['fold']}" / f'label_{idx}.pt')
-            self.test_metrics.update(prediction_aggregator.get_output_tensor().view(-1), label_aggregator.get_output_tensor().view(-1))
+            self.test_metrics.update(prediction_aggregator.get_output_tensor().view(-1).float(), label_aggregator.get_output_tensor().view(-1))
         self.log_dict(self.test_metrics, on_step=False, on_epoch=True, prog_bar=True)
 
 # Define the UNetRegressor
