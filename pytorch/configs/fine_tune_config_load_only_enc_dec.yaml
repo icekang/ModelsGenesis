@@ -4,7 +4,7 @@ seed: 0
 # WandB
 wandb:
   wandb_run_id: null
-  wandb_run_name: fold_0_freeze_enc
+  wandb_run_name: fold_0_load_only_enc_dec
   wandb_project_name: GenesisFinetuneTest
   logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/LogsBCEAugUniform
   # logs_path: logs # Bizon
@@ -35,7 +35,7 @@ model:
 
 # Optimizer
 optimizer:
-  learning_rate: 2
+  learning_rate: 1
   momentum: 0.9
   weight_decay: 0.0
   nesterov: False
