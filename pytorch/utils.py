@@ -854,7 +854,7 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
             from sklearn.model_selection import train_test_split
             subject_ids = outputModalityDf['USUBJID']
             train_subject_ids, test_subject_ids = train_test_split(subject_ids, test_size=0.2, random_state=0)
-            with open('tabular_data/test.json', 'w') as f:
+            with open(self.tabularDataDir / 'test.json', 'w') as f:
                 json.dump(test_subject_ids, f, indent=4)
             splits = []
             for fold in range(3):
@@ -863,18 +863,18 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
                     'train': fold_train_subject_ids,
                     'val': fold_val_subject_ids,
                 })
-            with open('tabular_data/splits_final.json', 'w') as f:
+            with open(self.tabularDataDir / 'splits_final.json', 'w') as f:
                 json.dump(splits, f, indent=4)
 
         if stage == 'fit':
-            with open('tabular_data/splits_final.json', 'r') as f:
+            with open(self.tabularDataDir / 'splits_final.json', 'r') as f:
                 splits = json.load(f)
             train_subject_ids = splits[self.fold]['train']
             val_subject_ids = splits[self.fold]['val']
             return train_subject_ids, val_subject_ids
 
         elif stage == 'test':
-            with open('tabular_data/test.json', 'r') as f:
+            with open(self.tabularDataDir / 'test.json', 'r') as f:
                 test_subject_ids = json.load(f)
             return test_subject_ids, None
 
