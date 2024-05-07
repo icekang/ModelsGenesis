@@ -8,6 +8,46 @@ import numpy as np
 
 unlabeled_data_dir = Path('/storage_bizon/naravich/Unlabeled_OCT_by_CADx/') # Yiqing filtered data
 
+def resolve_image_path(subject_id: str):
+    image_dir = unlabeled_data_dir / 'NiFTI'
+    post_stent_image_path = image_dir.glob("{}Final*".format(subject_id.replace('-', '')))
+    post_ivl_image_path = image_dir.glob("{}Post*".format(subject_id.replace('-', '')))
+    pre_ivl_image_path = image_dir.glob("{}Pre*".format(subject_id.replace('-', '')))
+
+    post_stent_image_path = list(post_stent_image_path) 
+    post_ivl_image_path = list(post_ivl_image_path)
+    pre_ivl_image_path = list(pre_ivl_image_path)
+
+    return {
+        'Pre': pre_ivl_image_path[0].name if pre_ivl_image_path else None,
+        'Post': post_ivl_image_path[0].name if post_ivl_image_path else None,
+        'Final': post_stent_image_path[0].name if post_stent_image_path else None,
+    }
+
+def set_image_path(row):
+    image_paths = resolve_image_path(row['USUBJID'])
+    row['Pre_IVL_image_path'] = image_paths['Pre']
+    row['Post_IVL_image_path'] = image_paths['Post']
+    row['Post_Stent_image_path'] = image_paths['Final']
+    return row
+
+def format_subject_id(subject_id: str):
+    # Define the pattern
+    pattern = r"[A-Z]{2} [0-9]{4,5}-([0-9]{3}-[0-9]{3})"
+
+    # Compile the pattern
+    regex = re.compile(pattern)
+
+    # Search for the pattern in the input string
+    match = regex.search(unidecode.unidecode(subject_id))
+
+    # If a match is found, extract the desired part using the replacement pattern
+    if match:
+        extracted_part = re.sub(r".*?([0-9]{3}-[0-9]{3})", r"\1", match.group(1))
+        return extracted_part
+    raise ValueError(f"No match found {subject_id.strip().replace(u'\xa0', ' ')}")
+
+
 for excel_file_name, Pre_or_Post in zip(['T1A_PRE_QUANT_LESION.xlsx', 'T5A_POST_QUANT_LESION.xlsx'], ['Pre', 'Post']):
     pre_or_post_ivl_df = pd.read_excel(f'tabular_data/{excel_file_name}', skiprows=4)
     pre_or_post_ivl_df.head()
@@ -22,24 +62,6 @@ for excel_file_name, Pre_or_Post in zip(['T1A_PRE_QUANT_LESION.xlsx', 'T5A_POST_
 
     # ### Extract the Unique Subject ID (USUBJID) to the format we use in the dataset `CP 61774-105-001` -> `105-001`
     # That is [A-Z]{2} [0-9]{5}-[0-9]{3}-[0-3]{3} -> [0-9]{3}-[0-9]{3}
-
-
-
-    def format_subject_id(subject_id: str):
-        # Define the pattern
-        pattern = r"[A-Z]{2} [0-9]{4,5}-([0-9]{3}-[0-9]{3})"
-
-        # Compile the pattern
-        regex = re.compile(pattern)
-
-        # Search for the pattern in the input string
-        match = regex.search(unidecode.unidecode(subject_id))
-
-        # If a match is found, extract the desired part using the replacement pattern
-        if match:
-            extracted_part = re.sub(r".*?([0-9]{3}-[0-9]{3})", r"\1", match.group(1))
-            return extracted_part
-        raise ValueError(f"No match found {subject_id.strip().replace(u'\xa0', ' ')}")
 
     pre_or_post_ivl_df['USUBJID'].apply(lambda x: format_subject_id(x))
 
@@ -99,7 +121,6 @@ for excel_file_name, Pre_or_Post in zip(['T1A_PRE_QUANT_LESION.xlsx', 'T5A_POST_
 
 
     pre_or_post_ivl_df = pre_or_post_ivl_df[selected_columns]
-    pre_or_post_ivl_df.head()
 
     # ### Just to make every easy for the dataloader, we will put the absolute path of the image to the DataFrame
 
@@ -113,26 +134,13 @@ for excel_file_name, Pre_or_Post in zip(['T1A_PRE_QUANT_LESION.xlsx', 'T5A_POST_
         else:
             print(i.stem)
 
-    def resolve_image_path(subject_id: str):
-        image_path = unlabeled_data_dir / 'NiFTI'
-        image_path = image_path.glob("{}{}*".format(subject_id.replace('-', ''), Pre_or_Post))
-        image_path = list(image_path)
-        if not image_path:
-            return None
-        return image_path[0]
-
-    pre_or_post_ivl_df['image_path'] = pre_or_post_ivl_df['USUBJID'].apply(lambda x: resolve_image_path(x))
-
-    pre_or_post_ivl_df.dropna(subset=['image_path'], inplace=True)
+    pre_or_post_ivl_df = pre_or_post_ivl_df.apply(lambda x: set_image_path(x), axis=1)
+    pre_or_post_ivl_df.dropna(subset=['Pre_IVL_image_path', 'Post_IVL_image_path', 'Post_Stent_image_path'], inplace=True, how='all')
 
 
     # ### Lastly fill . with null values
     pre_or_post_ivl_df.replace({'\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0.': np.nan}, inplace=False).to_csv(f'tabular_data/{Pre_or_Post}_IVL.csv', index=False)
 
-
-import numpy as np
-import re
-import unidecode
 
 post_stent = pd.read_excel('tabular_data/T6_POST_STENT_LESION.xlsx', skiprows=4)
 
@@ -140,23 +148,6 @@ column_names = post_stent.columns
 column_names = {column_name:column_name.split(' = ')[0] for column_name in column_names}
 
 post_stent.rename(columns=column_names, inplace=True)
-
-
-def format_subject_id(subject_id: str):
-    # Define the pattern
-    pattern = r"[A-Z]{2} [0-9]{4,5}-([0-9]{3}-[0-9]{3})"
-
-    # Compile the pattern
-    regex = re.compile(pattern)
-
-    # Search for the pattern in the input string
-    match = regex.search(unidecode.unidecode(subject_id))
-
-    # If a match is found, extract the desired part using the replacement pattern
-    if match:
-        extracted_part = re.sub(r".*?([0-9]{3}-[0-9]{3})", r"\1", match.group(1))
-        return extracted_part
-    raise ValueError(f"No match found {subject_id.strip().replace(u'\xa0', ' ')}")
 
 post_stent['USUBJID'] = post_stent['USUBJID'].apply(lambda x: format_subject_id(x))
 
@@ -206,15 +197,7 @@ for i in image_path:
     else:
         print(i.stem)
 
-def resolve_image_path(subject_id: str):
-    image_path = unlabeled_data_dir / 'NiFTI'
-    image_path = image_path.glob("{}Final*".format(subject_id.replace('-', '')))
-    image_path = list(image_path)
-    if not image_path:
-        return None
-    return image_path[0]
-
-post_stent['image_path'] = post_stent['USUBJID'].apply(lambda x: resolve_image_path(x))
-post_stent.dropna(subset=['image_path'], inplace=True)
+post_stent = post_stent.apply(lambda x: set_image_path(x), axis=1)
+post_stent.dropna(subset=['Pre_IVL_image_path', 'Post_IVL_image_path', 'Post_Stent_image_path'], inplace=True, how='all')
 
 post_stent.replace({'\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0.': np.nan}, inplace=False).to_csv('tabular_data/Post_Stent.csv', index=False)
