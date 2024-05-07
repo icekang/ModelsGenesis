@@ -21,7 +21,7 @@ data:
 
 # Train
 train:
-  max_epochs: 1
+  max_epochs: 2000
   patience: 100
 
 # Pre-trained
