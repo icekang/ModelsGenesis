@@ -22,7 +22,7 @@ from torchmetrics import Dice, MetricCollection, MeanSquaredError, F1Score, Accu
 from nnunetv2.run.run_training import get_trainer_from_args
 from nnunetv2.run.load_pretrained_weights import load_pretrained_weights
 import wandb.util
-
+import pandas as pd
 
 try:  # SciPy >= 0.19
     from scipy.special import comb
@@ -695,6 +695,202 @@ class UNetRegressorHead(torch.nn.Module):
         x = self.regressor(x)
         return x
 
+class KFoldNNUNetTabularDataModule(L.LightningDataModule):
+    def __init__(self,
+                 config: dict) -> None:
+        self.config = config
+        self.fold = self.config['data']['fold']
+        self.dataDir = self.config['data']['data_directory'] # /storage_bizon/naravich/Unlabeled_OCT_by_CADx/NiFTI/
+        
+        self.inputModality = self.config['data']['input_modality'] # ('pre', 'post', 'final')
+        self.outputModality = self.config['data']['output_modality'] # ('pre', 'post', 'final')
+        self.outputMetrics: List[str] = self.config['data']['output_metrics']
+        # Just for now
+        self.modalityToDataframePath = {
+            'pre': 'tabular_data/Pre_IVL.csv',
+            'post': 'tabular_data/Post_IVL.csv',
+            'final': 'tabular_data/Post_Stent.csv'
+        }
+        self.modalityToName = {
+            'pre': 'Pre_IVL',
+            'post': 'Post_IVL',
+            'final': 'Post_Stent'
+        }
+
+        if isinstance(self.dataDir, str):
+            self.dataDir = Path(self.dataDir)
+
+        self.num_workers = self.config['data']['num_workers']
+        self.batch_size = self.config['data']['batch_size']
+
+    def setup(self, stage: str) -> None:
+        """Define the split and data before putting them into dataloader
+
+        Args:
+            stage (str): Torch Lightning stage ('fit', 'validate', 'predict', ...), not used in the LightningDataModule
+        """
+        self.preprocess = self.getPreprocessTransform()
+        self.augment = self.getAugmentationTransform()
+        self.transform = tio.Compose([self.preprocess, self.augment])
+
+        # create subject from the CSV!
+        outputModalityDf = pd.read_csv(self.modalityToDataframePath[self.outputModality])
+        inputName = self.modalityToName[self.inputModality]
+        outputModalityDf = outputModalityDf[['USUBJID'] + self.outputMetrics + [f'{inputName}_image_path']]
+
+        if self.config['data']['nan_handling'] == 'drop':
+            outputModalityDf.dropna(subset=self.outputMetrics, inplace=True)
+        elif self.config['data']['nan_handling'] == 'mean':
+            outputModalityDf.fillna(outputModalityDf.mean(), inplace=True)
+        elif self.config['data']['nan_handling'] == 'median':
+            outputModalityDf.fillna(outputModalityDf.median(), inplace=True)
+        elif self.config['data']['nan_handling'] == 'zero':
+            outputModalityDf.fillna(0, inplace=True)
+
+
+        if self.config['data']['target_normalization'] == 'minmax':
+            # Get the train split to normalize the target
+            train_subject_ids, _ = self._getSplit('fit', outputModalityDf=outputModalityDf)
+            trainDF = outputModalityDf[outputModalityDf['USUBJID'].isin(train_subject_ids)]
+            outputModalityDf[self.outputMetrics] = (outputModalityDf[self.outputMetrics] - trainDF[self.outputMetrics].min(axis=0)) / (trainDF[self.outputMetrics].max(axis=0) - trainDF[self.outputMetrics].min(axis=0))
+        
+        train_subject_ids, val_subject_ids = self._getSplit(stage, outputModalityDf=outputModalityDf)
+
+        if stage == 'test':
+            test_subject_ids = train_subject_ids
+
+        # Create the subjects
+        if stage == 'fit':
+            trainSubjects = []
+            for _, row in outputModalityDf[outputModalityDf['USUBJID'].isin(train_subject_ids)].iterrows():
+                subject = tio.Subject(
+                    **{metric: row[metric] for metric in self.outputMetrics},
+                    image=tio.ScalarImage(self.dataDir / row[f'{inputName}_image_path'])
+                )
+                trainSubjects.append(subject)
+            
+            valSubjects = []
+            for _, row in outputModalityDf[outputModalityDf['USUBJID'].isin(val_subject_ids)].iterrows():
+                subject = tio.Subject(
+                    **{metric: row[metric] for metric in self.outputMetrics},
+                    image=tio.ScalarImage(self.dataDir / row[f'{inputName}_image_path'])
+                )
+                valSubjects.append(subject)
+            self.trainSet = tio.SubjectsDataset(subjects=trainSubjects, transform=self.transform)
+            self.valSet = tio.SubjectsDataset(subjects=valSubjects, transform=self.transform)
+            sampler = tio.UniformSampler(patch_size=self.config['data']['patch_size'])
+            self.patchesTrainSet = tio.Queue(
+                subjects_dataset=self.trainSet,
+                max_length=len(trainSubjects),
+                samples_per_volume=self.config['data']['samples_per_volume'],
+                sampler=sampler,
+                num_workers=self.num_workers,
+                shuffle_subjects=True,
+                shuffle_patches=True,)
+            self.patchesValSet = tio.Queue(
+                subjects_dataset=self.valSet,
+                max_length=len(valSubjects),
+                samples_per_volume=self.config['data']['samples_per_volume'],
+                sampler=sampler,
+                num_workers=self.num_workers,
+                shuffle_subjects=False,
+                shuffle_patches=False,)
+        elif stage == 'test':
+            testSubjects = []
+            for _, row in outputModalityDf[outputModalityDf['USUBJID'].isin(test_subject_ids)].iterrows():
+                subject = tio.Subject(
+                    **{metric: row[metric] for metric in self.outputMetrics},
+                    image=tio.ScalarImage(self.dataDir / row[f'{inputName}_image_path'])
+                )
+                testSubjects.append(subject)
+            self.testSet = tio.SubjectsDataset(subjects=testSubjects, transform=self.preprocess)
+            sampler = tio.UniformSampler(patch_size=self.config['data']['patch_size'])
+            self.patchesTestSet = tio.Queue(
+                subjects_dataset=self.testSet,
+                max_length=len(testSubjects),
+                samples_per_volume=1,
+                sampler=sampler,
+                num_workers=self.num_workers,
+                shuffle_subjects=False,
+                shuffle_patches=False,)
+        
+
+    def getPreprocessTransform(self):
+            preprocess = tio.Compose([
+                tio.CropOrPad(target_shape=self.config['data']['patch_size']), # patch_size = 512, 512, 384 (i.e. WHOLE VOLUME)
+            ])
+            return preprocess
+
+    def getAugmentationTransform(self):
+        augment = tio.Compose([
+            tio.RandomFlip(axes=(0, 1, 2), flip_probability=0.2),
+            tio.RandomAffine(scales=(0.9, 1.1), degrees=180, isotropic=True, default_pad_value='minimum'),
+            tio.RandomNoise(std=(0, 0.1)),
+        ])
+        return augment
+    
+
+    def _getSplit(self, stage: str, outputModalityDf: pd.DataFrame) -> Tuple[List[str], List[str]]:
+        """Get the train and validation split for the current fold and split
+
+        Returns:
+            Tuple[List[str], List[str]]: List of train and validation unique case IDs, if stage is 'test' return test case IDs, and None
+        """
+        # TODO
+        # if split exist from these combination read them
+        # else create a new split and save them
+        # Check if split exist
+        if not os.path.exists('tabular_data/splits_final.json'):
+            from sklearn.model_selection import train_test_split
+            subject_ids = outputModalityDf['USUBJID']
+            train_subject_ids, test_subject_ids = train_test_split(subject_ids, test_size=0.2, random_state=0)
+            with open('tabular_data/test.json', 'w') as f:
+                json.dump(test_subject_ids, f, indent=4)
+            splits = []
+            for fold in range(3):
+                fold_train_subject_ids, fold_val_subject_ids = train_test_split(train_subject_ids, test_size=0.2, random_state=0)
+                splits.append({
+                    'train': fold_train_subject_ids,
+                    'val': fold_val_subject_ids,
+                })
+            with open('tabular_data/splits_final.json', 'w') as f:
+                json.dump(splits, f, indent=4)
+
+        if stage == 'fit':
+            with open('tabular_data/splits_final.json', 'r') as f:
+                splits = json.load(f)
+            train_subject_ids = splits[self.fold]['train']
+            val_subject_ids = splits[self.fold]['val']
+            return train_subject_ids, val_subject_ids
+
+        elif stage == 'test':
+            with open('tabular_data/test.json', 'r') as f:
+                test_subject_ids = json.load(f)
+            return test_subject_ids, None
+
+    @staticmethod
+    def collate_fn(batch, test=False):
+        print(batch)
+        print(batch[0].keys())
+        collated_batch = {
+            metric: torch.tensor([data[metric] for data in batch]) for metric in batch[0].keys() if metric != 'image' and metric != 'location'
+        }
+        collated_batch['image'] = torch.stack([data['image'][tio.DATA] for data in batch], dim=0)
+
+        if test:
+            collated_batch['location'] = torch.stack([data[tio.LOCATION] for data in batch], dim=0)
+
+        return collated_batch
+
+    def train_dataloader(self):
+        return DataLoader(self.patchesTrainSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
+    
+    def val_dataloader(self):
+        return DataLoader(self.patchesValSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
+
+    def test_dataloader(self) -> Tuple[List[DataLoader], List[tio.GridSampler]]:
+        return [DataLoader(testSubjectGridSampler, batch_size=self.batch_size, num_workers=0, collate_fn=partial(self.collate_fn, test=True)) for testSubjectGridSampler in self.testSubjectGridSamplers], self.testSubjectGridSamplers
+
 class nnUNetRegressionClassification(L.LightningModule):
     def __init__(self, config):
         super().__init__()
@@ -712,7 +908,7 @@ class nnUNetRegressionClassification(L.LightningModule):
 
         if self.config['model']['head']['task'] == 'regression':
             metrics = MetricCollection({
-                'mse': MeanSquaredError(),
+                'rmse': MeanSquaredError(squared=True),
             })
             self.criterion = torch.nn.MSELoss()
 
