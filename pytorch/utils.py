@@ -710,15 +710,16 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
         self.config = config
         self.fold = self.config['data']['fold']
         self.dataDir = self.config['data']['data_directory'] # /storage_bizon/naravich/Unlabeled_OCT_by_CADx/NiFTI/
+        self.tabularDataDir = Path(self.config['data']['tabular_data_directory'])
         
         self.inputModality = self.config['data']['input_modality'] # ('pre', 'post', 'final')
         self.outputModality = self.config['data']['output_modality'] # ('pre', 'post', 'final')
         self.outputMetrics: List[str] = self.config['data']['output_metrics']
         # Just for now
         self.modalityToDataframePath = {
-            'pre': 'tabular_data/Pre_IVL.csv',
-            'post': 'tabular_data/Post_IVL.csv',
-            'final': 'tabular_data/Post_Stent.csv'
+            'pre': self.tabularDataDir / 'Pre_IVL.csv',
+            'post': self.tabularDataDir / 'Post_IVL.csv',
+            'final': self.tabularDataDir / 'Post_Stent.csv'
         }
         self.modalityToName = {
             'pre': 'Pre_IVL',

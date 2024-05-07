@@ -4,27 +4,33 @@ seed: 0
 # WandB
 wandb:
   wandb_run_id: null
-  wandb_run_name: fold_0_freeze_enc
-  wandb_project_name: GenesisFinetuneTest
-  # logs_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetFinetuningV2_noNorm/LogsBCEAugUniform # SuperCloud
-  logs_path: logs # Bizon
+  wandb_run_name: fold_0
+  wandb_project_name: nnUNetRegression
+  logs_path: /home/gridsan/nchutisilp/datasets/nnUNetRegression/logs # SuperCloud
+  # logs_path: logs # Bizon
 
 # Data
 data:
   fold: 0 # should change when doing different folds
-  # data_directory: /home/gridsan/nchutisilp/datasets/nnUNet_Datasets/nnUNet_raw/Dataset303_Calcium_OCTv2/ # SuperCloud
-  data_directory: /storage_bizon/naravich/nnUNet_Datasets/nnUNet_raw/Dataset303_Calcium_OCTv2/ # Bizon
-  patch_size: [128, 128, 64]
-  queue_max_length: 720 # 180 (patches per volume) x 4 (training volumes)
-  samples_per_volume: 180 # (500x500x375) / (128x128x64) ~ 89.4
-  num_workers: 39
-  batch_size: 16
+  tabular_data_directory: /home/gridsan/nchutisilp/projects/ModelsGenesis/notebooks/tabular_data # SuperCloud
+  data_directory: /home/gridsan/nchutisilp/datasets/Unlabeled_OCT_by_CADx/NiFTI/ # SuperCloud
+  # data_directory: /storage_bizon/naravich/Unlabeled_OCT_by_CADx/NiFTI/ # Bizon
+  patch_size: [512, 512, 384]
+  queue_max_length: 1 # 1 (patches per volume) x 4 (training volumes)
+  samples_per_volume: 1 # (500x500x375) / (128x128x64) ~ 89.4
+  num_workers: 10
+  batch_size: 2
   num_classes: 1
+  input_modality: pre
+  output_modality: post
+  output_metrics: [MCS_MSCT]
+  nan_handling: drop
+  target_normalization: minmax
 
 # Train
 train:
-  max_epochs: 2000
-  patience: 300
+  max_epochs: 1
+  patience: 100
 
 # Pre-trained
 # pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt # SuperCloud
@@ -33,7 +39,7 @@ pre_trained_weight_path: null
 
 # Model
 model:
-  freeze_encoder: True
+  freeze_encoder: False
   head:
     task: regression
     in_channels: 320
@@ -43,7 +49,7 @@ model:
 
 # Optimizer
 optimizer:
-  learning_rate: 2
+  learning_rate: 0.1
   momentum: 0.9
   weight_decay: 0.0
   nesterov: False
