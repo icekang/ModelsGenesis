@@ -749,7 +749,7 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
         outputModalityDf = outputModalityDf[['USUBJID'] + self.outputMetrics + [f'{inputName}_image_path']]
 
         if self.config['data']['nan_handling'] == 'drop':
-            outputModalityDf.dropna(subset=self.outputMetrics, inplace=True)
+            outputModalityDf.dropna(inplace=True)
         elif self.config['data']['nan_handling'] == 'mean':
             outputModalityDf.fillna(outputModalityDf.mean(), inplace=True)
         elif self.config['data']['nan_handling'] == 'median':
