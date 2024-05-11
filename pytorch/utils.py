@@ -710,15 +710,16 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
         self.config = config
         self.fold = self.config['data']['fold']
         self.dataDir = self.config['data']['data_directory'] # /storage_bizon/naravich/Unlabeled_OCT_by_CADx/NiFTI/
+        self.tabularDataDir = Path(self.config['data']['tabular_data_directory'])
         
         self.inputModality = self.config['data']['input_modality'] # ('pre', 'post', 'final')
         self.outputModality = self.config['data']['output_modality'] # ('pre', 'post', 'final')
         self.outputMetrics: List[str] = self.config['data']['output_metrics']
         # Just for now
         self.modalityToDataframePath = {
-            'pre': 'tabular_data/Pre_IVL.csv',
-            'post': 'tabular_data/Post_IVL.csv',
-            'final': 'tabular_data/Post_Stent.csv'
+            'pre': self.tabularDataDir / 'Pre_IVL.csv',
+            'post': self.tabularDataDir / 'Post_IVL.csv',
+            'final': self.tabularDataDir / 'Post_Stent.csv'
         }
         self.modalityToName = {
             'pre': 'Pre_IVL',
@@ -748,7 +749,7 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
         outputModalityDf = outputModalityDf[['USUBJID'] + self.outputMetrics + [f'{inputName}_image_path']]
 
         if self.config['data']['nan_handling'] == 'drop':
-            outputModalityDf.dropna(subset=self.outputMetrics, inplace=True)
+            outputModalityDf.dropna(inplace=True)
         elif self.config['data']['nan_handling'] == 'mean':
             outputModalityDf.fillna(outputModalityDf.mean(), inplace=True)
         elif self.config['data']['nan_handling'] == 'median':
@@ -853,7 +854,7 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
             from sklearn.model_selection import train_test_split
             subject_ids = outputModalityDf['USUBJID']
             train_subject_ids, test_subject_ids = train_test_split(subject_ids, test_size=0.2, random_state=0)
-            with open('tabular_data/test.json', 'w') as f:
+            with open(self.tabularDataDir / 'test.json', 'w') as f:
                 json.dump(test_subject_ids, f, indent=4)
             splits = []
             for fold in range(3):
@@ -862,18 +863,18 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
                     'train': fold_train_subject_ids,
                     'val': fold_val_subject_ids,
                 })
-            with open('tabular_data/splits_final.json', 'w') as f:
+            with open(self.tabularDataDir / 'splits_final.json', 'w') as f:
                 json.dump(splits, f, indent=4)
 
         if stage == 'fit':
-            with open('tabular_data/splits_final.json', 'r') as f:
+            with open(self.tabularDataDir / 'splits_final.json', 'r') as f:
                 splits = json.load(f)
             train_subject_ids = splits[self.fold]['train']
             val_subject_ids = splits[self.fold]['val']
             return train_subject_ids, val_subject_ids
 
         elif stage == 'test':
-            with open('tabular_data/test.json', 'r') as f:
+            with open(self.tabularDataDir / 'test.json', 'r') as f:
                 test_subject_ids = json.load(f)
             return test_subject_ids, None
 
