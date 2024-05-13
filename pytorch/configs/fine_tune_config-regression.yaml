@@ -15,10 +15,11 @@ data:
   tabular_data_directory: /home/gridsan/nchutisilp/projects/ModelsGenesis/notebooks/tabular_data # SuperCloud
   data_directory: /home/gridsan/nchutisilp/datasets/Unlabeled_OCT_by_CADx/NiFTI/ # SuperCloud
   # data_directory: /storage_bizon/naravich/Unlabeled_OCT_by_CADx/NiFTI/ # Bizon
-  patch_size: [512, 512, 384]
-  queue_max_length: 1 # 1 (patches per volume) x 4 (training volumes)
-  samples_per_volume: 1 # (500x500x375) / (128x128x64) ~ 89.4
-  num_workers: 10
+  # patch_size: [512, 512, 384]
+  patch_size: [256, 256, 384]
+  queue_max_length: 16
+  samples_per_volume: 4
+  num_workers: 5
   batch_size: 2
   num_classes: 1
   input_modality: pre
@@ -26,11 +27,12 @@ data:
   output_metrics: [MCS_MSCT]
   nan_handling: drop
   target_normalization: minmax
+  overfit: true
 
 # Train
 train:
-  max_epochs: 1
-  patience: 100
+  max_epochs: 10000
+  patience: 1000
 
 # Pre-trained
 # pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt # SuperCloud
@@ -44,7 +46,7 @@ model:
     task: regression
     in_channels: 320
     pooling: avg
-    dropout: 0.2
+    dropout: 0
 
 
 # Optimizer

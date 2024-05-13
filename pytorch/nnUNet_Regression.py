@@ -39,6 +39,8 @@ def main(config=None):
         config['wandb']['wandb_run_id'] = wandb.util.generate_id()
     if config['wandb']['wandb_run_name'] == None:
         config['wandb']['wandb_run_name'] = f'fold_{config["data"]["fold"]}'
+
+    Path(config['wandb']['logs_path']).mkdir(exist_ok=True)
     wandb_logger = WandbLogger(
         id=config['wandb']['wandb_run_id'],
         project=config['wandb']['wandb_project_name'],
@@ -50,7 +52,7 @@ def main(config=None):
 
     # Trainer
     trainer = L.Trainer(
-        accelerator="cpu",
+        overfit_batches=2,
         max_epochs=config['train']['max_epochs'],
         deterministic=True,
         precision="16-mixed",
@@ -59,15 +61,14 @@ def main(config=None):
         callbacks=[
             ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["data"]["fold"]}', monitor="val_loss", mode="min", save_top_k=1, save_last=True, verbose=True, filename='best_model-{val_loss:.2f}'),
             ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["data"]["fold"]}', filename="last_model"),
-            EarlyStopping(monitor="val_loss", mode="min", patience=config['train']['patience'], verbose=True),
+            # EarlyStopping(monitor="val_loss", mode="min", patience=config['train']['patience'], verbose=True),
             LearningRateMonitor(logging_interval='step', log_momentum=True, log_weight_decay=True)
         ],
         )
     trainer.fit(model, train_loader, val_loader)
 
     dm.setup('test')
-    test_loader, test_grid_samplers = dm.test_dataloader()
-    model.set_test_grid_samplers(test_grid_samplers)
+    test_loader = dm.test_dataloader()
     trainer.test(dataloaders=test_loader, ckpt_path="best")
 
 if __name__ == '__main__':
@@ -81,8 +82,6 @@ if __name__ == '__main__':
             config = yaml.load(f, Loader=yaml.FullLoader)
         if args.sweep:
             raise NotImplementedError('Sweep is not implemented yet')
-            sweep_id = wandb.sweep(sweep=config, project=config['name'])
-            wandb.agent(sweep_id=sweep_id, function=main)
         else:
             main(config)
     else:
