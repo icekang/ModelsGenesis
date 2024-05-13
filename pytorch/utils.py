@@ -697,7 +697,7 @@ class UNetRegressorHead(torch.nn.Module):
             torch.nn.Flatten(),
             torch.nn.Dropout(p=dropout, inplace=True) if dropout > 0 else torch.nn.Identity(),
             torch.nn.Linear(in_channels, n_classes, bias=True),
-            torch.nn.ReLU() if task == 'regression' else torch.nn.Softmax(dim=1)
+            torch.nn.LeakyReLU() if task == 'regression' else torch.nn.Softmax(dim=1)
         )
 
     def forward(self, x):
