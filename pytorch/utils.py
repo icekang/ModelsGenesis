@@ -839,8 +839,9 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
             return preprocess
 
     def getAugmentationTransform(self):
+        if self.config['data']['overfit']:
+            return tio.Compose([])
         augment = tio.Compose([
-            tio.RandomFlip(axes=(0, 1, 2), flip_probability=0.2),
             tio.RandomAffine(scales=(0.9, 1.1), degrees=180, isotropic=True, default_pad_value='minimum', p=0.2),
             tio.RandomAnisotropy(p=0.2),
             tio.RandomNoise(std=(0, 0.1), p=0.2),
@@ -921,9 +922,10 @@ class nnUNetRegressionClassification(L.LightningModule):
             self.encoder.requires_grad_(False)
 
         if self.config['model']['head']['task'] == 'regression':
-            metrics = MetricCollection({
-                f'rmse_{metric}': MeanSquaredError(squared=True) for metric in config['data']['output_metrics']
-            })
+            metrics = MetricCollection(dict(
+                **{f'rmse_{metric}': MeanSquaredError(squared=True) for metric in config['data']['output_metrics']},
+                **{f'R2_{metric}': R2Score() for metric in config['data']['output_metrics']}
+                ))
             self.criterion = torch.nn.MSELoss()
 
         else:
@@ -983,10 +985,10 @@ class nnUNetRegressionClassification(L.LightningModule):
         y_hat = self.head(y_hat[-1])
 
         loss = self.criterion(y_hat, y)
-        print(f'loss {loss}; y_hat {y_hat}; y {y}')
 
         for i, metric in enumerate(self.config['data']['output_metrics']):
             self.train_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
+            self.train_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
         self.log_dict(self.train_metrics, on_step=False, on_epoch=True)
         return loss
@@ -1005,6 +1007,7 @@ class nnUNetRegressionClassification(L.LightningModule):
 
         for i, metric in enumerate(self.config['data']['output_metrics']):
             self.val_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
+            self.val_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
         self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
         self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
         return loss
@@ -1021,6 +1024,7 @@ class nnUNetRegressionClassification(L.LightningModule):
 
         for i, metric in enumerate(self.config['data']['output_metrics']):
             self.test_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
+            self.test_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
         self.test_metrics.update(y_hat.view(-1), y.view(-1))
         self.log_dict(self.test_metrics, on_step=False, on_epoch=True, prog_bar=True)
         return None
