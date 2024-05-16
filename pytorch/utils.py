@@ -18,7 +18,7 @@ from pathlib import Path
 import json
 import lightning as L
 from torch.utils.data import DataLoader
-from torchmetrics import Dice, MetricCollection, MeanSquaredError, F1Score, Accuracy, Precision, Recall
+from torchmetrics import Dice, MetricCollection, MeanSquaredError, F1Score, Accuracy, Precision, Recall, R2Score
 from nnunetv2.run.run_training import get_trainer_from_args
 from nnunetv2.run.load_pretrained_weights import load_pretrained_weights
 import wandb.util
@@ -697,7 +697,7 @@ class UNetRegressorHead(torch.nn.Module):
             torch.nn.Flatten(),
             torch.nn.Dropout(p=dropout, inplace=True) if dropout > 0 else torch.nn.Identity(),
             torch.nn.Linear(in_channels, n_classes, bias=True),
-            torch.nn.ReLU() if task == 'regression' else torch.nn.Softmax(dim=1)
+            torch.nn.LeakyReLU() if task == 'regression' else torch.nn.Softmax(dim=1)
         )
 
     def forward(self, x):
@@ -771,8 +771,13 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
 
         # Create the subjects
         if stage == 'fit':
+            if self.config['data']['overfit']:
+                val_subject_ids = train_subject_ids.copy()
+                train_subject_ids = train_subject_ids[:1]
+                val_subject_ids = val_subject_ids[:1]
             trainSubjects = []
             for _, row in outputModalityDf[outputModalityDf['USUBJID'].isin(train_subject_ids)].iterrows():
+                assert (self.dataDir / row[f'{inputName}_image_path']).exists(), '{} does not exist'.format(self.dataDir / row[f'{inputName}_image_path'])
                 subject = tio.Subject(
                     **{metric: row[metric] for metric in self.outputMetrics},
                     image=tio.ScalarImage(self.dataDir / row[f'{inputName}_image_path'])
@@ -781,27 +786,28 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
             
             valSubjects = []
             for _, row in outputModalityDf[outputModalityDf['USUBJID'].isin(val_subject_ids)].iterrows():
+                assert (self.dataDir / row[f'{inputName}_image_path']).exists(), '{} does not exist'.format(self.dataDir / row[f'{inputName}_image_path'])
                 subject = tio.Subject(
                     **{metric: row[metric] for metric in self.outputMetrics},
                     image=tio.ScalarImage(self.dataDir / row[f'{inputName}_image_path'])
                 )
                 valSubjects.append(subject)
+
             self.trainSet = tio.SubjectsDataset(subjects=trainSubjects, transform=self.transform)
             self.valSet = tio.SubjectsDataset(subjects=valSubjects, transform=self.transform)
-            sampler = tio.UniformSampler(patch_size=self.config['data']['patch_size'])
             self.patchesTrainSet = tio.Queue(
                 subjects_dataset=self.trainSet,
-                max_length=len(trainSubjects),
+                max_length=self.config['data']['queue_max_length'],
                 samples_per_volume=self.config['data']['samples_per_volume'],
-                sampler=sampler,
+                sampler=tio.UniformSampler(patch_size=self.config['data']['patch_size']),
                 num_workers=self.num_workers,
                 shuffle_subjects=True,
                 shuffle_patches=True,)
             self.patchesValSet = tio.Queue(
                 subjects_dataset=self.valSet,
-                max_length=len(valSubjects),
+                max_length=self.config['data']['queue_max_length'],
                 samples_per_volume=self.config['data']['samples_per_volume'],
-                sampler=sampler,
+                sampler=tio.UniformSampler(patch_size=self.config['data']['patch_size']),
                 num_workers=self.num_workers,
                 shuffle_subjects=False,
                 shuffle_patches=False,)
@@ -827,15 +833,20 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
 
     def getPreprocessTransform(self):
             preprocess = tio.Compose([
-                tio.CropOrPad(target_shape=self.config['data']['patch_size']), # patch_size = 512, 512, 384 (i.e. WHOLE VOLUME)
+                tio.transforms.Resize(target_shape=self.config['data']['patch_size'], image_interpolation='bspline'),
+                # tio.CropOrPad(target_shape=self.config['data']['patch_size']), # patch_size = 512, 512, 384 (i.e. WHOLE VOLUME)
             ])
             return preprocess
 
     def getAugmentationTransform(self):
+        if self.config['data']['overfit']:
+            return tio.Compose([])
         augment = tio.Compose([
-            tio.RandomFlip(axes=(0, 1, 2), flip_probability=0.2),
-            tio.RandomAffine(scales=(0.9, 1.1), degrees=180, isotropic=True, default_pad_value='minimum'),
-            tio.RandomNoise(std=(0, 0.1)),
+            tio.RandomAffine(scales=(0.9, 1.1), degrees=180, isotropic=True, default_pad_value='minimum', p=0.2),
+            tio.RandomAnisotropy(p=0.2),
+            tio.RandomNoise(std=(0, 0.1), p=0.2),
+            tio.RandomBlur(p=0.2),
+            tio.RandomGamma(p=0.2),
         ])
         return augment
     
@@ -846,13 +857,9 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
         Returns:
             Tuple[List[str], List[str]]: List of train and validation unique case IDs, if stage is 'test' return test case IDs, and None
         """
-        # TODO
-        # if split exist from these combination read them
-        # else create a new split and save them
-        # Check if split exist
         if not os.path.exists('tabular_data/splits_final.json'):
             from sklearn.model_selection import train_test_split
-            subject_ids = outputModalityDf['USUBJID']
+            subject_ids = outputModalityDf['USUBJID'].tolist()
             train_subject_ids, test_subject_ids = train_test_split(subject_ids, test_size=0.2, random_state=0)
             with open(self.tabularDataDir / 'test.json', 'w') as f:
                 json.dump(test_subject_ids, f, indent=4)
@@ -880,10 +887,8 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
 
     @staticmethod
     def collate_fn(batch, test=False):
-        print(batch)
-        print(batch[0].keys())
         collated_batch = {
-            metric: torch.tensor([data[metric] for data in batch]) for metric in batch[0].keys() if metric != 'image' and metric != 'location'
+            metric: torch.tensor([[data[metric]] for data in batch]) for metric in batch[0].keys() if metric != 'image' and metric != 'location'
         }
         collated_batch['image'] = torch.stack([data['image'][tio.DATA] for data in batch], dim=0)
 
@@ -899,7 +904,7 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
         return DataLoader(self.patchesValSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
 
     def test_dataloader(self) -> Tuple[List[DataLoader], List[tio.GridSampler]]:
-        return [DataLoader(testSubjectGridSampler, batch_size=self.batch_size, num_workers=0, collate_fn=partial(self.collate_fn, test=True)) for testSubjectGridSampler in self.testSubjectGridSamplers], self.testSubjectGridSamplers
+        return DataLoader(self.patchesTestSet, batch_size=self.batch_size, num_workers=0, collate_fn=self.collate_fn)
 
 class nnUNetRegressionClassification(L.LightningModule):
     def __init__(self, config):
@@ -917,12 +922,14 @@ class nnUNetRegressionClassification(L.LightningModule):
             self.encoder.requires_grad_(False)
 
         if self.config['model']['head']['task'] == 'regression':
-            metrics = MetricCollection({
-                'rmse': MeanSquaredError(squared=True),
-            })
+            metrics = MetricCollection(dict(
+                **{f'rmse_{metric}': MeanSquaredError(squared=True) for metric in config['data']['output_metrics']},
+                **{f'R2_{metric}': R2Score() for metric in config['data']['output_metrics']}
+                ))
             self.criterion = torch.nn.MSELoss()
 
         else:
+            # TODO: handle multiple targets
             metrics = MetricCollection({
                 'accuracy': Accuracy(),
                 'f1': F1Score(num_classes=self.config['data']['num_classes']),
@@ -934,10 +941,6 @@ class nnUNetRegressionClassification(L.LightningModule):
         self.train_metrics = metrics.clone('train_')
         self.val_metrics = metrics.clone('val_')
         self.test_metrics = metrics.clone('test_')
-
-        self.test_grid_samplers: List[tio.GridSampler] = None
-        self.prediction_aggregators: List[tio.GridAggregator] = None
-        self.label_aggregators: List[tio.GridAggregator] = None
 
     def build_network(self) -> torch.nn.Module:
         # prepare the 3D model
@@ -972,38 +975,77 @@ class nnUNetRegressionClassification(L.LightningModule):
         return model
 
     def training_step(self, batch, batch_idx):
-        x, y = batch['image'], batch['label']
+        x = batch['image']
         x = x.float()
-        y = y.long()
+        # one metric : N, 1
+        y = torch.concat([batch[metric] for metric in self.config['data']['output_metrics']], dim=1)
+        y = y.float()
+
         y_hat = self.encoder(x)
         y_hat = self.head(y_hat[-1])
 
         loss = self.criterion(y_hat, y)
-        self.train_metrics.update(y_hat.view(-1), y.view(-1))
+
+        for i, metric in enumerate(self.config['data']['output_metrics']):
+            self.train_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
+            self.train_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
         self.log_dict(self.train_metrics, on_step=False, on_epoch=True)
         return loss
     
     def validation_step(self, batch, batch_idx):
-        x, y = batch['image'], batch['label']
+        x = batch['image']
         x = x.float()
-        y = y.long()
+        # one metric : N, 1
+        y = torch.concat([batch[metric] for metric in self.config['data']['output_metrics']], dim=1)
+        y = y.float()
+
         y_hat = self.encoder(x)
         y_hat = self.head(y_hat[-1])
 
         loss = self.criterion(y_hat, y)
-        self.val_metrics.update(y_hat.view(-1), y.view(-1))
+
+        for i, metric in enumerate(self.config['data']['output_metrics']):
+            self.val_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
+            self.val_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
         self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
         self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
         return loss
 
-    def test_step(self, batch, batch_idx, dataloader_idx):
-        x, y = batch['image'], batch['label']
+    def test_step(self, batch, batch_idx):
+        x = batch['image']
         x = x.float()
-        y = y.long()
+        # one metric : N, 1
+        y = torch.concat([batch[metric] for metric in self.config['data']['output_metrics']], dim=1)
+        y = y.float()
+
         y_hat = self.encoder(x)
         y_hat = self.head(y_hat[-1])
 
+        for i, metric in enumerate(self.config['data']['output_metrics']):
+            self.test_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
+            self.test_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
         self.test_metrics.update(y_hat.view(-1), y.view(-1))
         self.log_dict(self.test_metrics, on_step=False, on_epoch=True, prog_bar=True)
         return None
+
+    def configure_optimizers(self):
+        # optimizer = torch.optim.SGD(
+        #     filter(lambda p: p.requires_grad, self.parameters()), # Make sure to filter the parameters based on `requires_grad`
+        #     lr=self.config['optimizer']['learning_rate'],
+        #     momentum=self.config['optimizer']['momentum'],
+        #     weight_decay=self.config['optimizer']['weight_decay'],
+        #     nesterov=self.config['optimizer']['nesterov'])
+        optimizer = torch.optim.AdamW(
+            filter(lambda p: p.requires_grad, self.parameters()),
+            lr=self.config['optimizer']['learning_rate'],
+        )
+        # scheduler = torch.optim.lr_scheduler.StepLR(
+        #     optimizer, 
+        #     step_size=self.config['optimizer']['scheduler_step_size'], 
+        #     gamma=self.config['optimizer']['scheduler_gamma'], 
+        #     verbose=True)
+        return {
+            'optimizer': optimizer,
+            # 'lr_scheduler': scheduler,
+        }

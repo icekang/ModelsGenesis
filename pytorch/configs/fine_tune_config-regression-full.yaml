@@ -20,19 +20,19 @@ data:
   queue_max_length: 16
   samples_per_volume: 4
   num_workers: 5
-  batch_size: 2
+  batch_size: 4
   num_classes: 1
   input_modality: pre
-  output_modality: post
+  output_modality: pre
   output_metrics: [MCS_MSCT]
   nan_handling: drop
   target_normalization: minmax
-  overfit: true
+  overfit: false
 
 # Train
 train:
   max_epochs: 10000
-  patience: 1000
+  patience: 200
 
 # Pre-trained
 # pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt # SuperCloud
@@ -46,12 +46,12 @@ model:
     task: regression
     in_channels: 320
     pooling: avg
-    dropout: 0
+    dropout: 0.1
 
 
 # Optimizer
 optimizer:
-  learning_rate: 0.1
+  learning_rate: 0.001
   momentum: 0.9
   weight_decay: 0.0
   nesterov: False
