@@ -862,7 +862,7 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
         Returns:
             Tuple[List[str], List[str]]: List of train and validation unique case IDs, if stage is 'test' return test case IDs, and None
         """
-        if not os.path.exists('tabular_data/splits_final.json'):
+        if not os.path.exists(self.tabularDataDir / 'splits_final.json'):
             from sklearn.model_selection import train_test_split
             subject_ids = outputModalityDf['USUBJID'].tolist()
             train_subject_ids, test_subject_ids = train_test_split(subject_ids, test_size=0.2, random_state=0)
