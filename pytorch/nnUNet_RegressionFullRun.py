@@ -58,7 +58,7 @@ def main(config=None):
         logger=wandb_logger,
         default_root_dir=Path(config['wandb']['logs_path']) / f'fold_{config["data"]["fold"]}',
         callbacks=[
-            ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["data"]["fold"]}', monitor="val_loss", mode="min", save_top_k=1, save_last=True, verbose=True, filename='best_model-{val_loss:.2f}'),
+            ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["data"]["fold"]}', monitor="val_loss", mode="min", save_top_k=1, save_last=True, verbose=True, filename='best_model'),
             ModelCheckpoint(dirpath=Path(config['wandb']['logs_path']) / f'fold_{config["data"]["fold"]}', filename="last_model"),
             EarlyStopping(monitor="val_loss", mode="min", patience=config['train']['patience'], verbose=True),
             LearningRateMonitor(logging_interval='step', log_momentum=True, log_weight_decay=True)

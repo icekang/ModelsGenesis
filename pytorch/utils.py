@@ -794,7 +794,7 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
                 valSubjects.append(subject)
 
             self.trainSet = tio.SubjectsDataset(subjects=trainSubjects, transform=self.transform)
-            self.valSet = tio.SubjectsDataset(subjects=valSubjects, transform=self.transform)
+            self.valSet = tio.SubjectsDataset(subjects=valSubjects, transform=self.preprocess)
             self.patchesTrainSet = tio.Queue(
                 subjects_dataset=self.trainSet,
                 max_length=self.config['data']['queue_max_length'],
@@ -805,8 +805,8 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
                 shuffle_patches=True,)
             self.patchesValSet = tio.Queue(
                 subjects_dataset=self.valSet,
-                max_length=self.config['data']['queue_max_length'],
-                samples_per_volume=self.config['data']['samples_per_volume'],
+                max_length=len(valSubjects) if not self.config['data']['overfit'] else self.config['data']['queue_max_length'],
+                samples_per_volume=1 if not self.config['data']['overfit'] else self.config['data']['samples_per_volume'],
                 sampler=tio.UniformSampler(patch_size=self.config['data']['patch_size']),
                 num_workers=self.num_workers,
                 shuffle_subjects=False,
@@ -829,12 +829,17 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
                 num_workers=self.num_workers,
                 shuffle_subjects=False,
                 shuffle_patches=False,)
-        
+
+    @staticmethod    
+    def SampleEveryOtherFrame(tensor4D: torch.Tensor):
+        return tensor4D[:, :, :, ::2]
 
     def getPreprocessTransform(self):
             preprocess = tio.Compose([
+                tio.transforms.CropOrPad(target_shape=(512, 512, 384)),
+                tio.transforms.Lambda(KFoldNNUNetTabularDataModule.SampleEveryOtherFrame),
                 tio.transforms.Resize(target_shape=self.config['data']['patch_size'], image_interpolation='bspline'),
-                # tio.CropOrPad(target_shape=self.config['data']['patch_size']), # patch_size = 512, 512, 384 (i.e. WHOLE VOLUME)
+                tio.transforms.RescaleIntensity(out_min_max=(0, 1))
             ])
             return preprocess
 
@@ -1008,7 +1013,13 @@ class nnUNetRegressionClassification(L.LightningModule):
         for i, metric in enumerate(self.config['data']['output_metrics']):
             self.val_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
             self.val_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
+        torch.save(batch['image'].cpu(), 'last_x.pt')
+
         self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
+        self.log('val_y_hat1', y_hat[0].detach().cpu().item(), on_step=True, on_epoch=False)
+        self.log('val_y1', y[0].cpu().item(), on_step=True, on_epoch=False)
+        self.log('val_y_hat2', y_hat[1].detach().cpu().item(), on_step=True, on_epoch=False)
+        self.log('val_y2', y[1].cpu().item(), on_step=True, on_epoch=False)
         self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
         return loss
 
@@ -1040,12 +1051,11 @@ class nnUNetRegressionClassification(L.LightningModule):
             filter(lambda p: p.requires_grad, self.parameters()),
             lr=self.config['optimizer']['learning_rate'],
         )
-        # scheduler = torch.optim.lr_scheduler.StepLR(
-        #     optimizer, 
-        #     step_size=self.config['optimizer']['scheduler_step_size'], 
-        #     gamma=self.config['optimizer']['scheduler_gamma'], 
-        #     verbose=True)
+        scheduler = torch.optim.lr_scheduler.LinearLR(
+            optimizer, 
+            start_factor=0.1,
+            verbose=True)
         return {
             'optimizer': optimizer,
-            # 'lr_scheduler': scheduler,
+            'lr_scheduler': scheduler,
         }
