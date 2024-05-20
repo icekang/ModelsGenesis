@@ -16,11 +16,11 @@ data:
   data_directory: /home/gridsan/nchutisilp/datasets/Unlabeled_OCT_by_CADx/NiFTI/ # SuperCloud
   # data_directory: /storage_bizon/naravich/Unlabeled_OCT_by_CADx/NiFTI/ # Bizon
   # patch_size: [512, 512, 384]
-  patch_size: [256, 256, 384]
-  queue_max_length: 16
+  patch_size: [256, 256, 192] # All images will be padded to 512x512x384 -> z-axis resample to 512x512x384 -> then bicubicly resized to 256,256,192
+  queue_max_length: 400
   samples_per_volume: 4
   num_workers: 5
-  batch_size: 4
+  batch_size: 2
   num_classes: 1
   input_modality: pre
   output_modality: pre
@@ -31,8 +31,8 @@ data:
 
 # Train
 train:
-  max_epochs: 10000
-  patience: 200
+  max_epochs: 200
+  patience: 100
 
 # Pre-trained
 # pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt # SuperCloud
@@ -45,18 +45,18 @@ model:
   head:
     task: regression
     in_channels: 320
-    pooling: avg
+    pooling: max
     dropout: 0.1
 
 
 # Optimizer
 optimizer:
-  learning_rate: 0.001
-  momentum: 0.9
-  weight_decay: 0.0
-  nesterov: False
-  scheduler_step_size: 60
-  scheduler_gamma: 0.5
+  learning_rate:  0.0001
+  # momentum: 0.9
+  # weight_decay: 0.0
+  # nesterov: False
+  # scheduler_step_size: 60
+  # scheduler_gamma: 0.5
 
 # nnUNet architecutre
 nnUNet:
