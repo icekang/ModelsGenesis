@@ -963,20 +963,8 @@ class nnUNetRegressionClassification(L.LightningModule):
         print("Total number of parameters in the model: ", pytorch_total_params)
 
         if 'pre_trained_weight_path' in self.config and self.config['pre_trained_weight_path'] is not None:
-            #Load pre-trained weights
-            weight_dir = self.config['pre_trained_weight_path']
-            checkpoint = torch.load(weight_dir, map_location=torch.device('cpu'))
-            state_dict = checkpoint['state_dict']
-            unParalled_state_dict = {}
-            for key in state_dict.keys():
-                unParalled_state_dict[key.replace("module.", "")] = state_dict[key]
-            
-            if '_orig_mod.' in list(model.state_dict().keys())[0]:
-                # Since torch.optimized is used we need to add "_orig_mod." from the keys
-                print("Adding _orig_mod. to the state_dict")
-                unParalled_state_dict = {f"_orig_mod.{k}": v for k, v in unParalled_state_dict.items()}
-
-            model.load_state_dict(unParalled_state_dict)
+            trainer.load_checkpoint(self.config['pre_trained_weight_path'])
+            print("Loaded checkpoint from", self.config['pre_trained_weight_path'])
         return model
 
     def training_step(self, batch, batch_idx):
@@ -1020,6 +1008,17 @@ class nnUNetRegressionClassification(L.LightningModule):
         self.log('val_y1', y[0].cpu().item(), on_step=True, on_epoch=False)
         self.log('val_y_hat2', y_hat[1].detach().cpu().item(), on_step=True, on_epoch=False)
         self.log('val_y2', y[1].cpu().item(), on_step=True, on_epoch=False)
+        #TODO: save plt.fig and plot with wandb Image
+        self.logger.experiment.log(
+            {'val_scatter_plot': wandb.plot.scatter(
+                                    table=wandb.Table(data=[[pred, gt] for (pred, gt) in zip(y_hat.detach().cpu(), y.cpu())], columns=['y_hat', 'y_gt']),
+                                    x = "y_hat",
+                                    y = "y_gt",
+                                    title = "Scatter y_hat and g_gt plot")}
+        )
+        error = torch.abs(y_hat.detach() - y) / y
+        error = error.mean().cpu().item()
+        self.log('val_error', error, on_step=True, on_epoch=True, prog_bar=False)
         self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
         return loss
 

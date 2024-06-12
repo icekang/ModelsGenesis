@@ -1,0 +1,67 @@
+# Reproducibility
+seed: 0
+
+# WandB
+wandb:
+  wandb_run_id: null
+  wandb_run_name: fold_0
+  wandb_project_name: nnUNetRegression
+  logs_path: /home/gridsan/nchutisilp/datasets/nnUNetRegression/3d_32x160x128_logs # SuperCloud
+  # logs_path: logs # Bizon
+
+# Data
+data:
+  fold: 0 # should change when doing different folds
+  tabular_data_directory: /home/gridsan/nchutisilp/projects/ModelsGenesis/notebooks/tabular_data # SuperCloud
+  data_directory: /home/gridsan/nchutisilp/datasets/Unlabeled_OCT_by_CADx/NiFTI/ # SuperCloud
+  # data_directory: /storage_bizon/naravich/Unlabeled_OCT_by_CADx/NiFTI/ # Bizon
+  # patch_size: [512, 512, 384]
+  patch_size: [256, 256, 192] # All images will be padded to 512x512x384 -> z-axis resample to 512x512x384 -> then bicubicly resized to 256,256,192
+  queue_max_length: 400
+  samples_per_volume: 4
+  num_workers: 5
+  batch_size: 2
+  num_classes: 1
+  input_modality: pre
+  output_modality: pre
+  output_metrics: [MCS_MSCT]
+  nan_handling: drop
+  target_normalization: minmax
+  overfit: false
+
+# Train
+train:
+  max_epochs: 200
+  patience: 100
+
+# Pre-trained
+# pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt # SuperCloud
+pre_trained_weight_path: /home/gridsan/nchutisilp/datasets/nnUNet_Datasets/nnUNet_results/Dataset302_Calcium_OCTv2/nnUNetTrainer__nnUNetPlans__3d_32x160x128_b10/fold_0_pretrained_LaW/checkpoint_best.pth
+# pre_trained_weight_path: /storage_bizon/naravich/ModelGenesisNNUNetPretrainingV2_noNorm/Genesis_OCT_Best.pt # Bizon
+
+# Model
+model:
+  freeze_encoder: False
+  head:
+    task: regression
+    in_channels: 320
+    pooling: max
+    dropout: 0.1
+
+
+# Optimizer
+optimizer:
+  learning_rate:  0.0001
+  # momentum: 0.9
+  # weight_decay: 0.0
+  # nesterov: False
+  # scheduler_step_size: 60
+  # scheduler_gamma: 0.5
+
+# nnUNet architecutre
+nnUNet:
+  dataset_name_or_id: "302"
+  configuration: 3d_32x160x128_b10
+  trainer_name: nnUNetTrainer
+  plans_identifier: nnUNetPlans
+  fold: 0 # any fold would do
