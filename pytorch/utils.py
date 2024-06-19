@@ -870,7 +870,7 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
                 json.dump(test_subject_ids, f, indent=4)
             splits = []
             for fold in range(3):
-                fold_train_subject_ids, fold_val_subject_ids = train_test_split(train_subject_ids, test_size=0.2, random_state=0)
+                fold_train_subject_ids, fold_val_subject_ids = train_test_split(train_subject_ids, test_size=0.2, random_state=fold)
                 splits.append({
                     'train': fold_train_subject_ids,
                     'val': fold_val_subject_ids,
