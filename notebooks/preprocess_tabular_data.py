@@ -6,26 +6,28 @@ import re
 import unidecode
 import numpy as np
 
-unlabeled_data_dir = Path('/storage_bizon/naravich/Unlabeled_OCT_by_CADx/') # Yiqing filtered data
+unlabeled_data_dir = Path('/home/gridsan/nchutisilp/datasets/Unlabeled_OCT_by_CADx/Unlabeled_OCT_by_CADx/') # Yiqing filtered data
 
-def resolve_image_path(subject_id: str):
-    image_dir = unlabeled_data_dir / 'NiFTI'
-    post_stent_image_path = image_dir.glob("{}Final*".format(subject_id.replace('-', '')))
-    post_ivl_image_path = image_dir.glob("{}Post*".format(subject_id.replace('-', '')))
-    pre_ivl_image_path = image_dir.glob("{}Pre*".format(subject_id.replace('-', '')))
+def resolve_image_path(subject_id: str, cadx: str):
+    if subject_id.startswith('00'):
+        subject_id = subject_id[1:]
+    image_dir = unlabeled_data_dir / cadx
+    post_stent_image_path = image_dir.glob("{}Final".format(subject_id.replace('-', '')))
+    post_ivl_image_path = image_dir.glob("{}Post".format(subject_id.replace('-', '')))
+    pre_ivl_image_path = image_dir.glob("{}Pre".format(subject_id.replace('-', '')))
 
     post_stent_image_path = list(post_stent_image_path) 
     post_ivl_image_path = list(post_ivl_image_path)
     pre_ivl_image_path = list(pre_ivl_image_path)
 
     return {
-        'Pre': pre_ivl_image_path[0].name if pre_ivl_image_path else None,
-        'Post': post_ivl_image_path[0].name if post_ivl_image_path else None,
-        'Final': post_stent_image_path[0].name if post_stent_image_path else None,
+        'Pre': f'{cadx}/{pre_ivl_image_path[0].name}' if pre_ivl_image_path else None,
+        'Post': f'{cadx}/{post_ivl_image_path[0].name}' if post_ivl_image_path else None,
+        'Final': f'{cadx}/{post_stent_image_path[0].name}' if post_stent_image_path else None,
     }
 
 def set_image_path(row):
-    image_paths = resolve_image_path(row['USUBJID'])
+    image_paths = resolve_image_path(row['USUBJID'], row['STUDY'])
     row['Pre_IVL_image_path'] = image_paths['Pre']
     row['Post_IVL_image_path'] = image_paths['Post']
     row['Post_Stent_image_path'] = image_paths['Final']
@@ -45,28 +47,22 @@ def format_subject_id(subject_id: str):
     if match:
         extracted_part = re.sub(r".*?([0-9]{3}-[0-9]{3})", r"\1", match.group(1))
         return extracted_part
-    raise ValueError(f"No match found {subject_id.strip().replace(u'\xa0', ' ')}")
+    raise ValueError(f"No match found {subject_id.strip()}")
 
 
 for excel_file_name, Pre_or_Post in zip(['T1A_PRE_QUANT_LESION.xlsx', 'T5A_POST_QUANT_LESION.xlsx'], ['Pre', 'Post']):
     pre_or_post_ivl_df = pd.read_excel(f'tabular_data/{excel_file_name}', skiprows=4)
-    pre_or_post_ivl_df.head()
 
     # ### Rename columns to their code names `FLAG_CAL = Flag for calcified nodules` -> `FLAG_CAL`
 
     column_names = pre_or_post_ivl_df.columns
     column_names = {column_name:column_name.split(' = ')[0] for column_name in column_names}
-    column_names
     pre_or_post_ivl_df.rename(columns=column_names, inplace=True)
-    pre_or_post_ivl_df.head()
 
     # ### Extract the Unique Subject ID (USUBJID) to the format we use in the dataset `CP 61774-105-001` -> `105-001`
     # That is [A-Z]{2} [0-9]{5}-[0-9]{3}-[0-3]{3} -> [0-9]{3}-[0-9]{3}
 
-    pre_or_post_ivl_df['USUBJID'].apply(lambda x: format_subject_id(x))
-
     pre_or_post_ivl_df['USUBJID'] = pre_or_post_ivl_df['USUBJID'].apply(lambda x: format_subject_id(x))
-    pre_or_post_ivl_df.head()
 
     # ### Select only the columns we are interested in
     # 
@@ -122,18 +118,9 @@ for excel_file_name, Pre_or_Post in zip(['T1A_PRE_QUANT_LESION.xlsx', 'T5A_POST_
 
     pre_or_post_ivl_df = pre_or_post_ivl_df[selected_columns]
 
-    # ### Just to make every easy for the dataloader, we will put the absolute path of the image to the DataFrame
+    # ### Just to make everything easy for the dataloader, we will put the absolute path of the image to the DataFrame
 
     # Check that all the images are named with 'Final', 'Pre', or 'Post'
-
-    image_path = unlabeled_data_dir / 'NiFTI'
-    image_path = image_path.glob('*.nii.gz')
-    for i in image_path:
-        if 'Final' in i.stem or 'Pre' in i.stem or 'Post' in i.stem:
-            continue
-        else:
-            print(i.stem)
-
     pre_or_post_ivl_df = pre_or_post_ivl_df.apply(lambda x: set_image_path(x), axis=1)
     pre_or_post_ivl_df.dropna(subset=['Pre_IVL_image_path', 'Post_IVL_image_path', 'Post_Stent_image_path'], inplace=True, how='all')
 
@@ -188,14 +175,6 @@ selected_columns = [
 ]
 
 post_stent = post_stent[selected_columns]
-
-image_path = unlabeled_data_dir / 'NiFTI'
-image_path = image_path.glob('*.nii.gz')
-for i in image_path:
-    if 'Final' in i.stem or 'Pre' in i.stem or 'Post' in i.stem:
-        continue
-    else:
-        print(i.stem)
 
 post_stent = post_stent.apply(lambda x: set_image_path(x), axis=1)
 post_stent.dropna(subset=['Pre_IVL_image_path', 'Post_IVL_image_path', 'Post_Stent_image_path'], inplace=True, how='all')
