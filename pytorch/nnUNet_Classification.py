@@ -64,11 +64,11 @@ def main(config=None):
             LearningRateMonitor(logging_interval='step', log_momentum=True, log_weight_decay=True)
         ],
         )
-    # trainer.fit(model, train_loader, val_loader)
+    trainer.fit(model, train_loader, val_loader)
 
     dm.setup('test')
     test_loader = dm.test_dataloader()
-    trainer.test(model, dataloaders=test_loader, ckpt_path="/home/gridsan/nchutisilp/datasets/nnUNetCF_PRES_3d_32x160x128_logs/fold_2/best_model-v1.ckpt")
+    trainer.test(dataloaders=test_loader, ckpt_path="best")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
