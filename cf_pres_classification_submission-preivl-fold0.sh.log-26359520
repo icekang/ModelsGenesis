@@ -1,0 +1,103 @@
+/home/gridsan/nchutisilp/.conda/envs/genesis/bin/python
+[rank: 0] Seed set to 0
+Using device: cpu
+
+#######################################################################
+Please cite the following paper when using nnU-Net:
+Isensee, F., Jaeger, P. F., Kohl, S. A., Petersen, J., & Maier-Hein, K. H. (2021). nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation. Nature methods, 18(2), 203-211.
+#######################################################################
+
+2024-06-25 14:33:49.779866: Using torch.compile...
+/home/gridsan/nchutisilp/.local/lib/python3.9/site-packages/torch/optim/lr_scheduler.py:28: UserWarning: The verbose parameter is deprecated. Please use get_last_lr() to access the learning rate.
+  warnings.warn("The verbose parameter is deprecated. Please use get_last_lr() "
+/home/gridsan/nchutisilp/.conda/envs/genesis/lib/python3.9/site-packages/lightning/fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python pytorch/nnUNet_Classification.py --config pytorch/co ...
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+Total number of parameters in the model:  30785994
+Loaded checkpoint from /home/gridsan/nchutisilp/datasets/nnUNet_Datasets/nnUNet_results/Dataset302_Calcium_OCTv2/nnUNetTrainer__nnUNetPlans__3d_32x160x128_b10/fold_0_pretrained_LaW/checkpoint_best.pth
+wandb: WARNING `resume` will be ignored since W&B syncing is set to `offline`. Starting a new run with run id bxavc6kj.
+wandb: Tracking run with wandb version 0.16.6
+wandb: W&B syncing is set to `offline` in this directory.  
+wandb: Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+Restoring states from the checkpoint path at /home/gridsan/nchutisilp/datasets/nnUNetCF_PRES_3d_32x160x128_logs/fold_0/best_model-v2.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [GPU-798a549f-7e6e-0f02-828a-29163b5d8fff]
+Loaded model weights from the checkpoint at /home/gridsan/nchutisilp/datasets/nnUNetCF_PRES_3d_32x160x128_logs/fold_0/best_model-v2.ckpt
+/home/gridsan/nchutisilp/.conda/envs/genesis/lib/python3.9/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:441: The 'test_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=79` in the `DataLoader` to improve performance.
+Testing: |          | 0/? [00:00<?, ?it/s]Testing:   0%|          | 0/11 [00:00<?, ?it/s]Testing DataLoader 0:   0%|          | 0/11 [00:00<?, ?it/s]/home/gridsan/nchutisilp/.local/lib/python3.9/site-packages/torch/nn/modules/conv.py:605: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return F.conv3d(
+y, y_hat tensor([1, 0, 1], device='cuda:0') tensor([[0.0020, 0.9980],
+        [0.0176, 0.9824],
+        [0.0065, 0.9935]], device='cuda:0')
+y.shape, y_hat.shape torch.Size([3]) torch.Size([3, 2])
+Testing DataLoader 0:   9%|▉         | 1/11 [00:00<00:06,  1.47it/s]y, y_hat tensor([1, 1, 1], device='cuda:0') tensor([[0.2922, 0.7078],
+        [0.2526, 0.7474],
+        [0.0139, 0.9861]], device='cuda:0')
+y.shape, y_hat.shape torch.Size([3]) torch.Size([3, 2])
+Testing DataLoader 0:  18%|█▊        | 2/11 [00:01<00:04,  1.98it/s]y, y_hat tensor([0, 0, 1], device='cuda:0') tensor([[0.0262, 0.9738],
+        [0.0136, 0.9864],
+        [0.0770, 0.9230]], device='cuda:0')
+y.shape, y_hat.shape torch.Size([3]) torch.Size([3, 2])
+Testing DataLoader 0:  27%|██▋       | 3/11 [00:01<00:03,  2.22it/s]y, y_hat tensor([1, 1, 1], device='cuda:0') tensor([[0.2573, 0.7427],
+        [0.0042, 0.9958],
+        [0.0019, 0.9981]], device='cuda:0')
+y.shape, y_hat.shape torch.Size([3]) torch.Size([3, 2])
+Testing DataLoader 0:  36%|███▋      | 4/11 [00:01<00:02,  2.37it/s]y, y_hat tensor([1, 1, 1], device='cuda:0') tensor([[0.0827, 0.9173],
+        [0.1803, 0.8197],
+        [0.0022, 0.9978]], device='cuda:0')
+y.shape, y_hat.shape torch.Size([3]) torch.Size([3, 2])
+Testing DataLoader 0:  45%|████▌     | 5/11 [00:02<00:02,  2.46it/s]y, y_hat tensor([1, 1, 0], device='cuda:0') tensor([[0.2403, 0.7597],
+        [0.0131, 0.9869],
+        [0.1792, 0.8208]], device='cuda:0')
+y.shape, y_hat.shape torch.Size([3]) torch.Size([3, 2])
+Testing DataLoader 0:  55%|█████▍    | 6/11 [00:02<00:01,  2.53it/s]y, y_hat tensor([0, 1, 0], device='cuda:0') tensor([[0.1038, 0.8962],
+        [0.0022, 0.9978],
+        [0.0026, 0.9974]], device='cuda:0')
+y.shape, y_hat.shape torch.Size([3]) torch.Size([3, 2])
+Testing DataLoader 0:  64%|██████▎   | 7/11 [00:02<00:01,  2.58it/s]y, y_hat tensor([0, 1, 0], device='cuda:0') tensor([[0.6769, 0.3231],
+        [0.0198, 0.9802],
+        [0.9580, 0.0420]], device='cuda:0')
+y.shape, y_hat.shape torch.Size([3]) torch.Size([3, 2])
+Testing DataLoader 0:  73%|███████▎  | 8/11 [00:03<00:01,  2.62it/s]y, y_hat tensor([1, 0, 0], device='cuda:0') tensor([[0.0050, 0.9950],
+        [0.9841, 0.0159],
+        [0.0911, 0.9089]], device='cuda:0')
+y.shape, y_hat.shape torch.Size([3]) torch.Size([3, 2])
+Testing DataLoader 0:  82%|████████▏ | 9/11 [00:03<00:00,  2.65it/s]y, y_hat tensor([1, 1, 0], device='cuda:0') tensor([[0.9180, 0.0820],
+        [0.0023, 0.9977],
+        [0.0029, 0.9971]], device='cuda:0')
+y.shape, y_hat.shape torch.Size([3]) torch.Size([3, 2])
+Testing DataLoader 0:  91%|█████████ | 10/11 [00:03<00:00,  2.68it/s]y, y_hat tensor([1, 0, 1], device='cuda:0') tensor([[1.9483e-01, 8.0517e-01],
+        [7.6322e-05, 9.9992e-01],
+        [5.6314e-01, 4.3686e-01]], device='cuda:0')
+y.shape, y_hat.shape torch.Size([3]) torch.Size([3, 2])
+Testing DataLoader 0: 100%|██████████| 11/11 [00:04<00:00,  2.70it/s]Testing DataLoader 0: 100%|██████████| 11/11 [00:04<00:00,  2.46it/s]
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       test_accuracy       │    0.6666666865348816     │
+│          test_f1          │    0.7755101919174194     │
+│      test_precision       │    0.6785714030265808     │
+│        test_recall        │    0.9047619104385376     │
+└───────────────────────────┴───────────────────────────┘
+wandb: 
+wandb: Run history:
+wandb:               epoch ▁
+wandb:       test_accuracy ▁
+wandb:             test_f1 ▁
+wandb:      test_precision ▁
+wandb:         test_recall ▁
+wandb: trainer/global_step ▁
+wandb: 
+wandb: Run summary:
+wandb:               epoch 0
+wandb:       test_accuracy 0.66667
+wandb:             test_f1 0.77551
+wandb:      test_precision 0.67857
+wandb:         test_recall 0.90476
+wandb: trainer/global_step 0
+wandb: 
+wandb: You can sync this run to the cloud by running:
+wandb: wandb sync /home/gridsan/nchutisilp/datasets/nnUNetCF_PRES_3d_32x160x128_logs/wandb/offline-run-20240625_143352-bxavc6kj
+wandb: Find logs at: /home/gridsan/nchutisilp/datasets/nnUNetCF_PRES_3d_32x160x128_logs/wandb/offline-run-20240625_143352-bxavc6kj/logs

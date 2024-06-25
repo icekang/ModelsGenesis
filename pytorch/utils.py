@@ -757,6 +757,7 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
         elif self.config['data']['nan_handling'] == 'zero':
             outputModalityDf.fillna(0, inplace=True)
 
+        outputModalityDf[f'{inputName}_image_path'] = outputModalityDf[f'{inputName}_image_path'].apply(lambda x: f'{x}.nii.gz')
 
         if self.config['data']['target_normalization'] == 'minmax':
             # Get the train split to normalize the target
@@ -847,11 +848,14 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
         if self.config['data']['overfit']:
             return tio.Compose([])
         augment = tio.Compose([
-            tio.RandomAffine(scales=(0.9, 1.1), degrees=180, isotropic=True, default_pad_value='minimum', p=0.2),
-            tio.RandomAnisotropy(p=0.2),
-            tio.RandomNoise(std=(0, 0.1), p=0.2),
-            tio.RandomBlur(p=0.2),
-            tio.RandomGamma(p=0.2),
+            tio.RandomFlip(axes=(0, 1, 2), flip_probability=0.2),
+            tio.RandomAffine(scales=(0.7, 1.4), degrees=0, isotropic=True, translation=0, center='image', default_pad_value=0, p=0.2, image_interpolation='bspline'),
+            tio.RandomAffine(scales=0, degrees=(0, 0, 180) , isotropic=True, translation=0, center='image', default_pad_value=0, p=0.2, image_interpolation='bspline'),
+            tio.RandomAffine(scales=0, degrees=0 , isotropic=True, translation=60, center='image', default_pad_value=0, p=0.2, image_interpolation='bspline'),
+            tio.transforms.RandomAnisotropy(axes=(0, 1, 2), downsampling=(1, 1.5), scalars_only=True, p=0.2, image_interpolation='bspline'),
+            tio.transforms.RandomBlur(std=(0.5, 1.), p=0.2), # Like nnUNet
+            tio.RandomNoise(mean=0, std=(0, 0.1), p=0.1), # Like nnUNet
+            tio.transforms.RandomGamma(log_gamma=(0.7, 1.5), p=0.1),
         ])
         return augment
     
@@ -935,12 +939,20 @@ class nnUNetRegressionClassification(L.LightningModule):
 
         else:
             # TODO: handle multiple targets
-            metrics = MetricCollection({
-                'accuracy': Accuracy(),
-                'f1': F1Score(num_classes=self.config['data']['num_classes']),
-                'precision': Precision(num_classes=self.config['data']['num_classes']),
-                'recall': Recall(num_classes=self.config['data']['num_classes']),
-            })
+            if self.config['data']['num_classes'] == 2:
+                metrics = MetricCollection({
+                    'accuracy': Accuracy(task='binary'),
+                    'f1': F1Score(task='binary'),
+                    'precision': Precision(task='binary'),
+                    'recall': Recall(task='binary'),
+                })
+            else:
+                metrics = MetricCollection({
+                    'accuracy': Accuracy(task='multiclass', num_classes=self.config['data']['num_classes']),
+                    'f1': F1Score(task='multiclass', num_classes=self.config['data']['num_classes'], ignore_index=0),
+                    'precision': Precision(task='multiclass', num_classes=self.config['data']['num_classes'], ignore_index=0),
+                    'recall': Recall(task='multiclass', num_classes=self.config['data']['num_classes'], ignore_index=0),
+                })
             self.criterion = torch.nn.CrossEntropyLoss()
 
         self.train_metrics = metrics.clone('train_')
@@ -972,7 +984,11 @@ class nnUNetRegressionClassification(L.LightningModule):
         x = x.float()
         # one metric : N, 1
         y = torch.concat([batch[metric] for metric in self.config['data']['output_metrics']], dim=1)
-        y = y.float()
+
+        if self.config['model']['head']['task'] == 'classification':
+            y = y.long().squeeze(dim=1)
+        else:
+            y = y.float()
 
         y_hat = self.encoder(x)
         y_hat = self.head(y_hat[-1])
@@ -980,10 +996,16 @@ class nnUNetRegressionClassification(L.LightningModule):
         loss = self.criterion(y_hat, y)
 
         for i, metric in enumerate(self.config['data']['output_metrics']):
-            self.train_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
-            self.train_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
+            if self.config['model']['head']['task'] == 'regression':
+                self.train_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
+                self.train_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
+            else:
+                if self.config['data']['num_classes'] == 2:
+                    y_hat = torch.argmax(y_hat, dim=1)
+                self.train_metrics.update(y_hat, y)
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
-        self.log_dict(self.train_metrics, on_step=False, on_epoch=True)
+
+        self.log_dict({k:v for k,v in self.train_metrics.items()}, on_step=False, on_epoch=True, prog_bar=True)
         return loss
     
     def validation_step(self, batch, batch_idx):
@@ -991,35 +1013,45 @@ class nnUNetRegressionClassification(L.LightningModule):
         x = x.float()
         # one metric : N, 1
         y = torch.concat([batch[metric] for metric in self.config['data']['output_metrics']], dim=1)
-        y = y.float()
+
+        if self.config['model']['head']['task'] == 'classification':
+            y = y.long().squeeze(dim=1)
+        else:
+            y = y.float()
 
         y_hat = self.encoder(x)
         y_hat = self.head(y_hat[-1])
-
         loss = self.criterion(y_hat, y)
 
         for i, metric in enumerate(self.config['data']['output_metrics']):
-            self.val_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
-            self.val_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
-        torch.save(batch['image'].cpu(), 'last_x.pt')
+            if self.config['model']['head']['task'] == 'regression':
+                self.val_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
+                self.val_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
+            else:
+                if self.config['data']['num_classes'] == 2:
+                    y_hat = torch.argmax(y_hat, dim=1)
+                self.val_metrics.update(y_hat, y)
+        # torch.save(batch['image'].cpu(), 'last_x.pt')
 
         self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
-        self.log('val_y_hat1', y_hat[0].detach().cpu().item(), on_step=True, on_epoch=False)
-        self.log('val_y1', y[0].cpu().item(), on_step=True, on_epoch=False)
-        self.log('val_y_hat2', y_hat[1].detach().cpu().item(), on_step=True, on_epoch=False)
-        self.log('val_y2', y[1].cpu().item(), on_step=True, on_epoch=False)
-        #TODO: save plt.fig and plot with wandb Image
-        self.logger.experiment.log(
-            {'val_scatter_plot': wandb.plot.scatter(
-                                    table=wandb.Table(data=[[pred, gt] for (pred, gt) in zip(y_hat.detach().cpu(), y.cpu())], columns=['y_hat', 'y_gt']),
-                                    x = "y_hat",
-                                    y = "y_gt",
-                                    title = "Scatter y_hat and g_gt plot")}
-        )
-        error = torch.abs(y_hat.detach() - y) / y
-        error = error.mean().cpu().item()
-        self.log('val_error', error, on_step=True, on_epoch=True, prog_bar=False)
-        self.log_dict(self.val_metrics, on_step=False, on_epoch=True, prog_bar=True)
+
+        if self.config['model']['head']['task'] == 'regression':
+            self.log('val_y_hat1', y_hat[0].detach().cpu().item(), on_step=True, on_epoch=False)
+            self.log('val_y1', y[0].cpu().item(), on_step=True, on_epoch=False)
+            self.log('val_y_hat2', y_hat[1].detach().cpu().item(), on_step=True, on_epoch=False)
+            self.log('val_y2', y[1].cpu().item(), on_step=True, on_epoch=False)
+            #TODO: save plt.fig and plot with wandb Image
+            self.logger.experiment.log(
+                {'val_scatter_plot': wandb.plot.scatter(
+                                        table=wandb.Table(data=[[pred, gt] for (pred, gt) in zip(y_hat.detach().cpu(), y.cpu())], columns=['y_hat', 'y_gt']),
+                                        x = "y_hat",
+                                        y = "y_gt",
+                                        title = "Scatter y_hat and g_gt plot")}
+            )
+            error = torch.abs(y_hat.detach() - y) / y
+            error = error.mean().cpu().item()
+            self.log('val_error', error, on_step=True, on_epoch=True, prog_bar=False)
+        self.log_dict({k:v for k,v in self.val_metrics.items()}, on_step=False, on_epoch=True, prog_bar=True)
         return loss
 
     def test_step(self, batch, batch_idx):
@@ -1027,16 +1059,27 @@ class nnUNetRegressionClassification(L.LightningModule):
         x = x.float()
         # one metric : N, 1
         y = torch.concat([batch[metric] for metric in self.config['data']['output_metrics']], dim=1)
-        y = y.float()
+
+        if self.config['model']['head']['task'] == 'classification':
+            y = y.long().squeeze(dim=1)
+        else:
+            y = y.float()
 
         y_hat = self.encoder(x)
         y_hat = self.head(y_hat[-1])
+        print('y, y_hat', y, y_hat)
+        print('y.shape, y_hat.shape', y.shape, y_hat.shape)
 
         for i, metric in enumerate(self.config['data']['output_metrics']):
-            self.test_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
-            self.test_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
-        self.test_metrics.update(y_hat.view(-1), y.view(-1))
-        self.log_dict(self.test_metrics, on_step=False, on_epoch=True, prog_bar=True)
+            if self.config['model']['head']['task'] == 'regression':
+                self.test_metrics[f'rmse_{metric}'].update(y_hat[:, i], y[:, i])
+                self.test_metrics[f'R2_{metric}'].update(y_hat[:, i], y[:, i])
+            else:
+                if self.config['data']['num_classes'] == 2:
+                    y_hat = torch.argmax(y_hat, dim=1)
+                self.test_metrics.update(y_hat, y)
+
+        self.log_dict({k:v for k,v in self.test_metrics.items()}, on_step=False, on_epoch=True, prog_bar=True)
         return None
 
     def configure_optimizers(self):
