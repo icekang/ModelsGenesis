@@ -1,1 +1,17 @@
 /home/gridsan/nchutisilp/.conda/envs/genesis/bin/python
+Fold 0 0
+Train positive rate: 61.90%
+Val positive rate: 76.92%
+save to tabular_data/cf_pres_train_fold0.csv
+save to tabular_data/cf_pres_val_fold0.csv
+Fold 1 1
+Train positive rate: 61.90%
+Val positive rate: 76.92%
+save to tabular_data/cf_pres_train_fold1.csv
+save to tabular_data/cf_pres_val_fold1.csv
+Fold 2 2
+Train positive rate: 65.71%
+Val positive rate: 61.54%
+save to tabular_data/cf_pres_train_fold2.csv
+save to tabular_data/cf_pres_val_fold2.csv
+Test positive rate: 63.64%
