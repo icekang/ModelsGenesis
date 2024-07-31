@@ -1,0 +1,27 @@
+My task ID:  42
+Number of Tasks:  48
+Skipping 101054FinalProx
+Skipping 101010FinalDis
+Skipping 101016FinalProx
+Skipping 101054FinalDis
+Skipping 101010FinalProx
+Skipping 401008FinalProx
+Skipping 101026FinalDis
+Skipping .ipynb_checkpoints
+Skipping 101026FinalProx
+Skipping 401008FinalDis
+Skipping .ipynb_checkpoints
+Skipping 05002PreDis
+Skipping 05002PreProx
+Skipping .ipynb_checkpoints
+Creating 10 folders into NIfTI and MP4 (task_id 42; num_tasks: 48)
+CADI 04006Pre 375
+CADIII 101009Post 363
+CADIII 101028Post 375
+CADIII 101045Post 238
+CADIII 106016Final 345
+CADIII 402006Post 479
+CADIV 701012Post 363
+CADIV 704001Final 375
+CADIV 706005Final 287
+CADIV 707006Final 375

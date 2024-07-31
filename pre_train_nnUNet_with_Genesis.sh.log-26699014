@@ -1,0 +1,3692 @@
+/home/gridsan/nchutisilp/.conda/envs/genesis/bin/python
+torch = 2.3.0+cu121
+
+Configurations:
+batch_size                     96
+data                           /home/gridsan/nchutisilp/datasets/Unlabeled_OCT_cubes/
+exp_name                       nnUnet3DFullres-genesis_oct
+flip_rate                      0.4
+hu_max                         1000.0
+hu_min                         -1000.0
+inpaint_rate                   0.19999999999999996
+input_cols                     64
+input_deps                     32
+input_rows                     64
+local_rate                     0.5
+logs_path                      /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Logs
+lr                             1
+max_queue_size                 64
+model                          nnUnet3DFullres
+model_path                     /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation
+nb_class                       1
+nb_epoch                       10000
+nonlinear_rate                 0.9
+optimizer                      sgd
+outpaint_rate                  0.8
+paint_rate                     0.9
+patience                       75
+save_samples                   png
+scale                          96
+seed                           0
+suffix                         genesis_oct
+test_fold                      []
+train_fold                     ['03-008', '708-002', '101-051', '03-009', '706-004', '402-006', '703-002', '706-009', '704-001', '02-005', '402-009', '106-019', '101-032', '101-002', '106-016', '706-014', '702-003', '101-038', '04-010', '701-007', '101-028', '06-001', '101-057', '401-004', '703-001', '101-042', '101-012', '403-003', '705-002', '03-007', '101-015', '707-005', '101-006', '701-004', '101-009', '131-011', '135-003', '101-054', '03-003', '402-008', '701-002', '101-047', '101-020', '101-019', '702-005', '03-005', '101-036', '139-005', '403-006', '706-003', '706-011', '03-006', '04-006', '707-002', '03-001', '05-001', '101-026', '401-003', '705-005', '03-004', '708-007', '708-001', '706-001', '101-055', '101-050', '702-007', '101-040', '702-008', '106-017', '708-006', '403-002', '705-006', '701-015', '101-033', '106-009', '701-014', '101-044', '701-011', '706-012', '106-002', '401-008', '101-014', '708-003', '106-010', '109-003', '706-010', '101-024', '101-010', '705-001', '707-004', '02-008', '101-053', '05-011', '02-013', '06-003', '704-003', '703-004', '706-007', '701-008', '707-006', '401-005', '706-013', '708-008', '05-009', '401-002', '704-006', '04-008', '702-002', '704-002']
+valid_fold                     ['704-005', '704-004', '04-001', '101-007', '707-001', '131-013', '131-003', '706-006', '708-005', '701-006', '701-005', '101-039', '139-004', '131-016', '101-013', '101-035', '101-008', '05-005', '708-004', '101-058', '707-003', '03-002', '705-004', '101-022', '701-013', '703-005', '04-014', '05-002']
+verbose                        1
+wandb_project_name             Genesis_nnUNet_Pretraing_Correct_Orientation
+wandb_run_id                   vugprfm3
+wandb_run_name                 None
+weights                        None
+workers                        16
+
+
+  0%|          | 0/109 [00:00<?, ?it/s]  1%|          | 1/109 [00:01<02:44,  1.52s/it]  2%|▏         | 2/109 [00:02<02:37,  1.47s/it]  3%|▎         | 3/109 [00:04<02:46,  1.57s/it]  4%|▎         | 4/109 [00:05<02:21,  1.35s/it]  5%|▍         | 5/109 [00:07<02:27,  1.42s/it]  6%|▌         | 6/109 [00:08<02:27,  1.43s/it]  6%|▋         | 7/109 [00:09<02:17,  1.35s/it]  7%|▋         | 8/109 [00:11<02:18,  1.38s/it]  8%|▊         | 9/109 [00:12<02:14,  1.35s/it]  9%|▉         | 10/109 [00:13<02:09,  1.31s/it] 10%|█         | 11/109 [00:15<02:20,  1.44s/it] 11%|█         | 12/109 [00:16<02:05,  1.30s/it] 12%|█▏        | 13/109 [00:17<01:56,  1.21s/it] 13%|█▎        | 14/109 [00:18<02:01,  1.28s/it] 14%|█▍        | 15/109 [00:20<02:05,  1.33s/it] 15%|█▍        | 16/109 [00:21<02:04,  1.34s/it] 16%|█▌        | 17/109 [00:23<02:06,  1.37s/it] 17%|█▋        | 18/109 [00:24<02:05,  1.38s/it] 17%|█▋        | 19/109 [00:25<01:57,  1.30s/it] 18%|█▊        | 20/109 [00:27<02:00,  1.35s/it] 19%|█▉        | 21/109 [00:28<01:52,  1.28s/it] 20%|██        | 22/109 [00:28<01:35,  1.09s/it] 21%|██        | 23/109 [00:31<02:12,  1.54s/it] 22%|██▏       | 24/109 [00:32<02:03,  1.45s/it] 23%|██▎       | 25/109 [00:33<01:51,  1.33s/it] 24%|██▍       | 26/109 [00:35<01:51,  1.34s/it] 25%|██▍       | 27/109 [00:36<01:45,  1.28s/it] 26%|██▌       | 28/109 [00:37<01:44,  1.28s/it] 27%|██▋       | 29/109 [00:39<02:04,  1.56s/it] 28%|██▊       | 30/109 [00:41<02:12,  1.67s/it] 28%|██▊       | 31/109 [00:43<02:19,  1.79s/it] 29%|██▉       | 32/109 [00:45<02:07,  1.66s/it] 30%|███       | 33/109 [00:48<02:52,  2.26s/it] 31%|███       | 34/109 [00:50<02:32,  2.03s/it] 32%|███▏      | 35/109 [00:51<02:18,  1.87s/it] 33%|███▎      | 36/109 [00:52<02:00,  1.65s/it] 34%|███▍      | 37/109 [00:54<01:56,  1.62s/it] 35%|███▍      | 38/109 [00:56<01:53,  1.60s/it] 36%|███▌      | 39/109 [00:58<02:02,  1.75s/it] 37%|███▋      | 40/109 [00:59<01:58,  1.71s/it] 38%|███▊      | 41/109 [01:01<01:58,  1.74s/it] 39%|███▊      | 42/109 [01:03<01:50,  1.65s/it] 39%|███▉      | 43/109 [01:04<01:41,  1.53s/it] 40%|████      | 44/109 [01:06<01:44,  1.61s/it] 41%|████▏     | 45/109 [01:07<01:40,  1.56s/it] 42%|████▏     | 46/109 [01:08<01:33,  1.49s/it] 43%|████▎     | 47/109 [01:10<01:26,  1.40s/it] 44%|████▍     | 48/109 [01:11<01:23,  1.38s/it] 45%|████▍     | 49/109 [01:13<01:26,  1.45s/it] 46%|████▌     | 50/109 [01:14<01:30,  1.53s/it] 47%|████▋     | 51/109 [01:15<01:22,  1.42s/it] 48%|████▊     | 52/109 [01:17<01:20,  1.42s/it] 49%|████▊     | 53/109 [01:18<01:18,  1.41s/it] 50%|████▉     | 54/109 [01:20<01:26,  1.57s/it] 50%|█████     | 55/109 [01:21<01:15,  1.40s/it] 51%|█████▏    | 56/109 [01:22<01:11,  1.34s/it] 52%|█████▏    | 57/109 [01:24<01:12,  1.39s/it] 53%|█████▎    | 58/109 [01:25<01:11,  1.40s/it] 54%|█████▍    | 59/109 [01:26<01:06,  1.32s/it] 55%|█████▌    | 60/109 [01:28<01:02,  1.27s/it] 56%|█████▌    | 61/109 [01:29<01:04,  1.35s/it] 57%|█████▋    | 62/109 [01:31<01:08,  1.45s/it] 58%|█████▊    | 63/109 [01:32<01:09,  1.52s/it] 59%|█████▊    | 64/109 [01:34<01:06,  1.48s/it] 60%|█████▉    | 65/109 [01:35<01:01,  1.40s/it] 61%|██████    | 66/109 [01:36<00:58,  1.37s/it] 61%|██████▏   | 67/109 [01:38<00:58,  1.39s/it] 62%|██████▏   | 68/109 [01:40<01:01,  1.50s/it] 63%|██████▎   | 69/109 [01:40<00:49,  1.24s/it] 64%|██████▍   | 70/109 [01:42<00:49,  1.26s/it] 65%|██████▌   | 71/109 [01:43<00:47,  1.25s/it] 66%|██████▌   | 72/109 [01:45<00:59,  1.60s/it] 67%|██████▋   | 73/109 [01:47<00:55,  1.54s/it] 68%|██████▊   | 74/109 [01:48<00:49,  1.40s/it] 69%|██████▉   | 75/109 [01:50<00:52,  1.55s/it] 70%|██████▉   | 76/109 [01:50<00:44,  1.36s/it] 71%|███████   | 77/109 [01:51<00:38,  1.22s/it] 72%|███████▏  | 78/109 [01:53<00:37,  1.22s/it] 72%|███████▏  | 79/109 [01:54<00:36,  1.21s/it] 73%|███████▎  | 80/109 [01:55<00:31,  1.09s/it] 74%|███████▍  | 81/109 [01:56<00:37,  1.34s/it] 75%|███████▌  | 82/109 [01:59<00:44,  1.63s/it] 76%|███████▌  | 83/109 [02:01<00:43,  1.66s/it] 77%|███████▋  | 84/109 [02:02<00:39,  1.57s/it] 78%|███████▊  | 85/109 [02:03<00:35,  1.48s/it] 79%|███████▉  | 86/109 [02:04<00:32,  1.39s/it] 80%|███████▉  | 87/109 [02:06<00:33,  1.54s/it] 81%|████████  | 88/109 [02:08<00:31,  1.50s/it] 82%|████████▏ | 89/109 [02:09<00:29,  1.45s/it] 83%|████████▎ | 90/109 [02:10<00:27,  1.42s/it] 83%|████████▎ | 91/109 [02:12<00:27,  1.55s/it] 84%|████████▍ | 92/109 [02:13<00:23,  1.41s/it] 85%|████████▌ | 93/109 [02:15<00:23,  1.44s/it] 86%|████████▌ | 94/109 [02:16<00:20,  1.37s/it] 87%|████████▋ | 95/109 [02:18<00:21,  1.51s/it] 88%|████████▊ | 96/109 [02:20<00:20,  1.60s/it] 89%|████████▉ | 97/109 [02:22<00:20,  1.73s/it] 90%|████████▉ | 98/109 [02:24<00:20,  1.91s/it] 91%|█████████ | 99/109 [02:26<00:19,  1.97s/it] 92%|█████████▏| 100/109 [02:27<00:16,  1.79s/it] 93%|█████████▎| 101/109 [02:29<00:13,  1.72s/it] 94%|█████████▎| 102/109 [02:30<00:10,  1.55s/it] 94%|█████████▍| 103/109 [02:32<00:09,  1.53s/it] 95%|█████████▌| 104/109 [02:33<00:07,  1.40s/it] 96%|█████████▋| 105/109 [02:34<00:05,  1.44s/it] 97%|█████████▋| 106/109 [02:35<00:03,  1.31s/it] 98%|█████████▊| 107/109 [02:37<00:02,  1.43s/it] 99%|█████████▉| 108/109 [02:38<00:01,  1.22s/it]100%|██████████| 109/109 [02:39<00:00,  1.29s/it]100%|██████████| 109/109 [02:39<00:00,  1.47s/it]
+  0%|          | 0/28 [00:00<?, ?it/s]  4%|▎         | 1/28 [00:00<00:24,  1.11it/s]  7%|▋         | 2/28 [00:03<00:48,  1.87s/it] 11%|█         | 3/28 [00:05<00:43,  1.73s/it] 14%|█▍        | 4/28 [00:08<00:55,  2.31s/it] 18%|█▊        | 5/28 [00:09<00:45,  2.00s/it] 21%|██▏       | 6/28 [00:10<00:37,  1.69s/it] 25%|██▌       | 7/28 [00:12<00:33,  1.59s/it] 29%|██▊       | 8/28 [00:13<00:27,  1.37s/it] 32%|███▏      | 9/28 [00:14<00:23,  1.25s/it] 36%|███▌      | 10/28 [00:16<00:30,  1.68s/it] 39%|███▉      | 11/28 [00:18<00:29,  1.72s/it] 43%|████▎     | 12/28 [00:20<00:26,  1.67s/it] 46%|████▋     | 13/28 [00:21<00:23,  1.55s/it] 50%|█████     | 14/28 [00:26<00:35,  2.52s/it] 54%|█████▎    | 15/28 [00:27<00:28,  2.17s/it] 57%|█████▋    | 16/28 [00:28<00:23,  1.92s/it] 61%|██████    | 17/28 [00:29<00:18,  1.71s/it] 64%|██████▍   | 18/28 [00:31<00:16,  1.64s/it] 68%|██████▊   | 19/28 [00:32<00:14,  1.57s/it] 71%|███████▏  | 20/28 [00:33<00:11,  1.41s/it] 75%|███████▌  | 21/28 [00:35<00:10,  1.49s/it] 79%|███████▊  | 22/28 [00:36<00:08,  1.42s/it] 82%|████████▏ | 23/28 [00:38<00:07,  1.57s/it] 86%|████████▌ | 24/28 [00:40<00:06,  1.52s/it] 89%|████████▉ | 25/28 [00:41<00:04,  1.46s/it] 93%|█████████▎| 26/28 [00:43<00:03,  1.71s/it] 96%|█████████▋| 27/28 [00:45<00:01,  1.83s/it]100%|██████████| 28/28 [00:48<00:00,  2.05s/it]100%|██████████| 28/28 [00:48<00:00,  1.73s/it]
+x_train: (31200, 1, 64, 64, 32) | 0.00 ~ 0.50
+x_valid: (8145, 1, 64, 64, 32) | 0.00 ~ 0.50
+Using device: cuda:0
+
+#######################################################################
+Please cite the following paper when using nnU-Net:
+Isensee, F., Jaeger, P. F., Kohl, S. A., Petersen, J., & Maier-Hein, K. H. (2021). nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation. Nature methods, 18(2), 203-211.
+#######################################################################
+
+2024-07-30 16:48:22.052476: Using torch.compile...
+Total number of parameters in the model:  30785961
+Total CUDA devices:  1
+wandb: Tracking run with wandb version 0.16.6
+wandb: W&B syncing is set to `offline` in this directory.  
+wandb: Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+Epoch [1/10000], iteration 5, Loss: 0.079722
+Epoch [1/10000], iteration 10, Loss: 0.060678
+Epoch [1/10000], iteration 15, Loss: 0.054235
+Epoch [1/10000], iteration 20, Loss: 0.051251
+Epoch [1/10000], iteration 25, Loss: 0.049115
+Epoch [1/10000], iteration 30, Loss: 0.047452
+Epoch [1/10000], iteration 35, Loss: 0.045439
+Epoch [1/10000], iteration 40, Loss: 0.043685
+Epoch [1/10000], iteration 45, Loss: 0.041962
+Epoch [1/10000], iteration 50, Loss: 0.040441
+Epoch [1/10000], iteration 55, Loss: 0.039015
+Epoch [1/10000], iteration 60, Loss: 0.037854
+Epoch [1/10000], iteration 65, Loss: 0.036750
+Epoch [1/10000], iteration 70, Loss: 0.035761
+Epoch [1/10000], iteration 75, Loss: 0.034934
+Epoch [1/10000], iteration 80, Loss: 0.034114
+Epoch [1/10000], iteration 85, Loss: 0.033398
+Epoch [1/10000], iteration 90, Loss: 0.032781
+Epoch [1/10000], iteration 95, Loss: 0.032243
+Epoch [1/10000], iteration 100, Loss: 0.031742
+Epoch [1/10000], iteration 105, Loss: 0.031243
+Epoch [1/10000], iteration 110, Loss: 0.030760
+Epoch [1/10000], iteration 115, Loss: 0.030289
+Epoch [1/10000], iteration 120, Loss: 0.029844
+Epoch [1/10000], iteration 125, Loss: 0.029436
+Epoch [1/10000], iteration 130, Loss: 0.029041
+Epoch [1/10000], iteration 135, Loss: 0.028658
+Epoch [1/10000], iteration 140, Loss: 0.028307
+Epoch [1/10000], iteration 145, Loss: 0.027968
+Epoch [1/10000], iteration 150, Loss: 0.027631
+Epoch [1/10000], iteration 155, Loss: 0.027332
+Epoch [1/10000], iteration 160, Loss: 0.027040
+Epoch [1/10000], iteration 165, Loss: 0.026747
+Epoch [1/10000], iteration 170, Loss: 0.026442
+Epoch [1/10000], iteration 175, Loss: 0.026151
+Epoch [1/10000], iteration 180, Loss: 0.025881
+Epoch [1/10000], iteration 185, Loss: 0.025626
+Epoch [1/10000], iteration 190, Loss: 0.025369
+Epoch [1/10000], iteration 195, Loss: 0.025116
+Epoch [1/10000], iteration 200, Loss: 0.024869
+Epoch [1/10000], iteration 205, Loss: 0.024635
+Epoch [1/10000], iteration 210, Loss: 0.024410
+Epoch [1/10000], iteration 215, Loss: 0.024196
+Epoch [1/10000], iteration 220, Loss: 0.023993
+Epoch [1/10000], iteration 225, Loss: 0.023790
+Epoch [1/10000], iteration 230, Loss: 0.023596
+Epoch [1/10000], iteration 235, Loss: 0.023401
+Epoch [1/10000], iteration 240, Loss: 0.023231
+Epoch [1/10000], iteration 245, Loss: 0.023045
+Epoch [1/10000], iteration 250, Loss: 0.022873
+Epoch [1/10000], iteration 255, Loss: 0.022694
+Epoch [1/10000], iteration 260, Loss: 0.022533
+Epoch [1/10000], iteration 265, Loss: 0.022366
+Epoch [1/10000], iteration 270, Loss: 0.022203
+Epoch [1/10000], iteration 275, Loss: 0.022047
+Epoch [1/10000], iteration 280, Loss: 0.021894
+Epoch [1/10000], iteration 285, Loss: 0.021747
+Epoch [1/10000], iteration 290, Loss: 0.021607
+Epoch [1/10000], iteration 295, Loss: 0.021460
+Epoch [1/10000], iteration 300, Loss: 0.021324
+Epoch [1/10000], iteration 305, Loss: 0.021189
+Epoch [1/10000], iteration 310, Loss: 0.021055
+Epoch [1/10000], iteration 315, Loss: 0.020934
+Epoch [1/10000], iteration 320, Loss: 0.020817
+Epoch [1/10000], iteration 325, Loss: 0.020692
+Epoch 0 took 941.92 seconds
+validating....
+Epoch 1, validation loss is 0.0131, training loss is 0.0207
+Validation loss decreases from 100000.0000 to 0.0131
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [2/10000], iteration 5, Loss: 0.012689
+Epoch [2/10000], iteration 10, Loss: 0.012995
+Epoch [2/10000], iteration 15, Loss: 0.012843
+Epoch [2/10000], iteration 20, Loss: 0.012792
+Epoch [2/10000], iteration 25, Loss: 0.012853
+Epoch [2/10000], iteration 30, Loss: 0.012896
+Epoch [2/10000], iteration 35, Loss: 0.012880
+Epoch [2/10000], iteration 40, Loss: 0.012822
+Epoch [2/10000], iteration 45, Loss: 0.012766
+Epoch [2/10000], iteration 50, Loss: 0.012689
+Epoch [2/10000], iteration 55, Loss: 0.012590
+Epoch [2/10000], iteration 60, Loss: 0.012532
+Epoch [2/10000], iteration 65, Loss: 0.012508
+Epoch [2/10000], iteration 70, Loss: 0.012543
+Epoch [2/10000], iteration 75, Loss: 0.012510
+Epoch [2/10000], iteration 80, Loss: 0.012553
+Epoch [2/10000], iteration 85, Loss: 0.012524
+Epoch [2/10000], iteration 90, Loss: 0.012503
+Epoch [2/10000], iteration 95, Loss: 0.012479
+Epoch [2/10000], iteration 100, Loss: 0.012442
+Epoch [2/10000], iteration 105, Loss: 0.012395
+Epoch [2/10000], iteration 110, Loss: 0.012364
+Epoch [2/10000], iteration 115, Loss: 0.012364
+Epoch [2/10000], iteration 120, Loss: 0.012345
+Epoch [2/10000], iteration 125, Loss: 0.012327
+Epoch [2/10000], iteration 130, Loss: 0.012316
+Epoch [2/10000], iteration 135, Loss: 0.012305
+Epoch [2/10000], iteration 140, Loss: 0.012285
+Epoch [2/10000], iteration 145, Loss: 0.012243
+Epoch [2/10000], iteration 150, Loss: 0.012210
+Epoch [2/10000], iteration 155, Loss: 0.012171
+Epoch [2/10000], iteration 160, Loss: 0.012162
+Epoch [2/10000], iteration 165, Loss: 0.012127
+Epoch [2/10000], iteration 170, Loss: 0.012108
+Epoch [2/10000], iteration 175, Loss: 0.012081
+Epoch [2/10000], iteration 180, Loss: 0.012070
+Epoch [2/10000], iteration 185, Loss: 0.012069
+Epoch [2/10000], iteration 190, Loss: 0.012045
+Epoch [2/10000], iteration 195, Loss: 0.012036
+Epoch [2/10000], iteration 200, Loss: 0.012012
+Epoch [2/10000], iteration 205, Loss: 0.011993
+Epoch [2/10000], iteration 210, Loss: 0.011973
+Epoch [2/10000], iteration 215, Loss: 0.011963
+Epoch [2/10000], iteration 220, Loss: 0.011948
+Epoch [2/10000], iteration 225, Loss: 0.011933
+Epoch [2/10000], iteration 230, Loss: 0.011912
+Epoch [2/10000], iteration 235, Loss: 0.011901
+Epoch [2/10000], iteration 240, Loss: 0.011892
+Epoch [2/10000], iteration 245, Loss: 0.011872
+Epoch [2/10000], iteration 250, Loss: 0.011858
+Epoch [2/10000], iteration 255, Loss: 0.011835
+Epoch [2/10000], iteration 260, Loss: 0.011814
+Epoch [2/10000], iteration 265, Loss: 0.011804
+Epoch [2/10000], iteration 270, Loss: 0.011791
+Epoch [2/10000], iteration 275, Loss: 0.011772
+Epoch [2/10000], iteration 280, Loss: 0.011761
+Epoch [2/10000], iteration 285, Loss: 0.011747
+Epoch [2/10000], iteration 290, Loss: 0.011730
+Epoch [2/10000], iteration 295, Loss: 0.011721
+Epoch [2/10000], iteration 300, Loss: 0.011700
+Epoch [2/10000], iteration 305, Loss: 0.011690
+Epoch [2/10000], iteration 310, Loss: 0.011681
+Epoch [2/10000], iteration 315, Loss: 0.011672
+Epoch [2/10000], iteration 320, Loss: 0.011664
+Epoch [2/10000], iteration 325, Loss: 0.011665
+Epoch 1 took 896.51 seconds
+validating....
+Epoch 2, validation loss is 0.0112, training loss is 0.0117
+Validation loss decreases from 0.0131 to 0.0112
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [3/10000], iteration 5, Loss: 0.011250
+Epoch [3/10000], iteration 10, Loss: 0.011208
+Epoch [3/10000], iteration 15, Loss: 0.011011
+Epoch [3/10000], iteration 20, Loss: 0.010932
+Epoch [3/10000], iteration 25, Loss: 0.010851
+Epoch [3/10000], iteration 30, Loss: 0.010823
+Epoch [3/10000], iteration 35, Loss: 0.010825
+Epoch [3/10000], iteration 40, Loss: 0.010809
+Epoch [3/10000], iteration 45, Loss: 0.010811
+Epoch [3/10000], iteration 50, Loss: 0.010779
+Epoch [3/10000], iteration 55, Loss: 0.010748
+Epoch [3/10000], iteration 60, Loss: 0.010768
+Epoch [3/10000], iteration 65, Loss: 0.010761
+Epoch [3/10000], iteration 70, Loss: 0.010747
+Epoch [3/10000], iteration 75, Loss: 0.010717
+Epoch [3/10000], iteration 80, Loss: 0.010721
+Epoch [3/10000], iteration 85, Loss: 0.010726
+Epoch [3/10000], iteration 90, Loss: 0.010723
+Epoch [3/10000], iteration 95, Loss: 0.010708
+Epoch [3/10000], iteration 100, Loss: 0.010693
+Epoch [3/10000], iteration 105, Loss: 0.010712
+Epoch [3/10000], iteration 110, Loss: 0.010711
+Epoch [3/10000], iteration 115, Loss: 0.010699
+Epoch [3/10000], iteration 120, Loss: 0.010688
+Epoch [3/10000], iteration 125, Loss: 0.010681
+Epoch [3/10000], iteration 130, Loss: 0.010684
+Epoch [3/10000], iteration 135, Loss: 0.010672
+Epoch [3/10000], iteration 140, Loss: 0.010670
+Epoch [3/10000], iteration 145, Loss: 0.010683
+Epoch [3/10000], iteration 150, Loss: 0.010675
+Epoch [3/10000], iteration 155, Loss: 0.010675
+Epoch [3/10000], iteration 160, Loss: 0.010665
+Epoch [3/10000], iteration 165, Loss: 0.010660
+Epoch [3/10000], iteration 170, Loss: 0.010648
+Epoch [3/10000], iteration 175, Loss: 0.010654
+Epoch [3/10000], iteration 180, Loss: 0.010654
+Epoch [3/10000], iteration 185, Loss: 0.010649
+Epoch [3/10000], iteration 190, Loss: 0.010653
+Epoch [3/10000], iteration 195, Loss: 0.010643
+Epoch [3/10000], iteration 200, Loss: 0.010651
+Epoch [3/10000], iteration 205, Loss: 0.010636
+Epoch [3/10000], iteration 210, Loss: 0.010625
+Epoch [3/10000], iteration 215, Loss: 0.010618
+Epoch [3/10000], iteration 220, Loss: 0.010606
+Epoch [3/10000], iteration 225, Loss: 0.010598
+Epoch [3/10000], iteration 230, Loss: 0.010599
+Epoch [3/10000], iteration 235, Loss: 0.010586
+Epoch [3/10000], iteration 240, Loss: 0.010574
+Epoch [3/10000], iteration 245, Loss: 0.010575
+Epoch [3/10000], iteration 250, Loss: 0.010576
+Epoch [3/10000], iteration 255, Loss: 0.010572
+Epoch [3/10000], iteration 260, Loss: 0.010570
+Epoch [3/10000], iteration 265, Loss: 0.010561
+Epoch [3/10000], iteration 270, Loss: 0.010554
+Epoch [3/10000], iteration 275, Loss: 0.010541
+Epoch [3/10000], iteration 280, Loss: 0.010530
+Epoch [3/10000], iteration 285, Loss: 0.010523
+Epoch [3/10000], iteration 290, Loss: 0.010515
+Epoch [3/10000], iteration 295, Loss: 0.010502
+Epoch [3/10000], iteration 300, Loss: 0.010496
+Epoch [3/10000], iteration 305, Loss: 0.010483
+Epoch [3/10000], iteration 310, Loss: 0.010474
+Epoch [3/10000], iteration 315, Loss: 0.010468
+Epoch [3/10000], iteration 320, Loss: 0.010462
+Epoch [3/10000], iteration 325, Loss: 0.010461
+Epoch 2 took 894.05 seconds
+validating....
+Epoch 3, validation loss is 0.0104, training loss is 0.0105
+Validation loss decreases from 0.0112 to 0.0104
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [4/10000], iteration 5, Loss: 0.009981
+Epoch [4/10000], iteration 10, Loss: 0.010013
+Epoch [4/10000], iteration 15, Loss: 0.010088
+Epoch [4/10000], iteration 20, Loss: 0.010140
+Epoch [4/10000], iteration 25, Loss: 0.010172
+Epoch [4/10000], iteration 30, Loss: 0.010186
+Epoch [4/10000], iteration 35, Loss: 0.010181
+Epoch [4/10000], iteration 40, Loss: 0.010092
+Epoch [4/10000], iteration 45, Loss: 0.010045
+Epoch [4/10000], iteration 50, Loss: 0.010066
+Epoch [4/10000], iteration 55, Loss: 0.010044
+Epoch [4/10000], iteration 60, Loss: 0.010047
+Epoch [4/10000], iteration 65, Loss: 0.010038
+Epoch [4/10000], iteration 70, Loss: 0.010013
+Epoch [4/10000], iteration 75, Loss: 0.009975
+Epoch [4/10000], iteration 80, Loss: 0.009953
+Epoch [4/10000], iteration 85, Loss: 0.009974
+Epoch [4/10000], iteration 90, Loss: 0.009983
+Epoch [4/10000], iteration 95, Loss: 0.009994
+Epoch [4/10000], iteration 100, Loss: 0.009982
+Epoch [4/10000], iteration 105, Loss: 0.010009
+Epoch [4/10000], iteration 110, Loss: 0.010001
+Epoch [4/10000], iteration 115, Loss: 0.009985
+Epoch [4/10000], iteration 120, Loss: 0.009992
+Epoch [4/10000], iteration 125, Loss: 0.009974
+Epoch [4/10000], iteration 130, Loss: 0.009952
+Epoch [4/10000], iteration 135, Loss: 0.009947
+Epoch [4/10000], iteration 140, Loss: 0.009912
+Epoch [4/10000], iteration 145, Loss: 0.009918
+Epoch [4/10000], iteration 150, Loss: 0.009922
+Epoch [4/10000], iteration 155, Loss: 0.009911
+Epoch [4/10000], iteration 160, Loss: 0.009896
+Epoch [4/10000], iteration 165, Loss: 0.009897
+Epoch [4/10000], iteration 170, Loss: 0.009885
+Epoch [4/10000], iteration 175, Loss: 0.009873
+Epoch [4/10000], iteration 180, Loss: 0.009857
+Epoch [4/10000], iteration 185, Loss: 0.009866
+Epoch [4/10000], iteration 190, Loss: 0.009863
+Epoch [4/10000], iteration 195, Loss: 0.009866
+Epoch [4/10000], iteration 200, Loss: 0.009872
+Epoch [4/10000], iteration 205, Loss: 0.009862
+Epoch [4/10000], iteration 210, Loss: 0.009867
+Epoch [4/10000], iteration 215, Loss: 0.009873
+Epoch [4/10000], iteration 220, Loss: 0.009878
+Epoch [4/10000], iteration 225, Loss: 0.009880
+Epoch [4/10000], iteration 230, Loss: 0.009869
+Epoch [4/10000], iteration 235, Loss: 0.009862
+Epoch [4/10000], iteration 240, Loss: 0.009858
+Epoch [4/10000], iteration 245, Loss: 0.009862
+Epoch [4/10000], iteration 250, Loss: 0.009870
+Epoch [4/10000], iteration 255, Loss: 0.009872
+Epoch [4/10000], iteration 260, Loss: 0.009870
+Epoch [4/10000], iteration 265, Loss: 0.009870
+Epoch [4/10000], iteration 270, Loss: 0.009867
+Epoch [4/10000], iteration 275, Loss: 0.009857
+Epoch [4/10000], iteration 280, Loss: 0.009857
+Epoch [4/10000], iteration 285, Loss: 0.009859
+Epoch [4/10000], iteration 290, Loss: 0.009851
+Epoch [4/10000], iteration 295, Loss: 0.009857
+Epoch [4/10000], iteration 300, Loss: 0.009845
+Epoch [4/10000], iteration 305, Loss: 0.009840
+Epoch [4/10000], iteration 310, Loss: 0.009842
+Epoch [4/10000], iteration 315, Loss: 0.009839
+Epoch [4/10000], iteration 320, Loss: 0.009830
+Epoch [4/10000], iteration 325, Loss: 0.009826
+Epoch 3 took 895.73 seconds
+validating....
+Epoch 4, validation loss is 0.0098, training loss is 0.0098
+Validation loss decreases from 0.0104 to 0.0098
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [5/10000], iteration 5, Loss: 0.009266
+Epoch [5/10000], iteration 10, Loss: 0.009153
+Epoch [5/10000], iteration 15, Loss: 0.009183
+Epoch [5/10000], iteration 20, Loss: 0.009229
+Epoch [5/10000], iteration 25, Loss: 0.009230
+Epoch [5/10000], iteration 30, Loss: 0.009229
+Epoch [5/10000], iteration 35, Loss: 0.009239
+Epoch [5/10000], iteration 40, Loss: 0.009255
+Epoch [5/10000], iteration 45, Loss: 0.009285
+Epoch [5/10000], iteration 50, Loss: 0.009329
+Epoch [5/10000], iteration 55, Loss: 0.009334
+Epoch [5/10000], iteration 60, Loss: 0.009347
+Epoch [5/10000], iteration 65, Loss: 0.009362
+Epoch [5/10000], iteration 70, Loss: 0.009382
+Epoch [5/10000], iteration 75, Loss: 0.009405
+Epoch [5/10000], iteration 80, Loss: 0.009372
+Epoch [5/10000], iteration 85, Loss: 0.009340
+Epoch [5/10000], iteration 90, Loss: 0.009337
+Epoch [5/10000], iteration 95, Loss: 0.009335
+Epoch [5/10000], iteration 100, Loss: 0.009340
+Epoch [5/10000], iteration 105, Loss: 0.009361
+Epoch [5/10000], iteration 110, Loss: 0.009362
+Epoch [5/10000], iteration 115, Loss: 0.009360
+Epoch [5/10000], iteration 120, Loss: 0.009358
+Epoch [5/10000], iteration 125, Loss: 0.009348
+Epoch [5/10000], iteration 130, Loss: 0.009362
+Epoch [5/10000], iteration 135, Loss: 0.009356
+Epoch [5/10000], iteration 140, Loss: 0.009362
+Epoch [5/10000], iteration 145, Loss: 0.009356
+Epoch [5/10000], iteration 150, Loss: 0.009363
+Epoch [5/10000], iteration 155, Loss: 0.009370
+Epoch [5/10000], iteration 160, Loss: 0.009409
+Epoch [5/10000], iteration 165, Loss: 0.009405
+Epoch [5/10000], iteration 170, Loss: 0.009391
+Epoch [5/10000], iteration 175, Loss: 0.009388
+Epoch [5/10000], iteration 180, Loss: 0.009399
+Epoch [5/10000], iteration 185, Loss: 0.009385
+Epoch [5/10000], iteration 190, Loss: 0.009377
+Epoch [5/10000], iteration 195, Loss: 0.009364
+Epoch [5/10000], iteration 200, Loss: 0.009363
+Epoch [5/10000], iteration 205, Loss: 0.009363
+Epoch [5/10000], iteration 210, Loss: 0.009366
+Epoch [5/10000], iteration 215, Loss: 0.009359
+Epoch [5/10000], iteration 220, Loss: 0.009352
+Epoch [5/10000], iteration 225, Loss: 0.009357
+Epoch [5/10000], iteration 230, Loss: 0.009349
+Epoch [5/10000], iteration 235, Loss: 0.009351
+Epoch [5/10000], iteration 240, Loss: 0.009343
+Epoch [5/10000], iteration 245, Loss: 0.009339
+Epoch [5/10000], iteration 250, Loss: 0.009328
+Epoch [5/10000], iteration 255, Loss: 0.009329
+Epoch [5/10000], iteration 260, Loss: 0.009330
+Epoch [5/10000], iteration 265, Loss: 0.009329
+Epoch [5/10000], iteration 270, Loss: 0.009334
+Epoch [5/10000], iteration 275, Loss: 0.009332
+Epoch [5/10000], iteration 280, Loss: 0.009333
+Epoch [5/10000], iteration 285, Loss: 0.009338
+Epoch [5/10000], iteration 290, Loss: 0.009346
+Epoch [5/10000], iteration 295, Loss: 0.009348
+Epoch [5/10000], iteration 300, Loss: 0.009348
+Epoch [5/10000], iteration 305, Loss: 0.009357
+Epoch [5/10000], iteration 310, Loss: 0.009349
+Epoch [5/10000], iteration 315, Loss: 0.009343
+Epoch [5/10000], iteration 320, Loss: 0.009346
+Epoch [5/10000], iteration 325, Loss: 0.009351
+Epoch 4 took 891.58 seconds
+validating....
+Epoch 5, validation loss is 0.0095, training loss is 0.0094
+Validation loss decreases from 0.0098 to 0.0095
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [6/10000], iteration 5, Loss: 0.008928
+Epoch [6/10000], iteration 10, Loss: 0.009035
+Epoch [6/10000], iteration 15, Loss: 0.009003
+Epoch [6/10000], iteration 20, Loss: 0.009049
+Epoch [6/10000], iteration 25, Loss: 0.009056
+Epoch [6/10000], iteration 30, Loss: 0.009057
+Epoch [6/10000], iteration 35, Loss: 0.009072
+Epoch [6/10000], iteration 40, Loss: 0.009002
+Epoch [6/10000], iteration 45, Loss: 0.008989
+Epoch [6/10000], iteration 50, Loss: 0.009043
+Epoch [6/10000], iteration 55, Loss: 0.009069
+Epoch [6/10000], iteration 60, Loss: 0.009088
+Epoch [6/10000], iteration 65, Loss: 0.009089
+Epoch [6/10000], iteration 70, Loss: 0.009116
+Epoch [6/10000], iteration 75, Loss: 0.009132
+Epoch [6/10000], iteration 80, Loss: 0.009139
+Epoch [6/10000], iteration 85, Loss: 0.009113
+Epoch [6/10000], iteration 90, Loss: 0.009118
+Epoch [6/10000], iteration 95, Loss: 0.009103
+Epoch [6/10000], iteration 100, Loss: 0.009108
+Epoch [6/10000], iteration 105, Loss: 0.009134
+Epoch [6/10000], iteration 110, Loss: 0.009128
+Epoch [6/10000], iteration 115, Loss: 0.009119
+Epoch [6/10000], iteration 120, Loss: 0.009111
+Epoch [6/10000], iteration 125, Loss: 0.009138
+Epoch [6/10000], iteration 130, Loss: 0.009130
+Epoch [6/10000], iteration 135, Loss: 0.009132
+Epoch [6/10000], iteration 140, Loss: 0.009128
+Epoch [6/10000], iteration 145, Loss: 0.009128
+Epoch [6/10000], iteration 150, Loss: 0.009137
+Epoch [6/10000], iteration 155, Loss: 0.009120
+Epoch [6/10000], iteration 160, Loss: 0.009108
+Epoch [6/10000], iteration 165, Loss: 0.009111
+Epoch [6/10000], iteration 170, Loss: 0.009106
+Epoch [6/10000], iteration 175, Loss: 0.009106
+Epoch [6/10000], iteration 180, Loss: 0.009104
+Epoch [6/10000], iteration 185, Loss: 0.009107
+Epoch [6/10000], iteration 190, Loss: 0.009103
+Epoch [6/10000], iteration 195, Loss: 0.009102
+Epoch [6/10000], iteration 200, Loss: 0.009091
+Epoch [6/10000], iteration 205, Loss: 0.009082
+Epoch [6/10000], iteration 210, Loss: 0.009088
+Epoch [6/10000], iteration 215, Loss: 0.009095
+Epoch [6/10000], iteration 220, Loss: 0.009092
+Epoch [6/10000], iteration 225, Loss: 0.009082
+Epoch [6/10000], iteration 230, Loss: 0.009086
+Epoch [6/10000], iteration 235, Loss: 0.009095
+Epoch [6/10000], iteration 240, Loss: 0.009084
+Epoch [6/10000], iteration 245, Loss: 0.009080
+Epoch [6/10000], iteration 250, Loss: 0.009081
+Epoch [6/10000], iteration 255, Loss: 0.009070
+Epoch [6/10000], iteration 260, Loss: 0.009076
+Epoch [6/10000], iteration 265, Loss: 0.009080
+Epoch [6/10000], iteration 270, Loss: 0.009082
+Epoch [6/10000], iteration 275, Loss: 0.009081
+Epoch [6/10000], iteration 280, Loss: 0.009090
+Epoch [6/10000], iteration 285, Loss: 0.009086
+Epoch [6/10000], iteration 290, Loss: 0.009092
+Epoch [6/10000], iteration 295, Loss: 0.009091
+Epoch [6/10000], iteration 300, Loss: 0.009090
+Epoch [6/10000], iteration 305, Loss: 0.009089
+Epoch [6/10000], iteration 310, Loss: 0.009091
+Epoch [6/10000], iteration 315, Loss: 0.009090
+Epoch [6/10000], iteration 320, Loss: 0.009089
+Epoch [6/10000], iteration 325, Loss: 0.009080
+Epoch 5 took 892.43 seconds
+validating....
+Epoch 6, validation loss is 0.0092, training loss is 0.0091
+Validation loss decreases from 0.0095 to 0.0092
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [7/10000], iteration 5, Loss: 0.008641
+Epoch [7/10000], iteration 10, Loss: 0.009068
+Epoch [7/10000], iteration 15, Loss: 0.008879
+Epoch [7/10000], iteration 20, Loss: 0.009061
+Epoch [7/10000], iteration 25, Loss: 0.009079
+Epoch [7/10000], iteration 30, Loss: 0.009022
+Epoch [7/10000], iteration 35, Loss: 0.008954
+Epoch [7/10000], iteration 40, Loss: 0.008880
+Epoch [7/10000], iteration 45, Loss: 0.008816
+Epoch [7/10000], iteration 50, Loss: 0.008834
+Epoch [7/10000], iteration 55, Loss: 0.008840
+Epoch [7/10000], iteration 60, Loss: 0.008817
+Epoch [7/10000], iteration 65, Loss: 0.008808
+Epoch [7/10000], iteration 70, Loss: 0.008842
+Epoch [7/10000], iteration 75, Loss: 0.008818
+Epoch [7/10000], iteration 80, Loss: 0.008825
+Epoch [7/10000], iteration 85, Loss: 0.008814
+Epoch [7/10000], iteration 90, Loss: 0.008810
+Epoch [7/10000], iteration 95, Loss: 0.008831
+Epoch [7/10000], iteration 100, Loss: 0.008833
+Epoch [7/10000], iteration 105, Loss: 0.008846
+Epoch [7/10000], iteration 110, Loss: 0.008851
+Epoch [7/10000], iteration 115, Loss: 0.008844
+Epoch [7/10000], iteration 120, Loss: 0.008838
+Epoch [7/10000], iteration 125, Loss: 0.008817
+Epoch [7/10000], iteration 130, Loss: 0.008826
+Epoch [7/10000], iteration 135, Loss: 0.008845
+Epoch [7/10000], iteration 140, Loss: 0.008858
+Epoch [7/10000], iteration 145, Loss: 0.008861
+Epoch [7/10000], iteration 150, Loss: 0.008850
+Epoch [7/10000], iteration 155, Loss: 0.008849
+Epoch [7/10000], iteration 160, Loss: 0.008857
+Epoch [7/10000], iteration 165, Loss: 0.008857
+Epoch [7/10000], iteration 170, Loss: 0.008859
+Epoch [7/10000], iteration 175, Loss: 0.008855
+Epoch [7/10000], iteration 180, Loss: 0.008847
+Epoch [7/10000], iteration 185, Loss: 0.008851
+Epoch [7/10000], iteration 190, Loss: 0.008845
+Epoch [7/10000], iteration 195, Loss: 0.008854
+Epoch [7/10000], iteration 200, Loss: 0.008855
+Epoch [7/10000], iteration 205, Loss: 0.008861
+Epoch [7/10000], iteration 210, Loss: 0.008850
+Epoch [7/10000], iteration 215, Loss: 0.008843
+Epoch [7/10000], iteration 220, Loss: 0.008837
+Epoch [7/10000], iteration 225, Loss: 0.008834
+Epoch [7/10000], iteration 230, Loss: 0.008837
+Epoch [7/10000], iteration 235, Loss: 0.008830
+Epoch [7/10000], iteration 240, Loss: 0.008833
+Epoch [7/10000], iteration 245, Loss: 0.008825
+Epoch [7/10000], iteration 250, Loss: 0.008818
+Epoch [7/10000], iteration 255, Loss: 0.008813
+Epoch [7/10000], iteration 260, Loss: 0.008817
+Epoch [7/10000], iteration 265, Loss: 0.008807
+Epoch [7/10000], iteration 270, Loss: 0.008800
+Epoch [7/10000], iteration 275, Loss: 0.008798
+Epoch [7/10000], iteration 280, Loss: 0.008796
+Epoch [7/10000], iteration 285, Loss: 0.008799
+Epoch [7/10000], iteration 290, Loss: 0.008791
+Epoch [7/10000], iteration 295, Loss: 0.008793
+Epoch [7/10000], iteration 300, Loss: 0.008783
+Epoch [7/10000], iteration 305, Loss: 0.008780
+Epoch [7/10000], iteration 310, Loss: 0.008776
+Epoch [7/10000], iteration 315, Loss: 0.008770
+Epoch [7/10000], iteration 320, Loss: 0.008773
+Epoch [7/10000], iteration 325, Loss: 0.008772
+Epoch 6 took 898.38 seconds
+validating....
+Epoch 7, validation loss is 0.0088, training loss is 0.0088
+Validation loss decreases from 0.0092 to 0.0088
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [8/10000], iteration 5, Loss: 0.008326
+Epoch [8/10000], iteration 10, Loss: 0.008348
+Epoch [8/10000], iteration 15, Loss: 0.008578
+Epoch [8/10000], iteration 20, Loss: 0.008622
+Epoch [8/10000], iteration 25, Loss: 0.008651
+Epoch [8/10000], iteration 30, Loss: 0.008721
+Epoch [8/10000], iteration 35, Loss: 0.008734
+Epoch [8/10000], iteration 40, Loss: 0.008687
+Epoch [8/10000], iteration 45, Loss: 0.008670
+Epoch [8/10000], iteration 50, Loss: 0.008677
+Epoch [8/10000], iteration 55, Loss: 0.008646
+Epoch [8/10000], iteration 60, Loss: 0.008616
+Epoch [8/10000], iteration 65, Loss: 0.008594
+Epoch [8/10000], iteration 70, Loss: 0.008577
+Epoch [8/10000], iteration 75, Loss: 0.008582
+Epoch [8/10000], iteration 80, Loss: 0.008611
+Epoch [8/10000], iteration 85, Loss: 0.008621
+Epoch [8/10000], iteration 90, Loss: 0.008642
+Epoch [8/10000], iteration 95, Loss: 0.008635
+Epoch [8/10000], iteration 100, Loss: 0.008622
+Epoch [8/10000], iteration 105, Loss: 0.008609
+Epoch [8/10000], iteration 110, Loss: 0.008593
+Epoch [8/10000], iteration 115, Loss: 0.008593
+Epoch [8/10000], iteration 120, Loss: 0.008592
+Epoch [8/10000], iteration 125, Loss: 0.008607
+Epoch [8/10000], iteration 130, Loss: 0.008603
+Epoch [8/10000], iteration 135, Loss: 0.008600
+Epoch [8/10000], iteration 140, Loss: 0.008616
+Epoch [8/10000], iteration 145, Loss: 0.008621
+Epoch [8/10000], iteration 150, Loss: 0.008611
+Epoch [8/10000], iteration 155, Loss: 0.008593
+Epoch [8/10000], iteration 160, Loss: 0.008613
+Epoch [8/10000], iteration 165, Loss: 0.008606
+Epoch [8/10000], iteration 170, Loss: 0.008607
+Epoch [8/10000], iteration 175, Loss: 0.008612
+Epoch [8/10000], iteration 180, Loss: 0.008618
+Epoch [8/10000], iteration 185, Loss: 0.008626
+Epoch [8/10000], iteration 190, Loss: 0.008620
+Epoch [8/10000], iteration 195, Loss: 0.008630
+Epoch [8/10000], iteration 200, Loss: 0.008622
+Epoch [8/10000], iteration 205, Loss: 0.008605
+Epoch [8/10000], iteration 210, Loss: 0.008597
+Epoch [8/10000], iteration 215, Loss: 0.008593
+Epoch [8/10000], iteration 220, Loss: 0.008592
+Epoch [8/10000], iteration 225, Loss: 0.008583
+Epoch [8/10000], iteration 230, Loss: 0.008590
+Epoch [8/10000], iteration 235, Loss: 0.008587
+Epoch [8/10000], iteration 240, Loss: 0.008596
+Epoch [8/10000], iteration 245, Loss: 0.008592
+Epoch [8/10000], iteration 250, Loss: 0.008610
+Epoch [8/10000], iteration 255, Loss: 0.008609
+Epoch [8/10000], iteration 260, Loss: 0.008609
+Epoch [8/10000], iteration 265, Loss: 0.008601
+Epoch [8/10000], iteration 270, Loss: 0.008602
+Epoch [8/10000], iteration 275, Loss: 0.008599
+Epoch [8/10000], iteration 280, Loss: 0.008595
+Epoch [8/10000], iteration 285, Loss: 0.008592
+Epoch [8/10000], iteration 290, Loss: 0.008586
+Epoch [8/10000], iteration 295, Loss: 0.008587
+Epoch [8/10000], iteration 300, Loss: 0.008591
+Epoch [8/10000], iteration 305, Loss: 0.008585
+Epoch [8/10000], iteration 310, Loss: 0.008583
+Epoch [8/10000], iteration 315, Loss: 0.008581
+Epoch [8/10000], iteration 320, Loss: 0.008576
+Epoch [8/10000], iteration 325, Loss: 0.008576
+Epoch 7 took 892.75 seconds
+validating....
+Epoch 8, validation loss is 0.0087, training loss is 0.0086
+Validation loss decreases from 0.0088 to 0.0087
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [9/10000], iteration 5, Loss: 0.008763
+Epoch [9/10000], iteration 10, Loss: 0.008363
+Epoch [9/10000], iteration 15, Loss: 0.008394
+Epoch [9/10000], iteration 20, Loss: 0.008377
+Epoch [9/10000], iteration 25, Loss: 0.008354
+Epoch [9/10000], iteration 30, Loss: 0.008447
+Epoch [9/10000], iteration 35, Loss: 0.008471
+Epoch [9/10000], iteration 40, Loss: 0.008483
+Epoch [9/10000], iteration 45, Loss: 0.008471
+Epoch [9/10000], iteration 50, Loss: 0.008465
+Epoch [9/10000], iteration 55, Loss: 0.008479
+Epoch [9/10000], iteration 60, Loss: 0.008496
+Epoch [9/10000], iteration 65, Loss: 0.008470
+Epoch [9/10000], iteration 70, Loss: 0.008473
+Epoch [9/10000], iteration 75, Loss: 0.008443
+Epoch [9/10000], iteration 80, Loss: 0.008427
+Epoch [9/10000], iteration 85, Loss: 0.008412
+Epoch [9/10000], iteration 90, Loss: 0.008407
+Epoch [9/10000], iteration 95, Loss: 0.008391
+Epoch [9/10000], iteration 100, Loss: 0.008390
+Epoch [9/10000], iteration 105, Loss: 0.008411
+Epoch [9/10000], iteration 110, Loss: 0.008406
+Epoch [9/10000], iteration 115, Loss: 0.008399
+Epoch [9/10000], iteration 120, Loss: 0.008400
+Epoch [9/10000], iteration 125, Loss: 0.008397
+Epoch [9/10000], iteration 130, Loss: 0.008403
+Epoch [9/10000], iteration 135, Loss: 0.008415
+Epoch [9/10000], iteration 140, Loss: 0.008435
+Epoch [9/10000], iteration 145, Loss: 0.008434
+Epoch [9/10000], iteration 150, Loss: 0.008430
+Epoch [9/10000], iteration 155, Loss: 0.008416
+Epoch [9/10000], iteration 160, Loss: 0.008420
+Epoch [9/10000], iteration 165, Loss: 0.008424
+Epoch [9/10000], iteration 170, Loss: 0.008413
+Epoch [9/10000], iteration 175, Loss: 0.008410
+Epoch [9/10000], iteration 180, Loss: 0.008409
+Epoch [9/10000], iteration 185, Loss: 0.008416
+Epoch [9/10000], iteration 190, Loss: 0.008412
+Epoch [9/10000], iteration 195, Loss: 0.008412
+Epoch [9/10000], iteration 200, Loss: 0.008409
+Epoch [9/10000], iteration 205, Loss: 0.008423
+Epoch [9/10000], iteration 210, Loss: 0.008418
+Epoch [9/10000], iteration 215, Loss: 0.008425
+Epoch [9/10000], iteration 220, Loss: 0.008416
+Epoch [9/10000], iteration 225, Loss: 0.008419
+Epoch [9/10000], iteration 230, Loss: 0.008419
+Epoch [9/10000], iteration 235, Loss: 0.008414
+Epoch [9/10000], iteration 240, Loss: 0.008428
+Epoch [9/10000], iteration 245, Loss: 0.008435
+Epoch [9/10000], iteration 250, Loss: 0.008441
+Epoch [9/10000], iteration 255, Loss: 0.008446
+Epoch [9/10000], iteration 260, Loss: 0.008454
+Epoch [9/10000], iteration 265, Loss: 0.008467
+Epoch [9/10000], iteration 270, Loss: 0.008464
+Epoch [9/10000], iteration 275, Loss: 0.008465
+Epoch [9/10000], iteration 280, Loss: 0.008464
+Epoch [9/10000], iteration 285, Loss: 0.008465
+Epoch [9/10000], iteration 290, Loss: 0.008456
+Epoch [9/10000], iteration 295, Loss: 0.008453
+Epoch [9/10000], iteration 300, Loss: 0.008453
+Epoch [9/10000], iteration 305, Loss: 0.008453
+Epoch [9/10000], iteration 310, Loss: 0.008457
+Epoch [9/10000], iteration 315, Loss: 0.008455
+Epoch [9/10000], iteration 320, Loss: 0.008456
+Epoch [9/10000], iteration 325, Loss: 0.008460
+Epoch 8 took 895.13 seconds
+validating....
+Epoch 9, validation loss is 0.0085, training loss is 0.0085
+Validation loss decreases from 0.0087 to 0.0085
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [10/10000], iteration 5, Loss: 0.008169
+Epoch [10/10000], iteration 10, Loss: 0.008091
+Epoch [10/10000], iteration 15, Loss: 0.008064
+Epoch [10/10000], iteration 20, Loss: 0.008183
+Epoch [10/10000], iteration 25, Loss: 0.008357
+Epoch [10/10000], iteration 30, Loss: 0.008275
+Epoch [10/10000], iteration 35, Loss: 0.008265
+Epoch [10/10000], iteration 40, Loss: 0.008269
+Epoch [10/10000], iteration 45, Loss: 0.008285
+Epoch [10/10000], iteration 50, Loss: 0.008284
+Epoch [10/10000], iteration 55, Loss: 0.008298
+Epoch [10/10000], iteration 60, Loss: 0.008332
+Epoch [10/10000], iteration 65, Loss: 0.008383
+Epoch [10/10000], iteration 70, Loss: 0.008389
+Epoch [10/10000], iteration 75, Loss: 0.008400
+Epoch [10/10000], iteration 80, Loss: 0.008410
+Epoch [10/10000], iteration 85, Loss: 0.008408
+Epoch [10/10000], iteration 90, Loss: 0.008396
+Epoch [10/10000], iteration 95, Loss: 0.008373
+Epoch [10/10000], iteration 100, Loss: 0.008378
+Epoch [10/10000], iteration 105, Loss: 0.008399
+Epoch [10/10000], iteration 110, Loss: 0.008388
+Epoch [10/10000], iteration 115, Loss: 0.008384
+Epoch [10/10000], iteration 120, Loss: 0.008371
+Epoch [10/10000], iteration 125, Loss: 0.008375
+Epoch [10/10000], iteration 130, Loss: 0.008369
+Epoch [10/10000], iteration 135, Loss: 0.008377
+Epoch [10/10000], iteration 140, Loss: 0.008357
+Epoch [10/10000], iteration 145, Loss: 0.008360
+Epoch [10/10000], iteration 150, Loss: 0.008355
+Epoch [10/10000], iteration 155, Loss: 0.008355
+Epoch [10/10000], iteration 160, Loss: 0.008351
+Epoch [10/10000], iteration 165, Loss: 0.008344
+Epoch [10/10000], iteration 170, Loss: 0.008359
+Epoch [10/10000], iteration 175, Loss: 0.008349
+Epoch [10/10000], iteration 180, Loss: 0.008345
+Epoch [10/10000], iteration 185, Loss: 0.008335
+Epoch [10/10000], iteration 190, Loss: 0.008339
+Epoch [10/10000], iteration 195, Loss: 0.008331
+Epoch [10/10000], iteration 200, Loss: 0.008329
+Epoch [10/10000], iteration 205, Loss: 0.008316
+Epoch [10/10000], iteration 210, Loss: 0.008324
+Epoch [10/10000], iteration 215, Loss: 0.008326
+Epoch [10/10000], iteration 220, Loss: 0.008331
+Epoch [10/10000], iteration 225, Loss: 0.008321
+Epoch [10/10000], iteration 230, Loss: 0.008317
+Epoch [10/10000], iteration 235, Loss: 0.008310
+Epoch [10/10000], iteration 240, Loss: 0.008303
+Epoch [10/10000], iteration 245, Loss: 0.008303
+Epoch [10/10000], iteration 250, Loss: 0.008296
+Epoch [10/10000], iteration 255, Loss: 0.008300
+Epoch [10/10000], iteration 260, Loss: 0.008299
+Epoch [10/10000], iteration 265, Loss: 0.008293
+Epoch [10/10000], iteration 270, Loss: 0.008292
+Epoch [10/10000], iteration 275, Loss: 0.008286
+Epoch [10/10000], iteration 280, Loss: 0.008299
+Epoch [10/10000], iteration 285, Loss: 0.008297
+Epoch [10/10000], iteration 290, Loss: 0.008300
+Epoch [10/10000], iteration 295, Loss: 0.008296
+Epoch [10/10000], iteration 300, Loss: 0.008290
+Epoch [10/10000], iteration 305, Loss: 0.008283
+Epoch [10/10000], iteration 310, Loss: 0.008280
+Epoch [10/10000], iteration 315, Loss: 0.008277
+Epoch [10/10000], iteration 320, Loss: 0.008277
+Epoch [10/10000], iteration 325, Loss: 0.008276
+Epoch 9 took 893.30 seconds
+validating....
+Epoch 10, validation loss is 0.0086, training loss is 0.0083
+Validation loss does not decrease from 0.0085, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [11/10000], iteration 5, Loss: 0.008022
+Epoch [11/10000], iteration 10, Loss: 0.008086
+Epoch [11/10000], iteration 15, Loss: 0.008077
+Epoch [11/10000], iteration 20, Loss: 0.008132
+Epoch [11/10000], iteration 25, Loss: 0.008167
+Epoch [11/10000], iteration 30, Loss: 0.008234
+Epoch [11/10000], iteration 35, Loss: 0.008178
+Epoch [11/10000], iteration 40, Loss: 0.008188
+Epoch [11/10000], iteration 45, Loss: 0.008221
+Epoch [11/10000], iteration 50, Loss: 0.008230
+Epoch [11/10000], iteration 55, Loss: 0.008219
+Epoch [11/10000], iteration 60, Loss: 0.008160
+Epoch [11/10000], iteration 65, Loss: 0.008139
+Epoch [11/10000], iteration 70, Loss: 0.008195
+Epoch [11/10000], iteration 75, Loss: 0.008190
+Epoch [11/10000], iteration 80, Loss: 0.008205
+Epoch [11/10000], iteration 85, Loss: 0.008213
+Epoch [11/10000], iteration 90, Loss: 0.008205
+Epoch [11/10000], iteration 95, Loss: 0.008198
+Epoch [11/10000], iteration 100, Loss: 0.008214
+Epoch [11/10000], iteration 105, Loss: 0.008203
+Epoch [11/10000], iteration 110, Loss: 0.008204
+Epoch [11/10000], iteration 115, Loss: 0.008178
+Epoch [11/10000], iteration 120, Loss: 0.008171
+Epoch [11/10000], iteration 125, Loss: 0.008186
+Epoch [11/10000], iteration 130, Loss: 0.008174
+Epoch [11/10000], iteration 135, Loss: 0.008166
+Epoch [11/10000], iteration 140, Loss: 0.008170
+Epoch [11/10000], iteration 145, Loss: 0.008159
+Epoch [11/10000], iteration 150, Loss: 0.008144
+Epoch [11/10000], iteration 155, Loss: 0.008145
+Epoch [11/10000], iteration 160, Loss: 0.008135
+Epoch [11/10000], iteration 165, Loss: 0.008144
+Epoch [11/10000], iteration 170, Loss: 0.008145
+Epoch [11/10000], iteration 175, Loss: 0.008141
+Epoch [11/10000], iteration 180, Loss: 0.008128
+Epoch [11/10000], iteration 185, Loss: 0.008137
+Epoch [11/10000], iteration 190, Loss: 0.008156
+Epoch [11/10000], iteration 195, Loss: 0.008148
+Epoch [11/10000], iteration 200, Loss: 0.008158
+Epoch [11/10000], iteration 205, Loss: 0.008153
+Epoch [11/10000], iteration 210, Loss: 0.008157
+Epoch [11/10000], iteration 215, Loss: 0.008149
+Epoch [11/10000], iteration 220, Loss: 0.008137
+Epoch [11/10000], iteration 225, Loss: 0.008133
+Epoch [11/10000], iteration 230, Loss: 0.008125
+Epoch [11/10000], iteration 235, Loss: 0.008124
+Epoch [11/10000], iteration 240, Loss: 0.008118
+Epoch [11/10000], iteration 245, Loss: 0.008121
+Epoch [11/10000], iteration 250, Loss: 0.008124
+Epoch [11/10000], iteration 255, Loss: 0.008126
+Epoch [11/10000], iteration 260, Loss: 0.008134
+Epoch [11/10000], iteration 265, Loss: 0.008127
+Epoch [11/10000], iteration 270, Loss: 0.008125
+Epoch [11/10000], iteration 275, Loss: 0.008138
+Epoch [11/10000], iteration 280, Loss: 0.008134
+Epoch [11/10000], iteration 285, Loss: 0.008135
+Epoch [11/10000], iteration 290, Loss: 0.008142
+Epoch [11/10000], iteration 295, Loss: 0.008144
+Epoch [11/10000], iteration 300, Loss: 0.008150
+Epoch [11/10000], iteration 305, Loss: 0.008154
+Epoch [11/10000], iteration 310, Loss: 0.008150
+Epoch [11/10000], iteration 315, Loss: 0.008150
+Epoch [11/10000], iteration 320, Loss: 0.008152
+Epoch [11/10000], iteration 325, Loss: 0.008142
+Epoch 10 took 898.94 seconds
+validating....
+Epoch 11, validation loss is 0.0083, training loss is 0.0081
+Validation loss decreases from 0.0085 to 0.0083
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [12/10000], iteration 5, Loss: 0.007605
+Epoch [12/10000], iteration 10, Loss: 0.007661
+Epoch [12/10000], iteration 15, Loss: 0.007753
+Epoch [12/10000], iteration 20, Loss: 0.007838
+Epoch [12/10000], iteration 25, Loss: 0.007869
+Epoch [12/10000], iteration 30, Loss: 0.007830
+Epoch [12/10000], iteration 35, Loss: 0.007843
+Epoch [12/10000], iteration 40, Loss: 0.007907
+Epoch [12/10000], iteration 45, Loss: 0.007919
+Epoch [12/10000], iteration 50, Loss: 0.007911
+Epoch [12/10000], iteration 55, Loss: 0.007924
+Epoch [12/10000], iteration 60, Loss: 0.007930
+Epoch [12/10000], iteration 65, Loss: 0.007925
+Epoch [12/10000], iteration 70, Loss: 0.007933
+Epoch [12/10000], iteration 75, Loss: 0.007926
+Epoch [12/10000], iteration 80, Loss: 0.007913
+Epoch [12/10000], iteration 85, Loss: 0.007938
+Epoch [12/10000], iteration 90, Loss: 0.007950
+Epoch [12/10000], iteration 95, Loss: 0.007939
+Epoch [12/10000], iteration 100, Loss: 0.007934
+Epoch [12/10000], iteration 105, Loss: 0.007959
+Epoch [12/10000], iteration 110, Loss: 0.007958
+Epoch [12/10000], iteration 115, Loss: 0.007973
+Epoch [12/10000], iteration 120, Loss: 0.007956
+Epoch [12/10000], iteration 125, Loss: 0.007967
+Epoch [12/10000], iteration 130, Loss: 0.007978
+Epoch [12/10000], iteration 135, Loss: 0.007977
+Epoch [12/10000], iteration 140, Loss: 0.008004
+Epoch [12/10000], iteration 145, Loss: 0.007999
+Epoch [12/10000], iteration 150, Loss: 0.007990
+Epoch [12/10000], iteration 155, Loss: 0.007990
+Epoch [12/10000], iteration 160, Loss: 0.007980
+Epoch [12/10000], iteration 165, Loss: 0.007985
+Epoch [12/10000], iteration 170, Loss: 0.007986
+Epoch [12/10000], iteration 175, Loss: 0.007982
+Epoch [12/10000], iteration 180, Loss: 0.007975
+Epoch [12/10000], iteration 185, Loss: 0.007976
+Epoch [12/10000], iteration 190, Loss: 0.007967
+Epoch [12/10000], iteration 195, Loss: 0.007979
+Epoch [12/10000], iteration 200, Loss: 0.007999
+Epoch [12/10000], iteration 205, Loss: 0.007998
+Epoch [12/10000], iteration 210, Loss: 0.007985
+Epoch [12/10000], iteration 215, Loss: 0.007995
+Epoch [12/10000], iteration 220, Loss: 0.007996
+Epoch [12/10000], iteration 225, Loss: 0.007997
+Epoch [12/10000], iteration 230, Loss: 0.007994
+Epoch [12/10000], iteration 235, Loss: 0.007999
+Epoch [12/10000], iteration 240, Loss: 0.008001
+Epoch [12/10000], iteration 245, Loss: 0.008007
+Epoch [12/10000], iteration 250, Loss: 0.008002
+Epoch [12/10000], iteration 255, Loss: 0.007999
+Epoch [12/10000], iteration 260, Loss: 0.008006
+Epoch [12/10000], iteration 265, Loss: 0.008005
+Epoch [12/10000], iteration 270, Loss: 0.008005
+Epoch [12/10000], iteration 275, Loss: 0.008001
+Epoch [12/10000], iteration 280, Loss: 0.007994
+Epoch [12/10000], iteration 285, Loss: 0.007997
+Epoch [12/10000], iteration 290, Loss: 0.007992
+Epoch [12/10000], iteration 295, Loss: 0.007998
+Epoch [12/10000], iteration 300, Loss: 0.008000
+Epoch [12/10000], iteration 305, Loss: 0.007994
+Epoch [12/10000], iteration 310, Loss: 0.007996
+Epoch [12/10000], iteration 315, Loss: 0.007984
+Epoch [12/10000], iteration 320, Loss: 0.007988
+Epoch [12/10000], iteration 325, Loss: 0.007985
+Epoch 11 took 894.87 seconds
+validating....
+Epoch 12, validation loss is 0.0083, training loss is 0.0080
+Validation loss does not decrease from 0.0083, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [13/10000], iteration 5, Loss: 0.007795
+Epoch [13/10000], iteration 10, Loss: 0.007957
+Epoch [13/10000], iteration 15, Loss: 0.007788
+Epoch [13/10000], iteration 20, Loss: 0.007804
+Epoch [13/10000], iteration 25, Loss: 0.007891
+Epoch [13/10000], iteration 30, Loss: 0.007946
+Epoch [13/10000], iteration 35, Loss: 0.007961
+Epoch [13/10000], iteration 40, Loss: 0.007967
+Epoch [13/10000], iteration 45, Loss: 0.007958
+Epoch [13/10000], iteration 50, Loss: 0.007957
+Epoch [13/10000], iteration 55, Loss: 0.007917
+Epoch [13/10000], iteration 60, Loss: 0.007889
+Epoch [13/10000], iteration 65, Loss: 0.007913
+Epoch [13/10000], iteration 70, Loss: 0.007932
+Epoch [13/10000], iteration 75, Loss: 0.007943
+Epoch [13/10000], iteration 80, Loss: 0.007930
+Epoch [13/10000], iteration 85, Loss: 0.007916
+Epoch [13/10000], iteration 90, Loss: 0.007899
+Epoch [13/10000], iteration 95, Loss: 0.007895
+Epoch [13/10000], iteration 100, Loss: 0.007893
+Epoch [13/10000], iteration 105, Loss: 0.007895
+Epoch [13/10000], iteration 110, Loss: 0.007883
+Epoch [13/10000], iteration 115, Loss: 0.007917
+Epoch [13/10000], iteration 120, Loss: 0.007933
+Epoch [13/10000], iteration 125, Loss: 0.007943
+Epoch [13/10000], iteration 130, Loss: 0.007965
+Epoch [13/10000], iteration 135, Loss: 0.007973
+Epoch [13/10000], iteration 140, Loss: 0.007969
+Epoch [13/10000], iteration 145, Loss: 0.007967
+Epoch [13/10000], iteration 150, Loss: 0.007963
+Epoch [13/10000], iteration 155, Loss: 0.007968
+Epoch [13/10000], iteration 160, Loss: 0.007965
+Epoch [13/10000], iteration 165, Loss: 0.007962
+Epoch [13/10000], iteration 170, Loss: 0.007969
+Epoch [13/10000], iteration 175, Loss: 0.007983
+Epoch [13/10000], iteration 180, Loss: 0.007997
+Epoch [13/10000], iteration 185, Loss: 0.007998
+Epoch [13/10000], iteration 190, Loss: 0.007994
+Epoch [13/10000], iteration 195, Loss: 0.007983
+Epoch [13/10000], iteration 200, Loss: 0.007968
+Epoch [13/10000], iteration 205, Loss: 0.007963
+Epoch [13/10000], iteration 210, Loss: 0.007962
+Epoch [13/10000], iteration 215, Loss: 0.007955
+Epoch [13/10000], iteration 220, Loss: 0.007955
+Epoch [13/10000], iteration 225, Loss: 0.007957
+Epoch [13/10000], iteration 230, Loss: 0.007954
+Epoch [13/10000], iteration 235, Loss: 0.007953
+Epoch [13/10000], iteration 240, Loss: 0.007951
+Epoch [13/10000], iteration 245, Loss: 0.007945
+Epoch [13/10000], iteration 250, Loss: 0.007942
+Epoch [13/10000], iteration 255, Loss: 0.007933
+Epoch [13/10000], iteration 260, Loss: 0.007930
+Epoch [13/10000], iteration 265, Loss: 0.007930
+Epoch [13/10000], iteration 270, Loss: 0.007927
+Epoch [13/10000], iteration 275, Loss: 0.007927
+Epoch [13/10000], iteration 280, Loss: 0.007926
+Epoch [13/10000], iteration 285, Loss: 0.007918
+Epoch [13/10000], iteration 290, Loss: 0.007911
+Epoch [13/10000], iteration 295, Loss: 0.007911
+Epoch [13/10000], iteration 300, Loss: 0.007898
+Epoch [13/10000], iteration 305, Loss: 0.007900
+Epoch [13/10000], iteration 310, Loss: 0.007900
+Epoch [13/10000], iteration 315, Loss: 0.007899
+Epoch [13/10000], iteration 320, Loss: 0.007906
+Epoch [13/10000], iteration 325, Loss: 0.007904
+Epoch 12 took 890.63 seconds
+validating....
+Epoch 13, validation loss is 0.0079, training loss is 0.0079
+Validation loss decreases from 0.0083 to 0.0079
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [14/10000], iteration 5, Loss: 0.008024
+Epoch [14/10000], iteration 10, Loss: 0.007950
+Epoch [14/10000], iteration 15, Loss: 0.008040
+Epoch [14/10000], iteration 20, Loss: 0.007983
+Epoch [14/10000], iteration 25, Loss: 0.008110
+Epoch [14/10000], iteration 30, Loss: 0.008063
+Epoch [14/10000], iteration 35, Loss: 0.008088
+Epoch [14/10000], iteration 40, Loss: 0.008086
+Epoch [14/10000], iteration 45, Loss: 0.008053
+Epoch [14/10000], iteration 50, Loss: 0.007996
+Epoch [14/10000], iteration 55, Loss: 0.007942
+Epoch [14/10000], iteration 60, Loss: 0.007912
+Epoch [14/10000], iteration 65, Loss: 0.007901
+Epoch [14/10000], iteration 70, Loss: 0.007875
+Epoch [14/10000], iteration 75, Loss: 0.007878
+Epoch [14/10000], iteration 80, Loss: 0.007872
+Epoch [14/10000], iteration 85, Loss: 0.007862
+Epoch [14/10000], iteration 90, Loss: 0.007857
+Epoch [14/10000], iteration 95, Loss: 0.007867
+Epoch [14/10000], iteration 100, Loss: 0.007878
+Epoch [14/10000], iteration 105, Loss: 0.007897
+Epoch [14/10000], iteration 110, Loss: 0.007894
+Epoch [14/10000], iteration 115, Loss: 0.007887
+Epoch [14/10000], iteration 120, Loss: 0.007876
+Epoch [14/10000], iteration 125, Loss: 0.007889
+Epoch [14/10000], iteration 130, Loss: 0.007885
+Epoch [14/10000], iteration 135, Loss: 0.007888
+Epoch [14/10000], iteration 140, Loss: 0.007888
+Epoch [14/10000], iteration 145, Loss: 0.007884
+Epoch [14/10000], iteration 150, Loss: 0.007874
+Epoch [14/10000], iteration 155, Loss: 0.007871
+Epoch [14/10000], iteration 160, Loss: 0.007866
+Epoch [14/10000], iteration 165, Loss: 0.007866
+Epoch [14/10000], iteration 170, Loss: 0.007862
+Epoch [14/10000], iteration 175, Loss: 0.007854
+Epoch [14/10000], iteration 180, Loss: 0.007859
+Epoch [14/10000], iteration 185, Loss: 0.007859
+Epoch [14/10000], iteration 190, Loss: 0.007862
+Epoch [14/10000], iteration 195, Loss: 0.007866
+Epoch [14/10000], iteration 200, Loss: 0.007860
+Epoch [14/10000], iteration 205, Loss: 0.007860
+Epoch [14/10000], iteration 210, Loss: 0.007861
+Epoch [14/10000], iteration 215, Loss: 0.007865
+Epoch [14/10000], iteration 220, Loss: 0.007863
+Epoch [14/10000], iteration 225, Loss: 0.007863
+Epoch [14/10000], iteration 230, Loss: 0.007867
+Epoch [14/10000], iteration 235, Loss: 0.007868
+Epoch [14/10000], iteration 240, Loss: 0.007862
+Epoch [14/10000], iteration 245, Loss: 0.007862
+Epoch [14/10000], iteration 250, Loss: 0.007875
+Epoch [14/10000], iteration 255, Loss: 0.007876
+Epoch [14/10000], iteration 260, Loss: 0.007884
+Epoch [14/10000], iteration 265, Loss: 0.007874
+Epoch [14/10000], iteration 270, Loss: 0.007873
+Epoch [14/10000], iteration 275, Loss: 0.007866
+Epoch [14/10000], iteration 280, Loss: 0.007856
+Epoch [14/10000], iteration 285, Loss: 0.007846
+Epoch [14/10000], iteration 290, Loss: 0.007839
+Epoch [14/10000], iteration 295, Loss: 0.007834
+Epoch [14/10000], iteration 300, Loss: 0.007828
+Epoch [14/10000], iteration 305, Loss: 0.007830
+Epoch [14/10000], iteration 310, Loss: 0.007830
+Epoch [14/10000], iteration 315, Loss: 0.007838
+Epoch [14/10000], iteration 320, Loss: 0.007836
+Epoch [14/10000], iteration 325, Loss: 0.007832
+Epoch 13 took 893.84 seconds
+validating....
+Epoch 14, validation loss is 0.0080, training loss is 0.0078
+Validation loss does not decrease from 0.0079, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [15/10000], iteration 5, Loss: 0.007910
+Epoch [15/10000], iteration 10, Loss: 0.007740
+Epoch [15/10000], iteration 15, Loss: 0.007836
+Epoch [15/10000], iteration 20, Loss: 0.007853
+Epoch [15/10000], iteration 25, Loss: 0.007859
+Epoch [15/10000], iteration 30, Loss: 0.007878
+Epoch [15/10000], iteration 35, Loss: 0.007812
+Epoch [15/10000], iteration 40, Loss: 0.007834
+Epoch [15/10000], iteration 45, Loss: 0.007813
+Epoch [15/10000], iteration 50, Loss: 0.007804
+Epoch [15/10000], iteration 55, Loss: 0.007756
+Epoch [15/10000], iteration 60, Loss: 0.007772
+Epoch [15/10000], iteration 65, Loss: 0.007784
+Epoch [15/10000], iteration 70, Loss: 0.007765
+Epoch [15/10000], iteration 75, Loss: 0.007770
+Epoch [15/10000], iteration 80, Loss: 0.007769
+Epoch [15/10000], iteration 85, Loss: 0.007784
+Epoch [15/10000], iteration 90, Loss: 0.007777
+Epoch [15/10000], iteration 95, Loss: 0.007768
+Epoch [15/10000], iteration 100, Loss: 0.007761
+Epoch [15/10000], iteration 105, Loss: 0.007760
+Epoch [15/10000], iteration 110, Loss: 0.007756
+Epoch [15/10000], iteration 115, Loss: 0.007766
+Epoch [15/10000], iteration 120, Loss: 0.007780
+Epoch [15/10000], iteration 125, Loss: 0.007791
+Epoch [15/10000], iteration 130, Loss: 0.007769
+Epoch [15/10000], iteration 135, Loss: 0.007776
+Epoch [15/10000], iteration 140, Loss: 0.007776
+Epoch [15/10000], iteration 145, Loss: 0.007773
+Epoch [15/10000], iteration 150, Loss: 0.007789
+Epoch [15/10000], iteration 155, Loss: 0.007797
+Epoch [15/10000], iteration 160, Loss: 0.007804
+Epoch [15/10000], iteration 165, Loss: 0.007794
+Epoch [15/10000], iteration 170, Loss: 0.007800
+Epoch [15/10000], iteration 175, Loss: 0.007795
+Epoch [15/10000], iteration 180, Loss: 0.007806
+Epoch [15/10000], iteration 185, Loss: 0.007800
+Epoch [15/10000], iteration 190, Loss: 0.007797
+Epoch [15/10000], iteration 195, Loss: 0.007786
+Epoch [15/10000], iteration 200, Loss: 0.007779
+Epoch [15/10000], iteration 205, Loss: 0.007775
+Epoch [15/10000], iteration 210, Loss: 0.007765
+Epoch [15/10000], iteration 215, Loss: 0.007761
+Epoch [15/10000], iteration 220, Loss: 0.007772
+Epoch [15/10000], iteration 225, Loss: 0.007769
+Epoch [15/10000], iteration 230, Loss: 0.007774
+Epoch [15/10000], iteration 235, Loss: 0.007768
+Epoch [15/10000], iteration 240, Loss: 0.007773
+Epoch [15/10000], iteration 245, Loss: 0.007770
+Epoch [15/10000], iteration 250, Loss: 0.007771
+Epoch [15/10000], iteration 255, Loss: 0.007772
+Epoch [15/10000], iteration 260, Loss: 0.007768
+Epoch [15/10000], iteration 265, Loss: 0.007766
+Epoch [15/10000], iteration 270, Loss: 0.007770
+Epoch [15/10000], iteration 275, Loss: 0.007772
+Epoch [15/10000], iteration 280, Loss: 0.007773
+Epoch [15/10000], iteration 285, Loss: 0.007759
+Epoch [15/10000], iteration 290, Loss: 0.007757
+Epoch [15/10000], iteration 295, Loss: 0.007761
+Epoch [15/10000], iteration 300, Loss: 0.007757
+Epoch [15/10000], iteration 305, Loss: 0.007753
+Epoch [15/10000], iteration 310, Loss: 0.007753
+Epoch [15/10000], iteration 315, Loss: 0.007748
+Epoch [15/10000], iteration 320, Loss: 0.007752
+Epoch [15/10000], iteration 325, Loss: 0.007743
+Epoch 14 took 901.35 seconds
+validating....
+Epoch 15, validation loss is 0.0080, training loss is 0.0077
+Validation loss does not decrease from 0.0079, num_epoch_no_improvement 1
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [16/10000], iteration 5, Loss: 0.007559
+Epoch [16/10000], iteration 10, Loss: 0.007598
+Epoch [16/10000], iteration 15, Loss: 0.007638
+Epoch [16/10000], iteration 20, Loss: 0.007771
+Epoch [16/10000], iteration 25, Loss: 0.007829
+Epoch [16/10000], iteration 30, Loss: 0.007793
+Epoch [16/10000], iteration 35, Loss: 0.007783
+Epoch [16/10000], iteration 40, Loss: 0.007771
+Epoch [16/10000], iteration 45, Loss: 0.007768
+Epoch [16/10000], iteration 50, Loss: 0.007727
+Epoch [16/10000], iteration 55, Loss: 0.007730
+Epoch [16/10000], iteration 60, Loss: 0.007735
+Epoch [16/10000], iteration 65, Loss: 0.007757
+Epoch [16/10000], iteration 70, Loss: 0.007748
+Epoch [16/10000], iteration 75, Loss: 0.007750
+Epoch [16/10000], iteration 80, Loss: 0.007725
+Epoch [16/10000], iteration 85, Loss: 0.007709
+Epoch [16/10000], iteration 90, Loss: 0.007693
+Epoch [16/10000], iteration 95, Loss: 0.007716
+Epoch [16/10000], iteration 100, Loss: 0.007722
+Epoch [16/10000], iteration 105, Loss: 0.007701
+Epoch [16/10000], iteration 110, Loss: 0.007697
+Epoch [16/10000], iteration 115, Loss: 0.007699
+Epoch [16/10000], iteration 120, Loss: 0.007692
+Epoch [16/10000], iteration 125, Loss: 0.007682
+Epoch [16/10000], iteration 130, Loss: 0.007679
+Epoch [16/10000], iteration 135, Loss: 0.007670
+Epoch [16/10000], iteration 140, Loss: 0.007680
+Epoch [16/10000], iteration 145, Loss: 0.007706
+Epoch [16/10000], iteration 150, Loss: 0.007711
+Epoch [16/10000], iteration 155, Loss: 0.007699
+Epoch [16/10000], iteration 160, Loss: 0.007695
+Epoch [16/10000], iteration 165, Loss: 0.007692
+Epoch [16/10000], iteration 170, Loss: 0.007690
+Epoch [16/10000], iteration 175, Loss: 0.007687
+Epoch [16/10000], iteration 180, Loss: 0.007687
+Epoch [16/10000], iteration 185, Loss: 0.007692
+Epoch [16/10000], iteration 190, Loss: 0.007699
+Epoch [16/10000], iteration 195, Loss: 0.007700
+Epoch [16/10000], iteration 200, Loss: 0.007705
+Epoch [16/10000], iteration 205, Loss: 0.007699
+Epoch [16/10000], iteration 210, Loss: 0.007691
+Epoch [16/10000], iteration 215, Loss: 0.007679
+Epoch [16/10000], iteration 220, Loss: 0.007682
+Epoch [16/10000], iteration 225, Loss: 0.007672
+Epoch [16/10000], iteration 230, Loss: 0.007672
+Epoch [16/10000], iteration 235, Loss: 0.007668
+Epoch [16/10000], iteration 240, Loss: 0.007661
+Epoch [16/10000], iteration 245, Loss: 0.007654
+Epoch [16/10000], iteration 250, Loss: 0.007651
+Epoch [16/10000], iteration 255, Loss: 0.007651
+Epoch [16/10000], iteration 260, Loss: 0.007644
+Epoch [16/10000], iteration 265, Loss: 0.007638
+Epoch [16/10000], iteration 270, Loss: 0.007635
+Epoch [16/10000], iteration 275, Loss: 0.007638
+Epoch [16/10000], iteration 280, Loss: 0.007641
+Epoch [16/10000], iteration 285, Loss: 0.007635
+Epoch [16/10000], iteration 290, Loss: 0.007631
+Epoch [16/10000], iteration 295, Loss: 0.007628
+Epoch [16/10000], iteration 300, Loss: 0.007627
+Epoch [16/10000], iteration 305, Loss: 0.007627
+Epoch [16/10000], iteration 310, Loss: 0.007627
+Epoch [16/10000], iteration 315, Loss: 0.007624
+Epoch [16/10000], iteration 320, Loss: 0.007620
+Epoch [16/10000], iteration 325, Loss: 0.007623
+Epoch 15 took 890.50 seconds
+validating....
+Epoch 16, validation loss is 0.0076, training loss is 0.0076
+Validation loss decreases from 0.0079 to 0.0076
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [17/10000], iteration 5, Loss: 0.008027
+Epoch [17/10000], iteration 10, Loss: 0.007753
+Epoch [17/10000], iteration 15, Loss: 0.007643
+Epoch [17/10000], iteration 20, Loss: 0.007585
+Epoch [17/10000], iteration 25, Loss: 0.007490
+Epoch [17/10000], iteration 30, Loss: 0.007477
+Epoch [17/10000], iteration 35, Loss: 0.007475
+Epoch [17/10000], iteration 40, Loss: 0.007476
+Epoch [17/10000], iteration 45, Loss: 0.007483
+Epoch [17/10000], iteration 50, Loss: 0.007543
+Epoch [17/10000], iteration 55, Loss: 0.007539
+Epoch [17/10000], iteration 60, Loss: 0.007561
+Epoch [17/10000], iteration 65, Loss: 0.007566
+Epoch [17/10000], iteration 70, Loss: 0.007565
+Epoch [17/10000], iteration 75, Loss: 0.007549
+Epoch [17/10000], iteration 80, Loss: 0.007527
+Epoch [17/10000], iteration 85, Loss: 0.007530
+Epoch [17/10000], iteration 90, Loss: 0.007541
+Epoch [17/10000], iteration 95, Loss: 0.007536
+Epoch [17/10000], iteration 100, Loss: 0.007534
+Epoch [17/10000], iteration 105, Loss: 0.007559
+Epoch [17/10000], iteration 110, Loss: 0.007556
+Epoch [17/10000], iteration 115, Loss: 0.007556
+Epoch [17/10000], iteration 120, Loss: 0.007553
+Epoch [17/10000], iteration 125, Loss: 0.007549
+Epoch [17/10000], iteration 130, Loss: 0.007554
+Epoch [17/10000], iteration 135, Loss: 0.007539
+Epoch [17/10000], iteration 140, Loss: 0.007551
+Epoch [17/10000], iteration 145, Loss: 0.007534
+Epoch [17/10000], iteration 150, Loss: 0.007542
+Epoch [17/10000], iteration 155, Loss: 0.007537
+Epoch [17/10000], iteration 160, Loss: 0.007525
+Epoch [17/10000], iteration 165, Loss: 0.007529
+Epoch [17/10000], iteration 170, Loss: 0.007530
+Epoch [17/10000], iteration 175, Loss: 0.007522
+Epoch [17/10000], iteration 180, Loss: 0.007512
+Epoch [17/10000], iteration 185, Loss: 0.007528
+Epoch [17/10000], iteration 190, Loss: 0.007522
+Epoch [17/10000], iteration 195, Loss: 0.007529
+Epoch [17/10000], iteration 200, Loss: 0.007522
+Epoch [17/10000], iteration 205, Loss: 0.007524
+Epoch [17/10000], iteration 210, Loss: 0.007525
+Epoch [17/10000], iteration 215, Loss: 0.007536
+Epoch [17/10000], iteration 220, Loss: 0.007540
+Epoch [17/10000], iteration 225, Loss: 0.007548
+Epoch [17/10000], iteration 230, Loss: 0.007547
+Epoch [17/10000], iteration 235, Loss: 0.007551
+Epoch [17/10000], iteration 240, Loss: 0.007552
+Epoch [17/10000], iteration 245, Loss: 0.007551
+Epoch [17/10000], iteration 250, Loss: 0.007546
+Epoch [17/10000], iteration 255, Loss: 0.007544
+Epoch [17/10000], iteration 260, Loss: 0.007534
+Epoch [17/10000], iteration 265, Loss: 0.007533
+Epoch [17/10000], iteration 270, Loss: 0.007531
+Epoch [17/10000], iteration 275, Loss: 0.007528
+Epoch [17/10000], iteration 280, Loss: 0.007522
+Epoch [17/10000], iteration 285, Loss: 0.007523
+Epoch [17/10000], iteration 290, Loss: 0.007521
+Epoch [17/10000], iteration 295, Loss: 0.007525
+Epoch [17/10000], iteration 300, Loss: 0.007524
+Epoch [17/10000], iteration 305, Loss: 0.007520
+Epoch [17/10000], iteration 310, Loss: 0.007513
+Epoch [17/10000], iteration 315, Loss: 0.007512
+Epoch [17/10000], iteration 320, Loss: 0.007513
+Epoch [17/10000], iteration 325, Loss: 0.007509
+Epoch 16 took 892.92 seconds
+validating....
+Epoch 17, validation loss is 0.0077, training loss is 0.0075
+Validation loss does not decrease from 0.0076, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [18/10000], iteration 5, Loss: 0.007674
+Epoch [18/10000], iteration 10, Loss: 0.007617
+Epoch [18/10000], iteration 15, Loss: 0.007718
+Epoch [18/10000], iteration 20, Loss: 0.007652
+Epoch [18/10000], iteration 25, Loss: 0.007635
+Epoch [18/10000], iteration 30, Loss: 0.007581
+Epoch [18/10000], iteration 35, Loss: 0.007543
+Epoch [18/10000], iteration 40, Loss: 0.007528
+Epoch [18/10000], iteration 45, Loss: 0.007481
+Epoch [18/10000], iteration 50, Loss: 0.007470
+Epoch [18/10000], iteration 55, Loss: 0.007473
+Epoch [18/10000], iteration 60, Loss: 0.007448
+Epoch [18/10000], iteration 65, Loss: 0.007442
+Epoch [18/10000], iteration 70, Loss: 0.007432
+Epoch [18/10000], iteration 75, Loss: 0.007458
+Epoch [18/10000], iteration 80, Loss: 0.007461
+Epoch [18/10000], iteration 85, Loss: 0.007470
+Epoch [18/10000], iteration 90, Loss: 0.007457
+Epoch [18/10000], iteration 95, Loss: 0.007467
+Epoch [18/10000], iteration 100, Loss: 0.007468
+Epoch [18/10000], iteration 105, Loss: 0.007468
+Epoch [18/10000], iteration 110, Loss: 0.007461
+Epoch [18/10000], iteration 115, Loss: 0.007448
+Epoch [18/10000], iteration 120, Loss: 0.007453
+Epoch [18/10000], iteration 125, Loss: 0.007452
+Epoch [18/10000], iteration 130, Loss: 0.007439
+Epoch [18/10000], iteration 135, Loss: 0.007449
+Epoch [18/10000], iteration 140, Loss: 0.007444
+Epoch [18/10000], iteration 145, Loss: 0.007433
+Epoch [18/10000], iteration 150, Loss: 0.007436
+Epoch [18/10000], iteration 155, Loss: 0.007436
+Epoch [18/10000], iteration 160, Loss: 0.007439
+Epoch [18/10000], iteration 165, Loss: 0.007437
+Epoch [18/10000], iteration 170, Loss: 0.007437
+Epoch [18/10000], iteration 175, Loss: 0.007447
+Epoch [18/10000], iteration 180, Loss: 0.007442
+Epoch [18/10000], iteration 185, Loss: 0.007440
+Epoch [18/10000], iteration 190, Loss: 0.007441
+Epoch [18/10000], iteration 195, Loss: 0.007454
+Epoch [18/10000], iteration 200, Loss: 0.007455
+Epoch [18/10000], iteration 205, Loss: 0.007464
+Epoch [18/10000], iteration 210, Loss: 0.007471
+Epoch [18/10000], iteration 215, Loss: 0.007471
+Epoch [18/10000], iteration 220, Loss: 0.007460
+Epoch [18/10000], iteration 225, Loss: 0.007461
+Epoch [18/10000], iteration 230, Loss: 0.007458
+Epoch [18/10000], iteration 235, Loss: 0.007455
+Epoch [18/10000], iteration 240, Loss: 0.007456
+Epoch [18/10000], iteration 245, Loss: 0.007458
+Epoch [18/10000], iteration 250, Loss: 0.007459
+Epoch [18/10000], iteration 255, Loss: 0.007455
+Epoch [18/10000], iteration 260, Loss: 0.007459
+Epoch [18/10000], iteration 265, Loss: 0.007452
+Epoch [18/10000], iteration 270, Loss: 0.007457
+Epoch [18/10000], iteration 275, Loss: 0.007455
+Epoch [18/10000], iteration 280, Loss: 0.007457
+Epoch [18/10000], iteration 285, Loss: 0.007458
+Epoch [18/10000], iteration 290, Loss: 0.007456
+Epoch [18/10000], iteration 295, Loss: 0.007455
+Epoch [18/10000], iteration 300, Loss: 0.007449
+Epoch [18/10000], iteration 305, Loss: 0.007456
+Epoch [18/10000], iteration 310, Loss: 0.007456
+Epoch [18/10000], iteration 315, Loss: 0.007451
+Epoch [18/10000], iteration 320, Loss: 0.007449
+Epoch [18/10000], iteration 325, Loss: 0.007446
+Epoch 17 took 897.28 seconds
+validating....
+Epoch 18, validation loss is 0.0076, training loss is 0.0074
+Validation loss does not decrease from 0.0076, num_epoch_no_improvement 1
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [19/10000], iteration 5, Loss: 0.007024
+Epoch [19/10000], iteration 10, Loss: 0.007141
+Epoch [19/10000], iteration 15, Loss: 0.007320
+Epoch [19/10000], iteration 20, Loss: 0.007337
+Epoch [19/10000], iteration 25, Loss: 0.007306
+Epoch [19/10000], iteration 30, Loss: 0.007242
+Epoch [19/10000], iteration 35, Loss: 0.007238
+Epoch [19/10000], iteration 40, Loss: 0.007231
+Epoch [19/10000], iteration 45, Loss: 0.007274
+Epoch [19/10000], iteration 50, Loss: 0.007297
+Epoch [19/10000], iteration 55, Loss: 0.007326
+Epoch [19/10000], iteration 60, Loss: 0.007321
+Epoch [19/10000], iteration 65, Loss: 0.007334
+Epoch [19/10000], iteration 70, Loss: 0.007327
+Epoch [19/10000], iteration 75, Loss: 0.007322
+Epoch [19/10000], iteration 80, Loss: 0.007311
+Epoch [19/10000], iteration 85, Loss: 0.007287
+Epoch [19/10000], iteration 90, Loss: 0.007290
+Epoch [19/10000], iteration 95, Loss: 0.007301
+Epoch [19/10000], iteration 100, Loss: 0.007332
+Epoch [19/10000], iteration 105, Loss: 0.007341
+Epoch [19/10000], iteration 110, Loss: 0.007337
+Epoch [19/10000], iteration 115, Loss: 0.007363
+Epoch [19/10000], iteration 120, Loss: 0.007362
+Epoch [19/10000], iteration 125, Loss: 0.007368
+Epoch [19/10000], iteration 130, Loss: 0.007369
+Epoch [19/10000], iteration 135, Loss: 0.007363
+Epoch [19/10000], iteration 140, Loss: 0.007359
+Epoch [19/10000], iteration 145, Loss: 0.007365
+Epoch [19/10000], iteration 150, Loss: 0.007370
+Epoch [19/10000], iteration 155, Loss: 0.007368
+Epoch [19/10000], iteration 160, Loss: 0.007370
+Epoch [19/10000], iteration 165, Loss: 0.007360
+Epoch [19/10000], iteration 170, Loss: 0.007376
+Epoch [19/10000], iteration 175, Loss: 0.007373
+Epoch [19/10000], iteration 180, Loss: 0.007365
+Epoch [19/10000], iteration 185, Loss: 0.007368
+Epoch [19/10000], iteration 190, Loss: 0.007364
+Epoch [19/10000], iteration 195, Loss: 0.007366
+Epoch [19/10000], iteration 200, Loss: 0.007370
+Epoch [19/10000], iteration 205, Loss: 0.007363
+Epoch [19/10000], iteration 210, Loss: 0.007374
+Epoch [19/10000], iteration 215, Loss: 0.007374
+Epoch [19/10000], iteration 220, Loss: 0.007372
+Epoch [19/10000], iteration 225, Loss: 0.007371
+Epoch [19/10000], iteration 230, Loss: 0.007371
+Epoch [19/10000], iteration 235, Loss: 0.007372
+Epoch [19/10000], iteration 240, Loss: 0.007374
+Epoch [19/10000], iteration 245, Loss: 0.007373
+Epoch [19/10000], iteration 250, Loss: 0.007372
+Epoch [19/10000], iteration 255, Loss: 0.007369
+Epoch [19/10000], iteration 260, Loss: 0.007362
+Epoch [19/10000], iteration 265, Loss: 0.007366
+Epoch [19/10000], iteration 270, Loss: 0.007365
+Epoch [19/10000], iteration 275, Loss: 0.007362
+Epoch [19/10000], iteration 280, Loss: 0.007361
+Epoch [19/10000], iteration 285, Loss: 0.007363
+Epoch [19/10000], iteration 290, Loss: 0.007366
+Epoch [19/10000], iteration 295, Loss: 0.007368
+Epoch [19/10000], iteration 300, Loss: 0.007366
+Epoch [19/10000], iteration 305, Loss: 0.007356
+Epoch [19/10000], iteration 310, Loss: 0.007357
+Epoch [19/10000], iteration 315, Loss: 0.007363
+Epoch [19/10000], iteration 320, Loss: 0.007361
+Epoch [19/10000], iteration 325, Loss: 0.007366
+Epoch 18 took 898.12 seconds
+validating....
+Epoch 19, validation loss is 0.0074, training loss is 0.0074
+Validation loss decreases from 0.0076 to 0.0074
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [20/10000], iteration 5, Loss: 0.007071
+Epoch [20/10000], iteration 10, Loss: 0.007068
+Epoch [20/10000], iteration 15, Loss: 0.007044
+Epoch [20/10000], iteration 20, Loss: 0.007257
+Epoch [20/10000], iteration 25, Loss: 0.007284
+Epoch [20/10000], iteration 30, Loss: 0.007228
+Epoch [20/10000], iteration 35, Loss: 0.007277
+Epoch [20/10000], iteration 40, Loss: 0.007367
+Epoch [20/10000], iteration 45, Loss: 0.007343
+Epoch [20/10000], iteration 50, Loss: 0.007390
+Epoch [20/10000], iteration 55, Loss: 0.007372
+Epoch [20/10000], iteration 60, Loss: 0.007363
+Epoch [20/10000], iteration 65, Loss: 0.007358
+Epoch [20/10000], iteration 70, Loss: 0.007356
+Epoch [20/10000], iteration 75, Loss: 0.007366
+Epoch [20/10000], iteration 80, Loss: 0.007352
+Epoch [20/10000], iteration 85, Loss: 0.007358
+Epoch [20/10000], iteration 90, Loss: 0.007334
+Epoch [20/10000], iteration 95, Loss: 0.007325
+Epoch [20/10000], iteration 100, Loss: 0.007339
+Epoch [20/10000], iteration 105, Loss: 0.007341
+Epoch [20/10000], iteration 110, Loss: 0.007352
+Epoch [20/10000], iteration 115, Loss: 0.007345
+Epoch [20/10000], iteration 120, Loss: 0.007359
+Epoch [20/10000], iteration 125, Loss: 0.007356
+Epoch [20/10000], iteration 130, Loss: 0.007346
+Epoch [20/10000], iteration 135, Loss: 0.007335
+Epoch [20/10000], iteration 140, Loss: 0.007333
+Epoch [20/10000], iteration 145, Loss: 0.007326
+Epoch [20/10000], iteration 150, Loss: 0.007312
+Epoch [20/10000], iteration 155, Loss: 0.007319
+Epoch [20/10000], iteration 160, Loss: 0.007316
+Epoch [20/10000], iteration 165, Loss: 0.007324
+Epoch [20/10000], iteration 170, Loss: 0.007332
+Epoch [20/10000], iteration 175, Loss: 0.007329
+Epoch [20/10000], iteration 180, Loss: 0.007338
+Epoch [20/10000], iteration 185, Loss: 0.007340
+Epoch [20/10000], iteration 190, Loss: 0.007344
+Epoch [20/10000], iteration 195, Loss: 0.007342
+Epoch [20/10000], iteration 200, Loss: 0.007336
+Epoch [20/10000], iteration 205, Loss: 0.007327
+Epoch [20/10000], iteration 210, Loss: 0.007321
+Epoch [20/10000], iteration 215, Loss: 0.007313
+Epoch [20/10000], iteration 220, Loss: 0.007324
+Epoch [20/10000], iteration 225, Loss: 0.007324
+Epoch [20/10000], iteration 230, Loss: 0.007326
+Epoch [20/10000], iteration 235, Loss: 0.007333
+Epoch [20/10000], iteration 240, Loss: 0.007338
+Epoch [20/10000], iteration 245, Loss: 0.007340
+Epoch [20/10000], iteration 250, Loss: 0.007341
+Epoch [20/10000], iteration 255, Loss: 0.007343
+Epoch [20/10000], iteration 260, Loss: 0.007342
+Epoch [20/10000], iteration 265, Loss: 0.007333
+Epoch [20/10000], iteration 270, Loss: 0.007330
+Epoch [20/10000], iteration 275, Loss: 0.007348
+Epoch [20/10000], iteration 280, Loss: 0.007344
+Epoch [20/10000], iteration 285, Loss: 0.007342
+Epoch [20/10000], iteration 290, Loss: 0.007341
+Epoch [20/10000], iteration 295, Loss: 0.007342
+Epoch [20/10000], iteration 300, Loss: 0.007337
+Epoch [20/10000], iteration 305, Loss: 0.007337
+Epoch [20/10000], iteration 310, Loss: 0.007337
+Epoch [20/10000], iteration 315, Loss: 0.007338
+Epoch [20/10000], iteration 320, Loss: 0.007339
+Epoch [20/10000], iteration 325, Loss: 0.007343
+Epoch 19 took 894.50 seconds
+validating....
+Epoch 20, validation loss is 0.0073, training loss is 0.0073
+Validation loss decreases from 0.0074 to 0.0073
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [21/10000], iteration 5, Loss: 0.007437
+Epoch [21/10000], iteration 10, Loss: 0.007444
+Epoch [21/10000], iteration 15, Loss: 0.007403
+Epoch [21/10000], iteration 20, Loss: 0.007444
+Epoch [21/10000], iteration 25, Loss: 0.007402
+Epoch [21/10000], iteration 30, Loss: 0.007383
+Epoch [21/10000], iteration 35, Loss: 0.007377
+Epoch [21/10000], iteration 40, Loss: 0.007383
+Epoch [21/10000], iteration 45, Loss: 0.007378
+Epoch [21/10000], iteration 50, Loss: 0.007354
+Epoch [21/10000], iteration 55, Loss: 0.007337
+Epoch [21/10000], iteration 60, Loss: 0.007336
+Epoch [21/10000], iteration 65, Loss: 0.007369
+Epoch [21/10000], iteration 70, Loss: 0.007363
+Epoch [21/10000], iteration 75, Loss: 0.007339
+Epoch [21/10000], iteration 80, Loss: 0.007343
+Epoch [21/10000], iteration 85, Loss: 0.007339
+Epoch [21/10000], iteration 90, Loss: 0.007352
+Epoch [21/10000], iteration 95, Loss: 0.007327
+Epoch [21/10000], iteration 100, Loss: 0.007340
+Epoch [21/10000], iteration 105, Loss: 0.007339
+Epoch [21/10000], iteration 110, Loss: 0.007328
+Epoch [21/10000], iteration 115, Loss: 0.007330
+Epoch [21/10000], iteration 120, Loss: 0.007326
+Epoch [21/10000], iteration 125, Loss: 0.007320
+Epoch [21/10000], iteration 130, Loss: 0.007317
+Epoch [21/10000], iteration 135, Loss: 0.007320
+Epoch [21/10000], iteration 140, Loss: 0.007325
+Epoch [21/10000], iteration 145, Loss: 0.007320
+Epoch [21/10000], iteration 150, Loss: 0.007316
+Epoch [21/10000], iteration 155, Loss: 0.007323
+Epoch [21/10000], iteration 160, Loss: 0.007312
+Epoch [21/10000], iteration 165, Loss: 0.007310
+Epoch [21/10000], iteration 170, Loss: 0.007298
+Epoch [21/10000], iteration 175, Loss: 0.007297
+Epoch [21/10000], iteration 180, Loss: 0.007295
+Epoch [21/10000], iteration 185, Loss: 0.007303
+Epoch [21/10000], iteration 190, Loss: 0.007295
+Epoch [21/10000], iteration 195, Loss: 0.007306
+Epoch [21/10000], iteration 200, Loss: 0.007299
+Epoch [21/10000], iteration 205, Loss: 0.007287
+Epoch [21/10000], iteration 210, Loss: 0.007283
+Epoch [21/10000], iteration 215, Loss: 0.007289
+Epoch [21/10000], iteration 220, Loss: 0.007287
+Epoch [21/10000], iteration 225, Loss: 0.007281
+Epoch [21/10000], iteration 230, Loss: 0.007279
+Epoch [21/10000], iteration 235, Loss: 0.007273
+Epoch [21/10000], iteration 240, Loss: 0.007277
+Epoch [21/10000], iteration 245, Loss: 0.007272
+Epoch [21/10000], iteration 250, Loss: 0.007266
+Epoch [21/10000], iteration 255, Loss: 0.007268
+Epoch [21/10000], iteration 260, Loss: 0.007265
+Epoch [21/10000], iteration 265, Loss: 0.007263
+Epoch [21/10000], iteration 270, Loss: 0.007257
+Epoch [21/10000], iteration 275, Loss: 0.007258
+Epoch [21/10000], iteration 280, Loss: 0.007252
+Epoch [21/10000], iteration 285, Loss: 0.007254
+Epoch [21/10000], iteration 290, Loss: 0.007253
+Epoch [21/10000], iteration 295, Loss: 0.007254
+Epoch [21/10000], iteration 300, Loss: 0.007257
+Epoch [21/10000], iteration 305, Loss: 0.007251
+Epoch [21/10000], iteration 310, Loss: 0.007256
+Epoch [21/10000], iteration 315, Loss: 0.007262
+Epoch [21/10000], iteration 320, Loss: 0.007273
+Epoch [21/10000], iteration 325, Loss: 0.007275
+Epoch 20 took 892.31 seconds
+validating....
+Epoch 21, validation loss is 0.0074, training loss is 0.0073
+Validation loss does not decrease from 0.0073, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [22/10000], iteration 5, Loss: 0.007026
+Epoch [22/10000], iteration 10, Loss: 0.007328
+Epoch [22/10000], iteration 15, Loss: 0.007121
+Epoch [22/10000], iteration 20, Loss: 0.007135
+Epoch [22/10000], iteration 25, Loss: 0.007093
+Epoch [22/10000], iteration 30, Loss: 0.007131
+Epoch [22/10000], iteration 35, Loss: 0.007068
+Epoch [22/10000], iteration 40, Loss: 0.007021
+Epoch [22/10000], iteration 45, Loss: 0.007026
+Epoch [22/10000], iteration 50, Loss: 0.007018
+Epoch [22/10000], iteration 55, Loss: 0.007001
+Epoch [22/10000], iteration 60, Loss: 0.007007
+Epoch [22/10000], iteration 65, Loss: 0.007047
+Epoch [22/10000], iteration 70, Loss: 0.007069
+Epoch [22/10000], iteration 75, Loss: 0.007064
+Epoch [22/10000], iteration 80, Loss: 0.007067
+Epoch [22/10000], iteration 85, Loss: 0.007075
+Epoch [22/10000], iteration 90, Loss: 0.007104
+Epoch [22/10000], iteration 95, Loss: 0.007115
+Epoch [22/10000], iteration 100, Loss: 0.007103
+Epoch [22/10000], iteration 105, Loss: 0.007109
+Epoch [22/10000], iteration 110, Loss: 0.007116
+Epoch [22/10000], iteration 115, Loss: 0.007106
+Epoch [22/10000], iteration 120, Loss: 0.007099
+Epoch [22/10000], iteration 125, Loss: 0.007108
+Epoch [22/10000], iteration 130, Loss: 0.007123
+Epoch [22/10000], iteration 135, Loss: 0.007135
+Epoch [22/10000], iteration 140, Loss: 0.007133
+Epoch [22/10000], iteration 145, Loss: 0.007129
+Epoch [22/10000], iteration 150, Loss: 0.007129
+Epoch [22/10000], iteration 155, Loss: 0.007130
+Epoch [22/10000], iteration 160, Loss: 0.007127
+Epoch [22/10000], iteration 165, Loss: 0.007128
+Epoch [22/10000], iteration 170, Loss: 0.007116
+Epoch [22/10000], iteration 175, Loss: 0.007113
+Epoch [22/10000], iteration 180, Loss: 0.007113
+Epoch [22/10000], iteration 185, Loss: 0.007109
+Epoch [22/10000], iteration 190, Loss: 0.007119
+Epoch [22/10000], iteration 195, Loss: 0.007116
+Epoch [22/10000], iteration 200, Loss: 0.007131
+Epoch [22/10000], iteration 205, Loss: 0.007130
+Epoch [22/10000], iteration 210, Loss: 0.007129
+Epoch [22/10000], iteration 215, Loss: 0.007132
+Epoch [22/10000], iteration 220, Loss: 0.007136
+Epoch [22/10000], iteration 225, Loss: 0.007130
+Epoch [22/10000], iteration 230, Loss: 0.007127
+Epoch [22/10000], iteration 235, Loss: 0.007129
+Epoch [22/10000], iteration 240, Loss: 0.007131
+Epoch [22/10000], iteration 245, Loss: 0.007131
+Epoch [22/10000], iteration 250, Loss: 0.007134
+Epoch [22/10000], iteration 255, Loss: 0.007137
+Epoch [22/10000], iteration 260, Loss: 0.007144
+Epoch [22/10000], iteration 265, Loss: 0.007145
+Epoch [22/10000], iteration 270, Loss: 0.007140
+Epoch [22/10000], iteration 275, Loss: 0.007136
+Epoch [22/10000], iteration 280, Loss: 0.007125
+Epoch [22/10000], iteration 285, Loss: 0.007123
+Epoch [22/10000], iteration 290, Loss: 0.007118
+Epoch [22/10000], iteration 295, Loss: 0.007114
+Epoch [22/10000], iteration 300, Loss: 0.007113
+Epoch [22/10000], iteration 305, Loss: 0.007109
+Epoch [22/10000], iteration 310, Loss: 0.007114
+Epoch [22/10000], iteration 315, Loss: 0.007116
+Epoch [22/10000], iteration 320, Loss: 0.007116
+Epoch [22/10000], iteration 325, Loss: 0.007115
+Epoch 21 took 886.66 seconds
+validating....
+Epoch 22, validation loss is 0.0074, training loss is 0.0071
+Validation loss does not decrease from 0.0073, num_epoch_no_improvement 1
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [23/10000], iteration 5, Loss: 0.006954
+Epoch [23/10000], iteration 10, Loss: 0.006923
+Epoch [23/10000], iteration 15, Loss: 0.006927
+Epoch [23/10000], iteration 20, Loss: 0.006986
+Epoch [23/10000], iteration 25, Loss: 0.007056
+Epoch [23/10000], iteration 30, Loss: 0.007012
+Epoch [23/10000], iteration 35, Loss: 0.007033
+Epoch [23/10000], iteration 40, Loss: 0.006992
+Epoch [23/10000], iteration 45, Loss: 0.007002
+Epoch [23/10000], iteration 50, Loss: 0.007009
+Epoch [23/10000], iteration 55, Loss: 0.007010
+Epoch [23/10000], iteration 60, Loss: 0.007030
+Epoch [23/10000], iteration 65, Loss: 0.007038
+Epoch [23/10000], iteration 70, Loss: 0.007044
+Epoch [23/10000], iteration 75, Loss: 0.007036
+Epoch [23/10000], iteration 80, Loss: 0.007037
+Epoch [23/10000], iteration 85, Loss: 0.007042
+Epoch [23/10000], iteration 90, Loss: 0.007032
+Epoch [23/10000], iteration 95, Loss: 0.007039
+Epoch [23/10000], iteration 100, Loss: 0.007015
+Epoch [23/10000], iteration 105, Loss: 0.007008
+Epoch [23/10000], iteration 110, Loss: 0.007021
+Epoch [23/10000], iteration 115, Loss: 0.007027
+Epoch [23/10000], iteration 120, Loss: 0.007030
+Epoch [23/10000], iteration 125, Loss: 0.007042
+Epoch [23/10000], iteration 130, Loss: 0.007067
+Epoch [23/10000], iteration 135, Loss: 0.007070
+Epoch [23/10000], iteration 140, Loss: 0.007065
+Epoch [23/10000], iteration 145, Loss: 0.007065
+Epoch [23/10000], iteration 150, Loss: 0.007067
+Epoch [23/10000], iteration 155, Loss: 0.007065
+Epoch [23/10000], iteration 160, Loss: 0.007067
+Epoch [23/10000], iteration 165, Loss: 0.007071
+Epoch [23/10000], iteration 170, Loss: 0.007075
+Epoch [23/10000], iteration 175, Loss: 0.007066
+Epoch [23/10000], iteration 180, Loss: 0.007053
+Epoch [23/10000], iteration 185, Loss: 0.007047
+Epoch [23/10000], iteration 190, Loss: 0.007046
+Epoch [23/10000], iteration 195, Loss: 0.007052
+Epoch [23/10000], iteration 200, Loss: 0.007058
+Epoch [23/10000], iteration 205, Loss: 0.007064
+Epoch [23/10000], iteration 210, Loss: 0.007074
+Epoch [23/10000], iteration 215, Loss: 0.007078
+Epoch [23/10000], iteration 220, Loss: 0.007089
+Epoch [23/10000], iteration 225, Loss: 0.007084
+Epoch [23/10000], iteration 230, Loss: 0.007087
+Epoch [23/10000], iteration 235, Loss: 0.007082
+Epoch [23/10000], iteration 240, Loss: 0.007081
+Epoch [23/10000], iteration 245, Loss: 0.007081
+Epoch [23/10000], iteration 250, Loss: 0.007075
+Epoch [23/10000], iteration 255, Loss: 0.007081
+Epoch [23/10000], iteration 260, Loss: 0.007078
+Epoch [23/10000], iteration 265, Loss: 0.007078
+Epoch [23/10000], iteration 270, Loss: 0.007078
+Epoch [23/10000], iteration 275, Loss: 0.007075
+Epoch [23/10000], iteration 280, Loss: 0.007071
+Epoch [23/10000], iteration 285, Loss: 0.007066
+Epoch [23/10000], iteration 290, Loss: 0.007068
+Epoch [23/10000], iteration 295, Loss: 0.007069
+Epoch [23/10000], iteration 300, Loss: 0.007068
+Epoch [23/10000], iteration 305, Loss: 0.007066
+Epoch [23/10000], iteration 310, Loss: 0.007060
+Epoch [23/10000], iteration 315, Loss: 0.007057
+Epoch [23/10000], iteration 320, Loss: 0.007051
+Epoch [23/10000], iteration 325, Loss: 0.007055
+Epoch 22 took 897.95 seconds
+validating....
+Epoch 23, validation loss is 0.0074, training loss is 0.0071
+Validation loss does not decrease from 0.0073, num_epoch_no_improvement 2
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [24/10000], iteration 5, Loss: 0.007988
+Epoch [24/10000], iteration 10, Loss: 0.007692
+Epoch [24/10000], iteration 15, Loss: 0.007521
+Epoch [24/10000], iteration 20, Loss: 0.007395
+Epoch [24/10000], iteration 25, Loss: 0.007315
+Epoch [24/10000], iteration 30, Loss: 0.007302
+Epoch [24/10000], iteration 35, Loss: 0.007276
+Epoch [24/10000], iteration 40, Loss: 0.007270
+Epoch [24/10000], iteration 45, Loss: 0.007253
+Epoch [24/10000], iteration 50, Loss: 0.007220
+Epoch [24/10000], iteration 55, Loss: 0.007195
+Epoch [24/10000], iteration 60, Loss: 0.007185
+Epoch [24/10000], iteration 65, Loss: 0.007190
+Epoch [24/10000], iteration 70, Loss: 0.007186
+Epoch [24/10000], iteration 75, Loss: 0.007177
+Epoch [24/10000], iteration 80, Loss: 0.007154
+Epoch [24/10000], iteration 85, Loss: 0.007155
+Epoch [24/10000], iteration 90, Loss: 0.007151
+Epoch [24/10000], iteration 95, Loss: 0.007152
+Epoch [24/10000], iteration 100, Loss: 0.007151
+Epoch [24/10000], iteration 105, Loss: 0.007145
+Epoch [24/10000], iteration 110, Loss: 0.007136
+Epoch [24/10000], iteration 115, Loss: 0.007122
+Epoch [24/10000], iteration 120, Loss: 0.007117
+Epoch [24/10000], iteration 125, Loss: 0.007103
+Epoch [24/10000], iteration 130, Loss: 0.007106
+Epoch [24/10000], iteration 135, Loss: 0.007095
+Epoch [24/10000], iteration 140, Loss: 0.007093
+Epoch [24/10000], iteration 145, Loss: 0.007086
+Epoch [24/10000], iteration 150, Loss: 0.007073
+Epoch [24/10000], iteration 155, Loss: 0.007068
+Epoch [24/10000], iteration 160, Loss: 0.007071
+Epoch [24/10000], iteration 165, Loss: 0.007069
+Epoch [24/10000], iteration 170, Loss: 0.007067
+Epoch [24/10000], iteration 175, Loss: 0.007064
+Epoch [24/10000], iteration 180, Loss: 0.007058
+Epoch [24/10000], iteration 185, Loss: 0.007066
+Epoch [24/10000], iteration 190, Loss: 0.007067
+Epoch [24/10000], iteration 195, Loss: 0.007064
+Epoch [24/10000], iteration 200, Loss: 0.007066
+Epoch [24/10000], iteration 205, Loss: 0.007065
+Epoch [24/10000], iteration 210, Loss: 0.007069
+Epoch [24/10000], iteration 215, Loss: 0.007077
+Epoch [24/10000], iteration 220, Loss: 0.007077
+Epoch [24/10000], iteration 225, Loss: 0.007083
+Epoch [24/10000], iteration 230, Loss: 0.007079
+Epoch [24/10000], iteration 235, Loss: 0.007071
+Epoch [24/10000], iteration 240, Loss: 0.007067
+Epoch [24/10000], iteration 245, Loss: 0.007074
+Epoch [24/10000], iteration 250, Loss: 0.007071
+Epoch [24/10000], iteration 255, Loss: 0.007074
+Epoch [24/10000], iteration 260, Loss: 0.007072
+Epoch [24/10000], iteration 265, Loss: 0.007069
+Epoch [24/10000], iteration 270, Loss: 0.007067
+Epoch [24/10000], iteration 275, Loss: 0.007064
+Epoch [24/10000], iteration 280, Loss: 0.007064
+Epoch [24/10000], iteration 285, Loss: 0.007057
+Epoch [24/10000], iteration 290, Loss: 0.007057
+Epoch [24/10000], iteration 295, Loss: 0.007056
+Epoch [24/10000], iteration 300, Loss: 0.007055
+Epoch [24/10000], iteration 305, Loss: 0.007053
+Epoch [24/10000], iteration 310, Loss: 0.007056
+Epoch [24/10000], iteration 315, Loss: 0.007053
+Epoch [24/10000], iteration 320, Loss: 0.007052
+Epoch [24/10000], iteration 325, Loss: 0.007053
+Epoch 23 took 894.41 seconds
+validating....
+Epoch 24, validation loss is 0.0071, training loss is 0.0071
+Validation loss decreases from 0.0073 to 0.0071
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [25/10000], iteration 5, Loss: 0.007303
+Epoch [25/10000], iteration 10, Loss: 0.007187
+Epoch [25/10000], iteration 15, Loss: 0.007208
+Epoch [25/10000], iteration 20, Loss: 0.007240
+Epoch [25/10000], iteration 25, Loss: 0.007135
+Epoch [25/10000], iteration 30, Loss: 0.007125
+Epoch [25/10000], iteration 35, Loss: 0.007106
+Epoch [25/10000], iteration 40, Loss: 0.007098
+Epoch [25/10000], iteration 45, Loss: 0.007116
+Epoch [25/10000], iteration 50, Loss: 0.007122
+Epoch [25/10000], iteration 55, Loss: 0.007110
+Epoch [25/10000], iteration 60, Loss: 0.007099
+Epoch [25/10000], iteration 65, Loss: 0.007065
+Epoch [25/10000], iteration 70, Loss: 0.007050
+Epoch [25/10000], iteration 75, Loss: 0.007051
+Epoch [25/10000], iteration 80, Loss: 0.007063
+Epoch [25/10000], iteration 85, Loss: 0.007065
+Epoch [25/10000], iteration 90, Loss: 0.007071
+Epoch [25/10000], iteration 95, Loss: 0.007079
+Epoch [25/10000], iteration 100, Loss: 0.007082
+Epoch [25/10000], iteration 105, Loss: 0.007089
+Epoch [25/10000], iteration 110, Loss: 0.007097
+Epoch [25/10000], iteration 115, Loss: 0.007108
+Epoch [25/10000], iteration 120, Loss: 0.007104
+Epoch [25/10000], iteration 125, Loss: 0.007098
+Epoch [25/10000], iteration 130, Loss: 0.007088
+Epoch [25/10000], iteration 135, Loss: 0.007079
+Epoch [25/10000], iteration 140, Loss: 0.007079
+Epoch [25/10000], iteration 145, Loss: 0.007077
+Epoch [25/10000], iteration 150, Loss: 0.007058
+Epoch [25/10000], iteration 155, Loss: 0.007049
+Epoch [25/10000], iteration 160, Loss: 0.007043
+Epoch [25/10000], iteration 165, Loss: 0.007034
+Epoch [25/10000], iteration 170, Loss: 0.007026
+Epoch [25/10000], iteration 175, Loss: 0.007035
+Epoch [25/10000], iteration 180, Loss: 0.007047
+Epoch [25/10000], iteration 185, Loss: 0.007044
+Epoch [25/10000], iteration 190, Loss: 0.007042
+Epoch [25/10000], iteration 195, Loss: 0.007045
+Epoch [25/10000], iteration 200, Loss: 0.007045
+Epoch [25/10000], iteration 205, Loss: 0.007037
+Epoch [25/10000], iteration 210, Loss: 0.007041
+Epoch [25/10000], iteration 215, Loss: 0.007053
+Epoch [25/10000], iteration 220, Loss: 0.007053
+Epoch [25/10000], iteration 225, Loss: 0.007054
+Epoch [25/10000], iteration 230, Loss: 0.007044
+Epoch [25/10000], iteration 235, Loss: 0.007044
+Epoch [25/10000], iteration 240, Loss: 0.007042
+Epoch [25/10000], iteration 245, Loss: 0.007037
+Epoch [25/10000], iteration 250, Loss: 0.007028
+Epoch [25/10000], iteration 255, Loss: 0.007029
+Epoch [25/10000], iteration 260, Loss: 0.007027
+Epoch [25/10000], iteration 265, Loss: 0.007021
+Epoch [25/10000], iteration 270, Loss: 0.007021
+Epoch [25/10000], iteration 275, Loss: 0.007019
+Epoch [25/10000], iteration 280, Loss: 0.007025
+Epoch [25/10000], iteration 285, Loss: 0.007024
+Epoch [25/10000], iteration 290, Loss: 0.007023
+Epoch [25/10000], iteration 295, Loss: 0.007019
+Epoch [25/10000], iteration 300, Loss: 0.007015
+Epoch [25/10000], iteration 305, Loss: 0.007009
+Epoch [25/10000], iteration 310, Loss: 0.007012
+Epoch [25/10000], iteration 315, Loss: 0.007005
+Epoch [25/10000], iteration 320, Loss: 0.007000
+Epoch [25/10000], iteration 325, Loss: 0.006994
+Epoch 24 took 900.46 seconds
+validating....
+Epoch 25, validation loss is 0.0071, training loss is 0.0070
+Validation loss does not decrease from 0.0071, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [26/10000], iteration 5, Loss: 0.007113
+Epoch [26/10000], iteration 10, Loss: 0.006925
+Epoch [26/10000], iteration 15, Loss: 0.006913
+Epoch [26/10000], iteration 20, Loss: 0.006929
+Epoch [26/10000], iteration 25, Loss: 0.006974
+Epoch [26/10000], iteration 30, Loss: 0.007026
+Epoch [26/10000], iteration 35, Loss: 0.006968
+Epoch [26/10000], iteration 40, Loss: 0.006921
+Epoch [26/10000], iteration 45, Loss: 0.006945
+Epoch [26/10000], iteration 50, Loss: 0.006922
+Epoch [26/10000], iteration 55, Loss: 0.006917
+Epoch [26/10000], iteration 60, Loss: 0.006941
+Epoch [26/10000], iteration 65, Loss: 0.006932
+Epoch [26/10000], iteration 70, Loss: 0.006905
+Epoch [26/10000], iteration 75, Loss: 0.006909
+Epoch [26/10000], iteration 80, Loss: 0.006900
+Epoch [26/10000], iteration 85, Loss: 0.006898
+Epoch [26/10000], iteration 90, Loss: 0.006913
+Epoch [26/10000], iteration 95, Loss: 0.006907
+Epoch [26/10000], iteration 100, Loss: 0.006911
+Epoch [26/10000], iteration 105, Loss: 0.006904
+Epoch [26/10000], iteration 110, Loss: 0.006897
+Epoch [26/10000], iteration 115, Loss: 0.006891
+Epoch [26/10000], iteration 120, Loss: 0.006904
+Epoch [26/10000], iteration 125, Loss: 0.006892
+Epoch [26/10000], iteration 130, Loss: 0.006901
+Epoch [26/10000], iteration 135, Loss: 0.006884
+Epoch [26/10000], iteration 140, Loss: 0.006877
+Epoch [26/10000], iteration 145, Loss: 0.006886
+Epoch [26/10000], iteration 150, Loss: 0.006898
+Epoch [26/10000], iteration 155, Loss: 0.006904
+Epoch [26/10000], iteration 160, Loss: 0.006913
+Epoch [26/10000], iteration 165, Loss: 0.006918
+Epoch [26/10000], iteration 170, Loss: 0.006922
+Epoch [26/10000], iteration 175, Loss: 0.006934
+Epoch [26/10000], iteration 180, Loss: 0.006950
+Epoch [26/10000], iteration 185, Loss: 0.006950
+Epoch [26/10000], iteration 190, Loss: 0.006957
+Epoch [26/10000], iteration 195, Loss: 0.006964
+Epoch [26/10000], iteration 200, Loss: 0.006973
+Epoch [26/10000], iteration 205, Loss: 0.006973
+Epoch [26/10000], iteration 210, Loss: 0.006971
+Epoch [26/10000], iteration 215, Loss: 0.006972
+Epoch [26/10000], iteration 220, Loss: 0.006971
+Epoch [26/10000], iteration 225, Loss: 0.006969
+Epoch [26/10000], iteration 230, Loss: 0.006960
+Epoch [26/10000], iteration 235, Loss: 0.006957
+Epoch [26/10000], iteration 240, Loss: 0.006958
+Epoch [26/10000], iteration 245, Loss: 0.006960
+Epoch [26/10000], iteration 250, Loss: 0.006961
+Epoch [26/10000], iteration 255, Loss: 0.006962
+Epoch [26/10000], iteration 260, Loss: 0.006956
+Epoch [26/10000], iteration 265, Loss: 0.006953
+Epoch [26/10000], iteration 270, Loss: 0.006956
+Epoch [26/10000], iteration 275, Loss: 0.006955
+Epoch [26/10000], iteration 280, Loss: 0.006943
+Epoch [26/10000], iteration 285, Loss: 0.006941
+Epoch [26/10000], iteration 290, Loss: 0.006945
+Epoch [26/10000], iteration 295, Loss: 0.006947
+Epoch [26/10000], iteration 300, Loss: 0.006951
+Epoch [26/10000], iteration 305, Loss: 0.006951
+Epoch [26/10000], iteration 310, Loss: 0.006951
+Epoch [26/10000], iteration 315, Loss: 0.006961
+Epoch [26/10000], iteration 320, Loss: 0.006969
+Epoch [26/10000], iteration 325, Loss: 0.006976
+Epoch 25 took 902.84 seconds
+validating....
+Epoch 26, validation loss is 0.0072, training loss is 0.0070
+Validation loss does not decrease from 0.0071, num_epoch_no_improvement 1
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [27/10000], iteration 5, Loss: 0.006914
+Epoch [27/10000], iteration 10, Loss: 0.006968
+Epoch [27/10000], iteration 15, Loss: 0.006960
+Epoch [27/10000], iteration 20, Loss: 0.006919
+Epoch [27/10000], iteration 25, Loss: 0.006975
+Epoch [27/10000], iteration 30, Loss: 0.006996
+Epoch [27/10000], iteration 35, Loss: 0.006972
+Epoch [27/10000], iteration 40, Loss: 0.007000
+Epoch [27/10000], iteration 45, Loss: 0.007008
+Epoch [27/10000], iteration 50, Loss: 0.007029
+Epoch [27/10000], iteration 55, Loss: 0.006995
+Epoch [27/10000], iteration 60, Loss: 0.006975
+Epoch [27/10000], iteration 65, Loss: 0.006944
+Epoch [27/10000], iteration 70, Loss: 0.006943
+Epoch [27/10000], iteration 75, Loss: 0.006952
+Epoch [27/10000], iteration 80, Loss: 0.006960
+Epoch [27/10000], iteration 85, Loss: 0.006943
+Epoch [27/10000], iteration 90, Loss: 0.006936
+Epoch [27/10000], iteration 95, Loss: 0.006927
+Epoch [27/10000], iteration 100, Loss: 0.006921
+Epoch [27/10000], iteration 105, Loss: 0.006916
+Epoch [27/10000], iteration 110, Loss: 0.006926
+Epoch [27/10000], iteration 115, Loss: 0.006935
+Epoch [27/10000], iteration 120, Loss: 0.006940
+Epoch [27/10000], iteration 125, Loss: 0.006933
+Epoch [27/10000], iteration 130, Loss: 0.006955
+Epoch [27/10000], iteration 135, Loss: 0.006965
+Epoch [27/10000], iteration 140, Loss: 0.006978
+Epoch [27/10000], iteration 145, Loss: 0.006985
+Epoch [27/10000], iteration 150, Loss: 0.006983
+Epoch [27/10000], iteration 155, Loss: 0.006975
+Epoch [27/10000], iteration 160, Loss: 0.006977
+Epoch [27/10000], iteration 165, Loss: 0.006973
+Epoch [27/10000], iteration 170, Loss: 0.006967
+Epoch [27/10000], iteration 175, Loss: 0.006974
+Epoch [27/10000], iteration 180, Loss: 0.006966
+Epoch [27/10000], iteration 185, Loss: 0.006970
+Epoch [27/10000], iteration 190, Loss: 0.006972
+Epoch [27/10000], iteration 195, Loss: 0.006974
+Epoch [27/10000], iteration 200, Loss: 0.006972
+Epoch [27/10000], iteration 205, Loss: 0.006970
+Epoch [27/10000], iteration 210, Loss: 0.006967
+Epoch [27/10000], iteration 215, Loss: 0.006964
+Epoch [27/10000], iteration 220, Loss: 0.006972
+Epoch [27/10000], iteration 225, Loss: 0.006967
+Epoch [27/10000], iteration 230, Loss: 0.006967
+Epoch [27/10000], iteration 235, Loss: 0.006965
+Epoch [27/10000], iteration 240, Loss: 0.006973
+Epoch [27/10000], iteration 245, Loss: 0.006974
+Epoch [27/10000], iteration 250, Loss: 0.006974
+Epoch [27/10000], iteration 255, Loss: 0.006966
+Epoch [27/10000], iteration 260, Loss: 0.006967
+Epoch [27/10000], iteration 265, Loss: 0.006967
+Epoch [27/10000], iteration 270, Loss: 0.006964
+Epoch [27/10000], iteration 275, Loss: 0.006954
+Epoch [27/10000], iteration 280, Loss: 0.006951
+Epoch [27/10000], iteration 285, Loss: 0.006953
+Epoch [27/10000], iteration 290, Loss: 0.006946
+Epoch [27/10000], iteration 295, Loss: 0.006940
+Epoch [27/10000], iteration 300, Loss: 0.006940
+Epoch [27/10000], iteration 305, Loss: 0.006938
+Epoch [27/10000], iteration 310, Loss: 0.006938
+Epoch [27/10000], iteration 315, Loss: 0.006939
+Epoch [27/10000], iteration 320, Loss: 0.006935
+Epoch [27/10000], iteration 325, Loss: 0.006933
+Epoch 26 took 894.49 seconds
+validating....
+Epoch 27, validation loss is 0.0071, training loss is 0.0069
+Validation loss decreases from 0.0071 to 0.0071
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [28/10000], iteration 5, Loss: 0.007141
+Epoch [28/10000], iteration 10, Loss: 0.007197
+Epoch [28/10000], iteration 15, Loss: 0.007061
+Epoch [28/10000], iteration 20, Loss: 0.006944
+Epoch [28/10000], iteration 25, Loss: 0.006935
+Epoch [28/10000], iteration 30, Loss: 0.006912
+Epoch [28/10000], iteration 35, Loss: 0.006908
+Epoch [28/10000], iteration 40, Loss: 0.006943
+Epoch [28/10000], iteration 45, Loss: 0.006935
+Epoch [28/10000], iteration 50, Loss: 0.006905
+Epoch [28/10000], iteration 55, Loss: 0.006902
+Epoch [28/10000], iteration 60, Loss: 0.006887
+Epoch [28/10000], iteration 65, Loss: 0.006865
+Epoch [28/10000], iteration 70, Loss: 0.006847
+Epoch [28/10000], iteration 75, Loss: 0.006825
+Epoch [28/10000], iteration 80, Loss: 0.006839
+Epoch [28/10000], iteration 85, Loss: 0.006823
+Epoch [28/10000], iteration 90, Loss: 0.006818
+Epoch [28/10000], iteration 95, Loss: 0.006813
+Epoch [28/10000], iteration 100, Loss: 0.006806
+Epoch [28/10000], iteration 105, Loss: 0.006822
+Epoch [28/10000], iteration 110, Loss: 0.006823
+Epoch [28/10000], iteration 115, Loss: 0.006828
+Epoch [28/10000], iteration 120, Loss: 0.006817
+Epoch [28/10000], iteration 125, Loss: 0.006798
+Epoch [28/10000], iteration 130, Loss: 0.006796
+Epoch [28/10000], iteration 135, Loss: 0.006816
+Epoch [28/10000], iteration 140, Loss: 0.006821
+Epoch [28/10000], iteration 145, Loss: 0.006838
+Epoch [28/10000], iteration 150, Loss: 0.006840
+Epoch [28/10000], iteration 155, Loss: 0.006845
+Epoch [28/10000], iteration 160, Loss: 0.006848
+Epoch [28/10000], iteration 165, Loss: 0.006851
+Epoch [28/10000], iteration 170, Loss: 0.006854
+Epoch [28/10000], iteration 175, Loss: 0.006860
+Epoch [28/10000], iteration 180, Loss: 0.006860
+Epoch [28/10000], iteration 185, Loss: 0.006868
+Epoch [28/10000], iteration 190, Loss: 0.006867
+Epoch [28/10000], iteration 195, Loss: 0.006867
+Epoch [28/10000], iteration 200, Loss: 0.006873
+Epoch [28/10000], iteration 205, Loss: 0.006877
+Epoch [28/10000], iteration 210, Loss: 0.006880
+Epoch [28/10000], iteration 215, Loss: 0.006877
+Epoch [28/10000], iteration 220, Loss: 0.006873
+Epoch [28/10000], iteration 225, Loss: 0.006875
+Epoch [28/10000], iteration 230, Loss: 0.006878
+Epoch [28/10000], iteration 235, Loss: 0.006876
+Epoch [28/10000], iteration 240, Loss: 0.006873
+Epoch [28/10000], iteration 245, Loss: 0.006865
+Epoch [28/10000], iteration 250, Loss: 0.006869
+Epoch [28/10000], iteration 255, Loss: 0.006870
+Epoch [28/10000], iteration 260, Loss: 0.006875
+Epoch [28/10000], iteration 265, Loss: 0.006868
+Epoch [28/10000], iteration 270, Loss: 0.006863
+Epoch [28/10000], iteration 275, Loss: 0.006861
+Epoch [28/10000], iteration 280, Loss: 0.006864
+Epoch [28/10000], iteration 285, Loss: 0.006871
+Epoch [28/10000], iteration 290, Loss: 0.006874
+Epoch [28/10000], iteration 295, Loss: 0.006873
+Epoch [28/10000], iteration 300, Loss: 0.006874
+Epoch [28/10000], iteration 305, Loss: 0.006878
+Epoch [28/10000], iteration 310, Loss: 0.006880
+Epoch [28/10000], iteration 315, Loss: 0.006884
+Epoch [28/10000], iteration 320, Loss: 0.006881
+Epoch [28/10000], iteration 325, Loss: 0.006885
+Epoch 27 took 900.47 seconds
+validating....
+Epoch 28, validation loss is 0.0069, training loss is 0.0069
+Validation loss decreases from 0.0071 to 0.0069
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [29/10000], iteration 5, Loss: 0.007071
+Epoch [29/10000], iteration 10, Loss: 0.006803
+Epoch [29/10000], iteration 15, Loss: 0.006699
+Epoch [29/10000], iteration 20, Loss: 0.006743
+Epoch [29/10000], iteration 25, Loss: 0.006671
+Epoch [29/10000], iteration 30, Loss: 0.006658
+Epoch [29/10000], iteration 35, Loss: 0.006673
+Epoch [29/10000], iteration 40, Loss: 0.006717
+Epoch [29/10000], iteration 45, Loss: 0.006772
+Epoch [29/10000], iteration 50, Loss: 0.006773
+Epoch [29/10000], iteration 55, Loss: 0.006776
+Epoch [29/10000], iteration 60, Loss: 0.006767
+Epoch [29/10000], iteration 65, Loss: 0.006788
+Epoch [29/10000], iteration 70, Loss: 0.006795
+Epoch [29/10000], iteration 75, Loss: 0.006779
+Epoch [29/10000], iteration 80, Loss: 0.006778
+Epoch [29/10000], iteration 85, Loss: 0.006785
+Epoch [29/10000], iteration 90, Loss: 0.006772
+Epoch [29/10000], iteration 95, Loss: 0.006771
+Epoch [29/10000], iteration 100, Loss: 0.006774
+Epoch [29/10000], iteration 105, Loss: 0.006782
+Epoch [29/10000], iteration 110, Loss: 0.006785
+Epoch [29/10000], iteration 115, Loss: 0.006785
+Epoch [29/10000], iteration 120, Loss: 0.006778
+Epoch [29/10000], iteration 125, Loss: 0.006783
+Epoch [29/10000], iteration 130, Loss: 0.006777
+Epoch [29/10000], iteration 135, Loss: 0.006767
+Epoch [29/10000], iteration 140, Loss: 0.006775
+Epoch [29/10000], iteration 145, Loss: 0.006783
+Epoch [29/10000], iteration 150, Loss: 0.006787
+Epoch [29/10000], iteration 155, Loss: 0.006785
+Epoch [29/10000], iteration 160, Loss: 0.006785
+Epoch [29/10000], iteration 165, Loss: 0.006778
+Epoch [29/10000], iteration 170, Loss: 0.006790
+Epoch [29/10000], iteration 175, Loss: 0.006789
+Epoch [29/10000], iteration 180, Loss: 0.006799
+Epoch [29/10000], iteration 185, Loss: 0.006790
+Epoch [29/10000], iteration 190, Loss: 0.006793
+Epoch [29/10000], iteration 195, Loss: 0.006799
+Epoch [29/10000], iteration 200, Loss: 0.006788
+Epoch [29/10000], iteration 205, Loss: 0.006789
+Epoch [29/10000], iteration 210, Loss: 0.006786
+Epoch [29/10000], iteration 215, Loss: 0.006785
+Epoch [29/10000], iteration 220, Loss: 0.006783
+Epoch [29/10000], iteration 225, Loss: 0.006784
+Epoch [29/10000], iteration 230, Loss: 0.006784
+Epoch [29/10000], iteration 235, Loss: 0.006783
+Epoch [29/10000], iteration 240, Loss: 0.006784
+Epoch [29/10000], iteration 245, Loss: 0.006780
+Epoch [29/10000], iteration 250, Loss: 0.006779
+Epoch [29/10000], iteration 255, Loss: 0.006773
+Epoch [29/10000], iteration 260, Loss: 0.006775
+Epoch [29/10000], iteration 265, Loss: 0.006778
+Epoch [29/10000], iteration 270, Loss: 0.006778
+Epoch [29/10000], iteration 275, Loss: 0.006776
+Epoch [29/10000], iteration 280, Loss: 0.006777
+Epoch [29/10000], iteration 285, Loss: 0.006772
+Epoch [29/10000], iteration 290, Loss: 0.006784
+Epoch [29/10000], iteration 295, Loss: 0.006784
+Epoch [29/10000], iteration 300, Loss: 0.006780
+Epoch [29/10000], iteration 305, Loss: 0.006780
+Epoch [29/10000], iteration 310, Loss: 0.006780
+Epoch [29/10000], iteration 315, Loss: 0.006780
+Epoch [29/10000], iteration 320, Loss: 0.006780
+Epoch [29/10000], iteration 325, Loss: 0.006784
+Epoch 28 took 899.59 seconds
+validating....
+Epoch 29, validation loss is 0.0069, training loss is 0.0068
+Validation loss decreases from 0.0069 to 0.0069
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [30/10000], iteration 5, Loss: 0.006677
+Epoch [30/10000], iteration 10, Loss: 0.006681
+Epoch [30/10000], iteration 15, Loss: 0.006730
+Epoch [30/10000], iteration 20, Loss: 0.006663
+Epoch [30/10000], iteration 25, Loss: 0.006721
+Epoch [30/10000], iteration 30, Loss: 0.006710
+Epoch [30/10000], iteration 35, Loss: 0.006725
+Epoch [30/10000], iteration 40, Loss: 0.006722
+Epoch [30/10000], iteration 45, Loss: 0.006736
+Epoch [30/10000], iteration 50, Loss: 0.006738
+Epoch [30/10000], iteration 55, Loss: 0.006750
+Epoch [30/10000], iteration 60, Loss: 0.006751
+Epoch [30/10000], iteration 65, Loss: 0.006737
+Epoch [30/10000], iteration 70, Loss: 0.006744
+Epoch [30/10000], iteration 75, Loss: 0.006753
+Epoch [30/10000], iteration 80, Loss: 0.006733
+Epoch [30/10000], iteration 85, Loss: 0.006758
+Epoch [30/10000], iteration 90, Loss: 0.006731
+Epoch [30/10000], iteration 95, Loss: 0.006737
+Epoch [30/10000], iteration 100, Loss: 0.006743
+Epoch [30/10000], iteration 105, Loss: 0.006761
+Epoch [30/10000], iteration 110, Loss: 0.006760
+Epoch [30/10000], iteration 115, Loss: 0.006768
+Epoch [30/10000], iteration 120, Loss: 0.006764
+Epoch [30/10000], iteration 125, Loss: 0.006758
+Epoch [30/10000], iteration 130, Loss: 0.006761
+Epoch [30/10000], iteration 135, Loss: 0.006779
+Epoch [30/10000], iteration 140, Loss: 0.006780
+Epoch [30/10000], iteration 145, Loss: 0.006790
+Epoch [30/10000], iteration 150, Loss: 0.006791
+Epoch [30/10000], iteration 155, Loss: 0.006793
+Epoch [30/10000], iteration 160, Loss: 0.006792
+Epoch [30/10000], iteration 165, Loss: 0.006790
+Epoch [30/10000], iteration 170, Loss: 0.006790
+Epoch [30/10000], iteration 175, Loss: 0.006792
+Epoch [30/10000], iteration 180, Loss: 0.006800
+Epoch [30/10000], iteration 185, Loss: 0.006796
+Epoch [30/10000], iteration 190, Loss: 0.006793
+Epoch [30/10000], iteration 195, Loss: 0.006781
+Epoch [30/10000], iteration 200, Loss: 0.006774
+Epoch [30/10000], iteration 205, Loss: 0.006768
+Epoch [30/10000], iteration 210, Loss: 0.006765
+Epoch [30/10000], iteration 215, Loss: 0.006768
+Epoch [30/10000], iteration 220, Loss: 0.006768
+Epoch [30/10000], iteration 225, Loss: 0.006768
+Epoch [30/10000], iteration 230, Loss: 0.006780
+Epoch [30/10000], iteration 235, Loss: 0.006783
+Epoch [30/10000], iteration 240, Loss: 0.006776
+Epoch [30/10000], iteration 245, Loss: 0.006770
+Epoch [30/10000], iteration 250, Loss: 0.006765
+Epoch [30/10000], iteration 255, Loss: 0.006764
+Epoch [30/10000], iteration 260, Loss: 0.006767
+Epoch [30/10000], iteration 265, Loss: 0.006768
+Epoch [30/10000], iteration 270, Loss: 0.006762
+Epoch [30/10000], iteration 275, Loss: 0.006763
+Epoch [30/10000], iteration 280, Loss: 0.006765
+Epoch [30/10000], iteration 285, Loss: 0.006765
+Epoch [30/10000], iteration 290, Loss: 0.006763
+Epoch [30/10000], iteration 295, Loss: 0.006761
+Epoch [30/10000], iteration 300, Loss: 0.006758
+Epoch [30/10000], iteration 305, Loss: 0.006758
+Epoch [30/10000], iteration 310, Loss: 0.006756
+Epoch [30/10000], iteration 315, Loss: 0.006756
+Epoch [30/10000], iteration 320, Loss: 0.006759
+Epoch [30/10000], iteration 325, Loss: 0.006758
+Epoch 29 took 897.24 seconds
+validating....
+Epoch 30, validation loss is 0.0069, training loss is 0.0068
+Validation loss does not decrease from 0.0069, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [31/10000], iteration 5, Loss: 0.007060
+Epoch [31/10000], iteration 10, Loss: 0.006946
+Epoch [31/10000], iteration 15, Loss: 0.006913
+Epoch [31/10000], iteration 20, Loss: 0.006869
+Epoch [31/10000], iteration 25, Loss: 0.006866
+Epoch [31/10000], iteration 30, Loss: 0.006838
+Epoch [31/10000], iteration 35, Loss: 0.006768
+Epoch [31/10000], iteration 40, Loss: 0.006785
+Epoch [31/10000], iteration 45, Loss: 0.006803
+Epoch [31/10000], iteration 50, Loss: 0.006783
+Epoch [31/10000], iteration 55, Loss: 0.006771
+Epoch [31/10000], iteration 60, Loss: 0.006771
+Epoch [31/10000], iteration 65, Loss: 0.006769
+Epoch [31/10000], iteration 70, Loss: 0.006780
+Epoch [31/10000], iteration 75, Loss: 0.006772
+Epoch [31/10000], iteration 80, Loss: 0.006778
+Epoch [31/10000], iteration 85, Loss: 0.006793
+Epoch [31/10000], iteration 90, Loss: 0.006822
+Epoch [31/10000], iteration 95, Loss: 0.006812
+Epoch [31/10000], iteration 100, Loss: 0.006831
+Epoch [31/10000], iteration 105, Loss: 0.006840
+Epoch [31/10000], iteration 110, Loss: 0.006825
+Epoch [31/10000], iteration 115, Loss: 0.006818
+Epoch [31/10000], iteration 120, Loss: 0.006808
+Epoch [31/10000], iteration 125, Loss: 0.006801
+Epoch [31/10000], iteration 130, Loss: 0.006796
+Epoch [31/10000], iteration 135, Loss: 0.006796
+Epoch [31/10000], iteration 140, Loss: 0.006794
+Epoch [31/10000], iteration 145, Loss: 0.006797
+Epoch [31/10000], iteration 150, Loss: 0.006798
+Epoch [31/10000], iteration 155, Loss: 0.006794
+Epoch [31/10000], iteration 160, Loss: 0.006778
+Epoch [31/10000], iteration 165, Loss: 0.006775
+Epoch [31/10000], iteration 170, Loss: 0.006771
+Epoch [31/10000], iteration 175, Loss: 0.006762
+Epoch [31/10000], iteration 180, Loss: 0.006764
+Epoch [31/10000], iteration 185, Loss: 0.006772
+Epoch [31/10000], iteration 190, Loss: 0.006774
+Epoch [31/10000], iteration 195, Loss: 0.006776
+Epoch [31/10000], iteration 200, Loss: 0.006773
+Epoch [31/10000], iteration 205, Loss: 0.006769
+Epoch [31/10000], iteration 210, Loss: 0.006764
+Epoch [31/10000], iteration 215, Loss: 0.006761
+Epoch [31/10000], iteration 220, Loss: 0.006761
+Epoch [31/10000], iteration 225, Loss: 0.006758
+Epoch [31/10000], iteration 230, Loss: 0.006756
+Epoch [31/10000], iteration 235, Loss: 0.006759
+Epoch [31/10000], iteration 240, Loss: 0.006760
+Epoch [31/10000], iteration 245, Loss: 0.006758
+Epoch [31/10000], iteration 250, Loss: 0.006756
+Epoch [31/10000], iteration 255, Loss: 0.006755
+Epoch [31/10000], iteration 260, Loss: 0.006755
+Epoch [31/10000], iteration 265, Loss: 0.006751
+Epoch [31/10000], iteration 270, Loss: 0.006757
+Epoch [31/10000], iteration 275, Loss: 0.006759
+Epoch [31/10000], iteration 280, Loss: 0.006761
+Epoch [31/10000], iteration 285, Loss: 0.006761
+Epoch [31/10000], iteration 290, Loss: 0.006761
+Epoch [31/10000], iteration 295, Loss: 0.006761
+Epoch [31/10000], iteration 300, Loss: 0.006762
+Epoch [31/10000], iteration 305, Loss: 0.006761
+Epoch [31/10000], iteration 310, Loss: 0.006761
+Epoch [31/10000], iteration 315, Loss: 0.006767
+Epoch [31/10000], iteration 320, Loss: 0.006767
+Epoch [31/10000], iteration 325, Loss: 0.006765
+Epoch 30 took 894.97 seconds
+validating....
+Epoch 31, validation loss is 0.0069, training loss is 0.0068
+Validation loss does not decrease from 0.0069, num_epoch_no_improvement 1
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [32/10000], iteration 5, Loss: 0.006427
+Epoch [32/10000], iteration 10, Loss: 0.006608
+Epoch [32/10000], iteration 15, Loss: 0.006594
+Epoch [32/10000], iteration 20, Loss: 0.006684
+Epoch [32/10000], iteration 25, Loss: 0.006768
+Epoch [32/10000], iteration 30, Loss: 0.006768
+Epoch [32/10000], iteration 35, Loss: 0.006692
+Epoch [32/10000], iteration 40, Loss: 0.006679
+Epoch [32/10000], iteration 45, Loss: 0.006663
+Epoch [32/10000], iteration 50, Loss: 0.006676
+Epoch [32/10000], iteration 55, Loss: 0.006722
+Epoch [32/10000], iteration 60, Loss: 0.006729
+Epoch [32/10000], iteration 65, Loss: 0.006723
+Epoch [32/10000], iteration 70, Loss: 0.006727
+Epoch [32/10000], iteration 75, Loss: 0.006719
+Epoch [32/10000], iteration 80, Loss: 0.006706
+Epoch [32/10000], iteration 85, Loss: 0.006675
+Epoch [32/10000], iteration 90, Loss: 0.006702
+Epoch [32/10000], iteration 95, Loss: 0.006694
+Epoch [32/10000], iteration 100, Loss: 0.006681
+Epoch [32/10000], iteration 105, Loss: 0.006696
+Epoch [32/10000], iteration 110, Loss: 0.006692
+Epoch [32/10000], iteration 115, Loss: 0.006674
+Epoch [32/10000], iteration 120, Loss: 0.006678
+Epoch [32/10000], iteration 125, Loss: 0.006667
+Epoch [32/10000], iteration 130, Loss: 0.006680
+Epoch [32/10000], iteration 135, Loss: 0.006685
+Epoch [32/10000], iteration 140, Loss: 0.006684
+Epoch [32/10000], iteration 145, Loss: 0.006690
+Epoch [32/10000], iteration 150, Loss: 0.006703
+Epoch [32/10000], iteration 155, Loss: 0.006704
+Epoch [32/10000], iteration 160, Loss: 0.006709
+Epoch [32/10000], iteration 165, Loss: 0.006702
+Epoch [32/10000], iteration 170, Loss: 0.006703
+Epoch [32/10000], iteration 175, Loss: 0.006704
+Epoch [32/10000], iteration 180, Loss: 0.006705
+Epoch [32/10000], iteration 185, Loss: 0.006692
+Epoch [32/10000], iteration 190, Loss: 0.006694
+Epoch [32/10000], iteration 195, Loss: 0.006693
+Epoch [32/10000], iteration 200, Loss: 0.006697
+Epoch [32/10000], iteration 205, Loss: 0.006690
+Epoch [32/10000], iteration 210, Loss: 0.006691
+Epoch [32/10000], iteration 215, Loss: 0.006689
+Epoch [32/10000], iteration 220, Loss: 0.006689
+Epoch [32/10000], iteration 225, Loss: 0.006688
+Epoch [32/10000], iteration 230, Loss: 0.006687
+Epoch [32/10000], iteration 235, Loss: 0.006686
+Epoch [32/10000], iteration 240, Loss: 0.006677
+Epoch [32/10000], iteration 245, Loss: 0.006672
+Epoch [32/10000], iteration 250, Loss: 0.006667
+Epoch [32/10000], iteration 255, Loss: 0.006667
+Epoch [32/10000], iteration 260, Loss: 0.006677
+Epoch [32/10000], iteration 265, Loss: 0.006676
+Epoch [32/10000], iteration 270, Loss: 0.006674
+Epoch [32/10000], iteration 275, Loss: 0.006668
+Epoch [32/10000], iteration 280, Loss: 0.006666
+Epoch [32/10000], iteration 285, Loss: 0.006667
+Epoch [32/10000], iteration 290, Loss: 0.006670
+Epoch [32/10000], iteration 295, Loss: 0.006670
+Epoch [32/10000], iteration 300, Loss: 0.006669
+Epoch [32/10000], iteration 305, Loss: 0.006664
+Epoch [32/10000], iteration 310, Loss: 0.006664
+Epoch [32/10000], iteration 315, Loss: 0.006661
+Epoch [32/10000], iteration 320, Loss: 0.006661
+Epoch [32/10000], iteration 325, Loss: 0.006664
+Epoch 31 took 897.80 seconds
+validating....
+Epoch 32, validation loss is 0.0067, training loss is 0.0067
+Validation loss decreases from 0.0069 to 0.0067
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [33/10000], iteration 5, Loss: 0.006854
+Epoch [33/10000], iteration 10, Loss: 0.006724
+Epoch [33/10000], iteration 15, Loss: 0.006768
+Epoch [33/10000], iteration 20, Loss: 0.006818
+Epoch [33/10000], iteration 25, Loss: 0.006830
+Epoch [33/10000], iteration 30, Loss: 0.006796
+Epoch [33/10000], iteration 35, Loss: 0.006786
+Epoch [33/10000], iteration 40, Loss: 0.006763
+Epoch [33/10000], iteration 45, Loss: 0.006736
+Epoch [33/10000], iteration 50, Loss: 0.006726
+Epoch [33/10000], iteration 55, Loss: 0.006690
+Epoch [33/10000], iteration 60, Loss: 0.006662
+Epoch [33/10000], iteration 65, Loss: 0.006671
+Epoch [33/10000], iteration 70, Loss: 0.006678
+Epoch [33/10000], iteration 75, Loss: 0.006689
+Epoch [33/10000], iteration 80, Loss: 0.006703
+Epoch [33/10000], iteration 85, Loss: 0.006697
+Epoch [33/10000], iteration 90, Loss: 0.006701
+Epoch [33/10000], iteration 95, Loss: 0.006687
+Epoch [33/10000], iteration 100, Loss: 0.006671
+Epoch [33/10000], iteration 105, Loss: 0.006667
+Epoch [33/10000], iteration 110, Loss: 0.006679
+Epoch [33/10000], iteration 115, Loss: 0.006675
+Epoch [33/10000], iteration 120, Loss: 0.006666
+Epoch [33/10000], iteration 125, Loss: 0.006665
+Epoch [33/10000], iteration 130, Loss: 0.006659
+Epoch [33/10000], iteration 135, Loss: 0.006646
+Epoch [33/10000], iteration 140, Loss: 0.006647
+Epoch [33/10000], iteration 145, Loss: 0.006650
+Epoch [33/10000], iteration 150, Loss: 0.006636
+Epoch [33/10000], iteration 155, Loss: 0.006629
+Epoch [33/10000], iteration 160, Loss: 0.006617
+Epoch [33/10000], iteration 165, Loss: 0.006620
+Epoch [33/10000], iteration 170, Loss: 0.006614
+Epoch [33/10000], iteration 175, Loss: 0.006613
+Epoch [33/10000], iteration 180, Loss: 0.006615
+Epoch [33/10000], iteration 185, Loss: 0.006616
+Epoch [33/10000], iteration 190, Loss: 0.006613
+Epoch [33/10000], iteration 195, Loss: 0.006612
+Epoch [33/10000], iteration 200, Loss: 0.006618
+Epoch [33/10000], iteration 205, Loss: 0.006618
+Epoch [33/10000], iteration 210, Loss: 0.006615
+Epoch [33/10000], iteration 215, Loss: 0.006612
+Epoch [33/10000], iteration 220, Loss: 0.006619
+Epoch [33/10000], iteration 225, Loss: 0.006610
+Epoch [33/10000], iteration 230, Loss: 0.006616
+Epoch [33/10000], iteration 235, Loss: 0.006614
+Epoch [33/10000], iteration 240, Loss: 0.006618
+Epoch [33/10000], iteration 245, Loss: 0.006615
+Epoch [33/10000], iteration 250, Loss: 0.006618
+Epoch [33/10000], iteration 255, Loss: 0.006617
+Epoch [33/10000], iteration 260, Loss: 0.006622
+Epoch [33/10000], iteration 265, Loss: 0.006621
+Epoch [33/10000], iteration 270, Loss: 0.006622
+Epoch [33/10000], iteration 275, Loss: 0.006619
+Epoch [33/10000], iteration 280, Loss: 0.006620
+Epoch [33/10000], iteration 285, Loss: 0.006623
+Epoch [33/10000], iteration 290, Loss: 0.006626
+Epoch [33/10000], iteration 295, Loss: 0.006624
+Epoch [33/10000], iteration 300, Loss: 0.006625
+Epoch [33/10000], iteration 305, Loss: 0.006620
+Epoch [33/10000], iteration 310, Loss: 0.006622
+Epoch [33/10000], iteration 315, Loss: 0.006624
+Epoch [33/10000], iteration 320, Loss: 0.006626
+Epoch [33/10000], iteration 325, Loss: 0.006626
+Epoch 32 took 899.58 seconds
+validating....
+Epoch 33, validation loss is 0.0067, training loss is 0.0066
+Validation loss does not decrease from 0.0067, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [34/10000], iteration 5, Loss: 0.006664
+Epoch [34/10000], iteration 10, Loss: 0.006907
+Epoch [34/10000], iteration 15, Loss: 0.006752
+Epoch [34/10000], iteration 20, Loss: 0.006743
+Epoch [34/10000], iteration 25, Loss: 0.006667
+Epoch [34/10000], iteration 30, Loss: 0.006647
+Epoch [34/10000], iteration 35, Loss: 0.006662
+Epoch [34/10000], iteration 40, Loss: 0.006641
+Epoch [34/10000], iteration 45, Loss: 0.006635
+Epoch [34/10000], iteration 50, Loss: 0.006657
+Epoch [34/10000], iteration 55, Loss: 0.006666
+Epoch [34/10000], iteration 60, Loss: 0.006663
+Epoch [34/10000], iteration 65, Loss: 0.006639
+Epoch [34/10000], iteration 70, Loss: 0.006636
+Epoch [34/10000], iteration 75, Loss: 0.006628
+Epoch [34/10000], iteration 80, Loss: 0.006619
+Epoch [34/10000], iteration 85, Loss: 0.006613
+Epoch [34/10000], iteration 90, Loss: 0.006612
+Epoch [34/10000], iteration 95, Loss: 0.006620
+Epoch [34/10000], iteration 100, Loss: 0.006605
+Epoch [34/10000], iteration 105, Loss: 0.006607
+Epoch [34/10000], iteration 110, Loss: 0.006613
+Epoch [34/10000], iteration 115, Loss: 0.006609
+Epoch [34/10000], iteration 120, Loss: 0.006620
+Epoch [34/10000], iteration 125, Loss: 0.006630
+Epoch [34/10000], iteration 130, Loss: 0.006619
+Epoch [34/10000], iteration 135, Loss: 0.006613
+Epoch [34/10000], iteration 140, Loss: 0.006627
+Epoch [34/10000], iteration 145, Loss: 0.006618
+Epoch [34/10000], iteration 150, Loss: 0.006627
+Epoch [34/10000], iteration 155, Loss: 0.006631
+Epoch [34/10000], iteration 160, Loss: 0.006626
+Epoch [34/10000], iteration 165, Loss: 0.006622
+Epoch [34/10000], iteration 170, Loss: 0.006617
+Epoch [34/10000], iteration 175, Loss: 0.006614
+Epoch [34/10000], iteration 180, Loss: 0.006615
+Epoch [34/10000], iteration 185, Loss: 0.006613
+Epoch [34/10000], iteration 190, Loss: 0.006607
+Epoch [34/10000], iteration 195, Loss: 0.006611
+Epoch [34/10000], iteration 200, Loss: 0.006609
+Epoch [34/10000], iteration 205, Loss: 0.006609
+Epoch [34/10000], iteration 210, Loss: 0.006602
+Epoch [34/10000], iteration 215, Loss: 0.006606
+Epoch [34/10000], iteration 220, Loss: 0.006602
+Epoch [34/10000], iteration 225, Loss: 0.006608
+Epoch [34/10000], iteration 230, Loss: 0.006603
+Epoch [34/10000], iteration 235, Loss: 0.006598
+Epoch [34/10000], iteration 240, Loss: 0.006598
+Epoch [34/10000], iteration 245, Loss: 0.006589
+Epoch [34/10000], iteration 250, Loss: 0.006587
+Epoch [34/10000], iteration 255, Loss: 0.006584
+Epoch [34/10000], iteration 260, Loss: 0.006587
+Epoch [34/10000], iteration 265, Loss: 0.006587
+Epoch [34/10000], iteration 270, Loss: 0.006588
+Epoch [34/10000], iteration 275, Loss: 0.006590
+Epoch [34/10000], iteration 280, Loss: 0.006585
+Epoch [34/10000], iteration 285, Loss: 0.006586
+Epoch [34/10000], iteration 290, Loss: 0.006594
+Epoch [34/10000], iteration 295, Loss: 0.006593
+Epoch [34/10000], iteration 300, Loss: 0.006590
+Epoch [34/10000], iteration 305, Loss: 0.006591
+Epoch [34/10000], iteration 310, Loss: 0.006595
+Epoch [34/10000], iteration 315, Loss: 0.006593
+Epoch [34/10000], iteration 320, Loss: 0.006589
+Epoch [34/10000], iteration 325, Loss: 0.006588
+Epoch 33 took 897.86 seconds
+validating....
+Epoch 34, validation loss is 0.0067, training loss is 0.0066
+Validation loss decreases from 0.0067 to 0.0067
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [35/10000], iteration 5, Loss: 0.006264
+Epoch [35/10000], iteration 10, Loss: 0.006334
+Epoch [35/10000], iteration 15, Loss: 0.006365
+Epoch [35/10000], iteration 20, Loss: 0.006455
+Epoch [35/10000], iteration 25, Loss: 0.006482
+Epoch [35/10000], iteration 30, Loss: 0.006471
+Epoch [35/10000], iteration 35, Loss: 0.006496
+Epoch [35/10000], iteration 40, Loss: 0.006523
+Epoch [35/10000], iteration 45, Loss: 0.006559
+Epoch [35/10000], iteration 50, Loss: 0.006552
+Epoch [35/10000], iteration 55, Loss: 0.006547
+Epoch [35/10000], iteration 60, Loss: 0.006559
+Epoch [35/10000], iteration 65, Loss: 0.006551
+Epoch [35/10000], iteration 70, Loss: 0.006556
+Epoch [35/10000], iteration 75, Loss: 0.006541
+Epoch [35/10000], iteration 80, Loss: 0.006535
+Epoch [35/10000], iteration 85, Loss: 0.006521
+Epoch [35/10000], iteration 90, Loss: 0.006537
+Epoch [35/10000], iteration 95, Loss: 0.006528
+Epoch [35/10000], iteration 100, Loss: 0.006537
+Epoch [35/10000], iteration 105, Loss: 0.006529
+Epoch [35/10000], iteration 110, Loss: 0.006538
+Epoch [35/10000], iteration 115, Loss: 0.006549
+Epoch [35/10000], iteration 120, Loss: 0.006539
+Epoch [35/10000], iteration 125, Loss: 0.006530
+Epoch [35/10000], iteration 130, Loss: 0.006525
+Epoch [35/10000], iteration 135, Loss: 0.006526
+Epoch [35/10000], iteration 140, Loss: 0.006534
+Epoch [35/10000], iteration 145, Loss: 0.006527
+Epoch [35/10000], iteration 150, Loss: 0.006524
+Epoch [35/10000], iteration 155, Loss: 0.006522
+Epoch [35/10000], iteration 160, Loss: 0.006514
+Epoch [35/10000], iteration 165, Loss: 0.006510
+Epoch [35/10000], iteration 170, Loss: 0.006510
+Epoch [35/10000], iteration 175, Loss: 0.006511
+Epoch [35/10000], iteration 180, Loss: 0.006513
+Epoch [35/10000], iteration 185, Loss: 0.006520
+Epoch [35/10000], iteration 190, Loss: 0.006519
+Epoch [35/10000], iteration 195, Loss: 0.006522
+Epoch [35/10000], iteration 200, Loss: 0.006525
+Epoch [35/10000], iteration 205, Loss: 0.006533
+Epoch [35/10000], iteration 210, Loss: 0.006529
+Epoch [35/10000], iteration 215, Loss: 0.006524
+Epoch [35/10000], iteration 220, Loss: 0.006531
+Epoch [35/10000], iteration 225, Loss: 0.006536
+Epoch [35/10000], iteration 230, Loss: 0.006532
+Epoch [35/10000], iteration 235, Loss: 0.006534
+Epoch [35/10000], iteration 240, Loss: 0.006538
+Epoch [35/10000], iteration 245, Loss: 0.006538
+Epoch [35/10000], iteration 250, Loss: 0.006547
+Epoch [35/10000], iteration 255, Loss: 0.006539
+Epoch [35/10000], iteration 260, Loss: 0.006538
+Epoch [35/10000], iteration 265, Loss: 0.006541
+Epoch [35/10000], iteration 270, Loss: 0.006546
+Epoch [35/10000], iteration 275, Loss: 0.006550
+Epoch [35/10000], iteration 280, Loss: 0.006552
+Epoch [35/10000], iteration 285, Loss: 0.006547
+Epoch [35/10000], iteration 290, Loss: 0.006552
+Epoch [35/10000], iteration 295, Loss: 0.006555
+Epoch [35/10000], iteration 300, Loss: 0.006549
+Epoch [35/10000], iteration 305, Loss: 0.006550
+Epoch [35/10000], iteration 310, Loss: 0.006553
+Epoch [35/10000], iteration 315, Loss: 0.006556
+Epoch [35/10000], iteration 320, Loss: 0.006555
+Epoch [35/10000], iteration 325, Loss: 0.006553
+Epoch 34 took 893.27 seconds
+validating....
+Epoch 35, validation loss is 0.0068, training loss is 0.0066
+Validation loss does not decrease from 0.0067, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [36/10000], iteration 5, Loss: 0.006552
+Epoch [36/10000], iteration 10, Loss: 0.006635
+Epoch [36/10000], iteration 15, Loss: 0.006590
+Epoch [36/10000], iteration 20, Loss: 0.006574
+Epoch [36/10000], iteration 25, Loss: 0.006554
+Epoch [36/10000], iteration 30, Loss: 0.006532
+Epoch [36/10000], iteration 35, Loss: 0.006494
+Epoch [36/10000], iteration 40, Loss: 0.006522
+Epoch [36/10000], iteration 45, Loss: 0.006544
+Epoch [36/10000], iteration 50, Loss: 0.006555
+Epoch [36/10000], iteration 55, Loss: 0.006536
+Epoch [36/10000], iteration 60, Loss: 0.006510
+Epoch [36/10000], iteration 65, Loss: 0.006515
+Epoch [36/10000], iteration 70, Loss: 0.006497
+Epoch [36/10000], iteration 75, Loss: 0.006486
+Epoch [36/10000], iteration 80, Loss: 0.006508
+Epoch [36/10000], iteration 85, Loss: 0.006509
+Epoch [36/10000], iteration 90, Loss: 0.006511
+Epoch [36/10000], iteration 95, Loss: 0.006536
+Epoch [36/10000], iteration 100, Loss: 0.006529
+Epoch [36/10000], iteration 105, Loss: 0.006556
+Epoch [36/10000], iteration 110, Loss: 0.006566
+Epoch [36/10000], iteration 115, Loss: 0.006556
+Epoch [36/10000], iteration 120, Loss: 0.006549
+Epoch [36/10000], iteration 125, Loss: 0.006546
+Epoch [36/10000], iteration 130, Loss: 0.006549
+Epoch [36/10000], iteration 135, Loss: 0.006551
+Epoch [36/10000], iteration 140, Loss: 0.006554
+Epoch [36/10000], iteration 145, Loss: 0.006558
+Epoch [36/10000], iteration 150, Loss: 0.006554
+Epoch [36/10000], iteration 155, Loss: 0.006574
+Epoch [36/10000], iteration 160, Loss: 0.006575
+Epoch [36/10000], iteration 165, Loss: 0.006577
+Epoch [36/10000], iteration 170, Loss: 0.006581
+Epoch [36/10000], iteration 175, Loss: 0.006585
+Epoch [36/10000], iteration 180, Loss: 0.006589
+Epoch [36/10000], iteration 185, Loss: 0.006591
+Epoch [36/10000], iteration 190, Loss: 0.006586
+Epoch [36/10000], iteration 195, Loss: 0.006579
+Epoch [36/10000], iteration 200, Loss: 0.006581
+Epoch [36/10000], iteration 205, Loss: 0.006585
+Epoch [36/10000], iteration 210, Loss: 0.006584
+Epoch [36/10000], iteration 215, Loss: 0.006586
+Epoch [36/10000], iteration 220, Loss: 0.006590
+Epoch [36/10000], iteration 225, Loss: 0.006587
+Epoch [36/10000], iteration 230, Loss: 0.006586
+Epoch [36/10000], iteration 235, Loss: 0.006588
+Epoch [36/10000], iteration 240, Loss: 0.006587
+Epoch [36/10000], iteration 245, Loss: 0.006586
+Epoch [36/10000], iteration 250, Loss: 0.006580
+Epoch [36/10000], iteration 255, Loss: 0.006579
+Epoch [36/10000], iteration 260, Loss: 0.006582
+Epoch [36/10000], iteration 265, Loss: 0.006575
+Epoch [36/10000], iteration 270, Loss: 0.006575
+Epoch [36/10000], iteration 275, Loss: 0.006573
+Epoch [36/10000], iteration 280, Loss: 0.006575
+Epoch [36/10000], iteration 285, Loss: 0.006571
+Epoch [36/10000], iteration 290, Loss: 0.006569
+Epoch [36/10000], iteration 295, Loss: 0.006565
+Epoch [36/10000], iteration 300, Loss: 0.006559
+Epoch [36/10000], iteration 305, Loss: 0.006557
+Epoch [36/10000], iteration 310, Loss: 0.006554
+Epoch [36/10000], iteration 315, Loss: 0.006550
+Epoch [36/10000], iteration 320, Loss: 0.006550
+Epoch [36/10000], iteration 325, Loss: 0.006555
+Epoch 35 took 897.25 seconds
+validating....
+Epoch 36, validation loss is 0.0067, training loss is 0.0066
+Validation loss does not decrease from 0.0067, num_epoch_no_improvement 1
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [37/10000], iteration 5, Loss: 0.006712
+Epoch [37/10000], iteration 10, Loss: 0.006710
+Epoch [37/10000], iteration 15, Loss: 0.006698
+Epoch [37/10000], iteration 20, Loss: 0.006661
+Epoch [37/10000], iteration 25, Loss: 0.006667
+Epoch [37/10000], iteration 30, Loss: 0.006539
+Epoch [37/10000], iteration 35, Loss: 0.006533
+Epoch [37/10000], iteration 40, Loss: 0.006530
+Epoch [37/10000], iteration 45, Loss: 0.006539
+Epoch [37/10000], iteration 50, Loss: 0.006572
+Epoch [37/10000], iteration 55, Loss: 0.006561
+Epoch [37/10000], iteration 60, Loss: 0.006551
+Epoch [37/10000], iteration 65, Loss: 0.006556
+Epoch [37/10000], iteration 70, Loss: 0.006558
+Epoch [37/10000], iteration 75, Loss: 0.006541
+Epoch [37/10000], iteration 80, Loss: 0.006525
+Epoch [37/10000], iteration 85, Loss: 0.006525
+Epoch [37/10000], iteration 90, Loss: 0.006515
+Epoch [37/10000], iteration 95, Loss: 0.006513
+Epoch [37/10000], iteration 100, Loss: 0.006516
+Epoch [37/10000], iteration 105, Loss: 0.006526
+Epoch [37/10000], iteration 110, Loss: 0.006519
+Epoch [37/10000], iteration 115, Loss: 0.006519
+Epoch [37/10000], iteration 120, Loss: 0.006526
+Epoch [37/10000], iteration 125, Loss: 0.006511
+Epoch [37/10000], iteration 130, Loss: 0.006522
+Epoch [37/10000], iteration 135, Loss: 0.006530
+Epoch [37/10000], iteration 140, Loss: 0.006529
+Epoch [37/10000], iteration 145, Loss: 0.006528
+Epoch [37/10000], iteration 150, Loss: 0.006539
+Epoch [37/10000], iteration 155, Loss: 0.006550
+Epoch [37/10000], iteration 160, Loss: 0.006554
+Epoch [37/10000], iteration 165, Loss: 0.006538
+Epoch [37/10000], iteration 170, Loss: 0.006536
+Epoch [37/10000], iteration 175, Loss: 0.006545
+Epoch [37/10000], iteration 180, Loss: 0.006545
+Epoch [37/10000], iteration 185, Loss: 0.006554
+Epoch [37/10000], iteration 190, Loss: 0.006552
+Epoch [37/10000], iteration 195, Loss: 0.006549
+Epoch [37/10000], iteration 200, Loss: 0.006550
+Epoch [37/10000], iteration 205, Loss: 0.006554
+Epoch [37/10000], iteration 210, Loss: 0.006564
+Epoch [37/10000], iteration 215, Loss: 0.006572
+Epoch [37/10000], iteration 220, Loss: 0.006575
+Epoch [37/10000], iteration 225, Loss: 0.006575
+Epoch [37/10000], iteration 230, Loss: 0.006570
+Epoch [37/10000], iteration 235, Loss: 0.006564
+Epoch [37/10000], iteration 240, Loss: 0.006556
+Epoch [37/10000], iteration 245, Loss: 0.006557
+Epoch [37/10000], iteration 250, Loss: 0.006554
+Epoch [37/10000], iteration 255, Loss: 0.006547
+Epoch [37/10000], iteration 260, Loss: 0.006549
+Epoch [37/10000], iteration 265, Loss: 0.006551
+Epoch [37/10000], iteration 270, Loss: 0.006550
+Epoch [37/10000], iteration 275, Loss: 0.006547
+Epoch [37/10000], iteration 280, Loss: 0.006538
+Epoch [37/10000], iteration 285, Loss: 0.006542
+Epoch [37/10000], iteration 290, Loss: 0.006539
+Epoch [37/10000], iteration 295, Loss: 0.006540
+Epoch [37/10000], iteration 300, Loss: 0.006538
+Epoch [37/10000], iteration 305, Loss: 0.006532
+Epoch [37/10000], iteration 310, Loss: 0.006524
+Epoch [37/10000], iteration 315, Loss: 0.006526
+Epoch [37/10000], iteration 320, Loss: 0.006526
+Epoch [37/10000], iteration 325, Loss: 0.006530
+Epoch 36 took 899.29 seconds
+validating....
+Epoch 37, validation loss is 0.0065, training loss is 0.0065
+Validation loss decreases from 0.0067 to 0.0065
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [38/10000], iteration 5, Loss: 0.006882
+Epoch [38/10000], iteration 10, Loss: 0.006601
+Epoch [38/10000], iteration 15, Loss: 0.006649
+Epoch [38/10000], iteration 20, Loss: 0.006653
+Epoch [38/10000], iteration 25, Loss: 0.006603
+Epoch [38/10000], iteration 30, Loss: 0.006597
+Epoch [38/10000], iteration 35, Loss: 0.006599
+Epoch [38/10000], iteration 40, Loss: 0.006566
+Epoch [38/10000], iteration 45, Loss: 0.006569
+Epoch [38/10000], iteration 50, Loss: 0.006527
+Epoch [38/10000], iteration 55, Loss: 0.006545
+Epoch [38/10000], iteration 60, Loss: 0.006546
+Epoch [38/10000], iteration 65, Loss: 0.006533
+Epoch [38/10000], iteration 70, Loss: 0.006522
+Epoch [38/10000], iteration 75, Loss: 0.006513
+Epoch [38/10000], iteration 80, Loss: 0.006502
+Epoch [38/10000], iteration 85, Loss: 0.006491
+Epoch [38/10000], iteration 90, Loss: 0.006492
+Epoch [38/10000], iteration 95, Loss: 0.006481
+Epoch [38/10000], iteration 100, Loss: 0.006471
+Epoch [38/10000], iteration 105, Loss: 0.006462
+Epoch [38/10000], iteration 110, Loss: 0.006456
+Epoch [38/10000], iteration 115, Loss: 0.006451
+Epoch [38/10000], iteration 120, Loss: 0.006445
+Epoch [38/10000], iteration 125, Loss: 0.006435
+Epoch [38/10000], iteration 130, Loss: 0.006431
+Epoch [38/10000], iteration 135, Loss: 0.006433
+Epoch [38/10000], iteration 140, Loss: 0.006439
+Epoch [38/10000], iteration 145, Loss: 0.006451
+Epoch [38/10000], iteration 150, Loss: 0.006468
+Epoch [38/10000], iteration 155, Loss: 0.006456
+Epoch [38/10000], iteration 160, Loss: 0.006461
+Epoch [38/10000], iteration 165, Loss: 0.006456
+Epoch [38/10000], iteration 170, Loss: 0.006452
+Epoch [38/10000], iteration 175, Loss: 0.006456
+Epoch [38/10000], iteration 180, Loss: 0.006457
+Epoch [38/10000], iteration 185, Loss: 0.006453
+Epoch [38/10000], iteration 190, Loss: 0.006454
+Epoch [38/10000], iteration 195, Loss: 0.006449
+Epoch [38/10000], iteration 200, Loss: 0.006458
+Epoch [38/10000], iteration 205, Loss: 0.006459
+Epoch [38/10000], iteration 210, Loss: 0.006463
+Epoch [38/10000], iteration 215, Loss: 0.006455
+Epoch [38/10000], iteration 220, Loss: 0.006458
+Epoch [38/10000], iteration 225, Loss: 0.006462
+Epoch [38/10000], iteration 230, Loss: 0.006457
+Epoch [38/10000], iteration 235, Loss: 0.006453
+Epoch [38/10000], iteration 240, Loss: 0.006456
+Epoch [38/10000], iteration 245, Loss: 0.006457
+Epoch [38/10000], iteration 250, Loss: 0.006454
+Epoch [38/10000], iteration 255, Loss: 0.006453
+Epoch [38/10000], iteration 260, Loss: 0.006456
+Epoch [38/10000], iteration 265, Loss: 0.006460
+Epoch [38/10000], iteration 270, Loss: 0.006463
+Epoch [38/10000], iteration 275, Loss: 0.006466
+Epoch [38/10000], iteration 280, Loss: 0.006465
+Epoch [38/10000], iteration 285, Loss: 0.006466
+Epoch [38/10000], iteration 290, Loss: 0.006465
+Epoch [38/10000], iteration 295, Loss: 0.006466
+Epoch [38/10000], iteration 300, Loss: 0.006460
+Epoch [38/10000], iteration 305, Loss: 0.006457
+Epoch [38/10000], iteration 310, Loss: 0.006458
+Epoch [38/10000], iteration 315, Loss: 0.006458
+Epoch [38/10000], iteration 320, Loss: 0.006459
+Epoch [38/10000], iteration 325, Loss: 0.006460
+Epoch 37 took 886.63 seconds
+validating....
+Epoch 38, validation loss is 0.0066, training loss is 0.0065
+Validation loss does not decrease from 0.0065, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [39/10000], iteration 5, Loss: 0.006840
+Epoch [39/10000], iteration 10, Loss: 0.006532
+Epoch [39/10000], iteration 15, Loss: 0.006447
+Epoch [39/10000], iteration 20, Loss: 0.006405
+Epoch [39/10000], iteration 25, Loss: 0.006410
+Epoch [39/10000], iteration 30, Loss: 0.006412
+Epoch [39/10000], iteration 35, Loss: 0.006363
+Epoch [39/10000], iteration 40, Loss: 0.006389
+Epoch [39/10000], iteration 45, Loss: 0.006381
+Epoch [39/10000], iteration 50, Loss: 0.006376
+Epoch [39/10000], iteration 55, Loss: 0.006384
+Epoch [39/10000], iteration 60, Loss: 0.006388
+Epoch [39/10000], iteration 65, Loss: 0.006407
+Epoch [39/10000], iteration 70, Loss: 0.006425
+Epoch [39/10000], iteration 75, Loss: 0.006413
+Epoch [39/10000], iteration 80, Loss: 0.006416
+Epoch [39/10000], iteration 85, Loss: 0.006424
+Epoch [39/10000], iteration 90, Loss: 0.006412
+Epoch [39/10000], iteration 95, Loss: 0.006423
+Epoch [39/10000], iteration 100, Loss: 0.006421
+Epoch [39/10000], iteration 105, Loss: 0.006419
+Epoch [39/10000], iteration 110, Loss: 0.006422
+Epoch [39/10000], iteration 115, Loss: 0.006410
+Epoch [39/10000], iteration 120, Loss: 0.006416
+Epoch [39/10000], iteration 125, Loss: 0.006433
+Epoch [39/10000], iteration 130, Loss: 0.006437
+Epoch [39/10000], iteration 135, Loss: 0.006432
+Epoch [39/10000], iteration 140, Loss: 0.006418
+Epoch [39/10000], iteration 145, Loss: 0.006416
+Epoch [39/10000], iteration 150, Loss: 0.006418
+Epoch [39/10000], iteration 155, Loss: 0.006426
+Epoch [39/10000], iteration 160, Loss: 0.006433
+Epoch [39/10000], iteration 165, Loss: 0.006435
+Epoch [39/10000], iteration 170, Loss: 0.006433
+Epoch [39/10000], iteration 175, Loss: 0.006437
+Epoch [39/10000], iteration 180, Loss: 0.006435
+Epoch [39/10000], iteration 185, Loss: 0.006432
+Epoch [39/10000], iteration 190, Loss: 0.006444
+Epoch [39/10000], iteration 195, Loss: 0.006446
+Epoch [39/10000], iteration 200, Loss: 0.006454
+Epoch [39/10000], iteration 205, Loss: 0.006450
+Epoch [39/10000], iteration 210, Loss: 0.006456
+Epoch [39/10000], iteration 215, Loss: 0.006450
+Epoch [39/10000], iteration 220, Loss: 0.006451
+Epoch [39/10000], iteration 225, Loss: 0.006449
+Epoch [39/10000], iteration 230, Loss: 0.006447
+Epoch [39/10000], iteration 235, Loss: 0.006443
+Epoch [39/10000], iteration 240, Loss: 0.006443
+Epoch [39/10000], iteration 245, Loss: 0.006443
+Epoch [39/10000], iteration 250, Loss: 0.006444
+Epoch [39/10000], iteration 255, Loss: 0.006439
+Epoch [39/10000], iteration 260, Loss: 0.006435
+Epoch [39/10000], iteration 265, Loss: 0.006435
+Epoch [39/10000], iteration 270, Loss: 0.006432
+Epoch [39/10000], iteration 275, Loss: 0.006432
+Epoch [39/10000], iteration 280, Loss: 0.006426
+Epoch [39/10000], iteration 285, Loss: 0.006426
+Epoch [39/10000], iteration 290, Loss: 0.006425
+Epoch [39/10000], iteration 295, Loss: 0.006426
+Epoch [39/10000], iteration 300, Loss: 0.006430
+Epoch [39/10000], iteration 305, Loss: 0.006432
+Epoch [39/10000], iteration 310, Loss: 0.006437
+Epoch [39/10000], iteration 315, Loss: 0.006439
+Epoch [39/10000], iteration 320, Loss: 0.006443
+Epoch [39/10000], iteration 325, Loss: 0.006448
+Epoch 38 took 889.77 seconds
+validating....
+Epoch 39, validation loss is 0.0066, training loss is 0.0064
+Validation loss does not decrease from 0.0065, num_epoch_no_improvement 1
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [40/10000], iteration 5, Loss: 0.006387
+Epoch [40/10000], iteration 10, Loss: 0.006291
+Epoch [40/10000], iteration 15, Loss: 0.006322
+Epoch [40/10000], iteration 20, Loss: 0.006310
+Epoch [40/10000], iteration 25, Loss: 0.006297
+Epoch [40/10000], iteration 30, Loss: 0.006300
+Epoch [40/10000], iteration 35, Loss: 0.006330
+Epoch [40/10000], iteration 40, Loss: 0.006347
+Epoch [40/10000], iteration 45, Loss: 0.006363
+Epoch [40/10000], iteration 50, Loss: 0.006372
+Epoch [40/10000], iteration 55, Loss: 0.006387
+Epoch [40/10000], iteration 60, Loss: 0.006374
+Epoch [40/10000], iteration 65, Loss: 0.006360
+Epoch [40/10000], iteration 70, Loss: 0.006376
+Epoch [40/10000], iteration 75, Loss: 0.006362
+Epoch [40/10000], iteration 80, Loss: 0.006373
+Epoch [40/10000], iteration 85, Loss: 0.006384
+Epoch [40/10000], iteration 90, Loss: 0.006394
+Epoch [40/10000], iteration 95, Loss: 0.006399
+Epoch [40/10000], iteration 100, Loss: 0.006405
+Epoch [40/10000], iteration 105, Loss: 0.006404
+Epoch [40/10000], iteration 110, Loss: 0.006398
+Epoch [40/10000], iteration 115, Loss: 0.006398
+Epoch [40/10000], iteration 120, Loss: 0.006402
+Epoch [40/10000], iteration 125, Loss: 0.006412
+Epoch [40/10000], iteration 130, Loss: 0.006413
+Epoch [40/10000], iteration 135, Loss: 0.006417
+Epoch [40/10000], iteration 140, Loss: 0.006421
+Epoch [40/10000], iteration 145, Loss: 0.006428
+Epoch [40/10000], iteration 150, Loss: 0.006439
+Epoch [40/10000], iteration 155, Loss: 0.006439
+Epoch [40/10000], iteration 160, Loss: 0.006430
+Epoch [40/10000], iteration 165, Loss: 0.006428
+Epoch [40/10000], iteration 170, Loss: 0.006423
+Epoch [40/10000], iteration 175, Loss: 0.006421
+Epoch [40/10000], iteration 180, Loss: 0.006422
+Epoch [40/10000], iteration 185, Loss: 0.006428
+Epoch [40/10000], iteration 190, Loss: 0.006429
+Epoch [40/10000], iteration 195, Loss: 0.006427
+Epoch [40/10000], iteration 200, Loss: 0.006430
+Epoch [40/10000], iteration 205, Loss: 0.006426
+Epoch [40/10000], iteration 210, Loss: 0.006435
+Epoch [40/10000], iteration 215, Loss: 0.006429
+Epoch [40/10000], iteration 220, Loss: 0.006434
+Epoch [40/10000], iteration 225, Loss: 0.006440
+Epoch [40/10000], iteration 230, Loss: 0.006439
+Epoch [40/10000], iteration 235, Loss: 0.006438
+Epoch [40/10000], iteration 240, Loss: 0.006444
+Epoch [40/10000], iteration 245, Loss: 0.006436
+Epoch [40/10000], iteration 250, Loss: 0.006428
+Epoch [40/10000], iteration 255, Loss: 0.006427
+Epoch [40/10000], iteration 260, Loss: 0.006430
+Epoch [40/10000], iteration 265, Loss: 0.006430
+Epoch [40/10000], iteration 270, Loss: 0.006425
+Epoch [40/10000], iteration 275, Loss: 0.006423
+Epoch [40/10000], iteration 280, Loss: 0.006422
+Epoch [40/10000], iteration 285, Loss: 0.006427
+Epoch [40/10000], iteration 290, Loss: 0.006422
+Epoch [40/10000], iteration 295, Loss: 0.006423
+Epoch [40/10000], iteration 300, Loss: 0.006424
+Epoch [40/10000], iteration 305, Loss: 0.006422
+Epoch [40/10000], iteration 310, Loss: 0.006419
+Epoch [40/10000], iteration 315, Loss: 0.006416
+Epoch [40/10000], iteration 320, Loss: 0.006412
+Epoch [40/10000], iteration 325, Loss: 0.006412
+Epoch 39 took 892.99 seconds
+validating....
+Epoch 40, validation loss is 0.0065, training loss is 0.0064
+Validation loss does not decrease from 0.0065, num_epoch_no_improvement 2
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [41/10000], iteration 5, Loss: 0.006611
+Epoch [41/10000], iteration 10, Loss: 0.006434
+Epoch [41/10000], iteration 15, Loss: 0.006370
+Epoch [41/10000], iteration 20, Loss: 0.006382
+Epoch [41/10000], iteration 25, Loss: 0.006339
+Epoch [41/10000], iteration 30, Loss: 0.006322
+Epoch [41/10000], iteration 35, Loss: 0.006342
+Epoch [41/10000], iteration 40, Loss: 0.006322
+Epoch [41/10000], iteration 45, Loss: 0.006277
+Epoch [41/10000], iteration 50, Loss: 0.006282
+Epoch [41/10000], iteration 55, Loss: 0.006297
+Epoch [41/10000], iteration 60, Loss: 0.006299
+Epoch [41/10000], iteration 65, Loss: 0.006316
+Epoch [41/10000], iteration 70, Loss: 0.006332
+Epoch [41/10000], iteration 75, Loss: 0.006336
+Epoch [41/10000], iteration 80, Loss: 0.006322
+Epoch [41/10000], iteration 85, Loss: 0.006333
+Epoch [41/10000], iteration 90, Loss: 0.006362
+Epoch [41/10000], iteration 95, Loss: 0.006358
+Epoch [41/10000], iteration 100, Loss: 0.006339
+Epoch [41/10000], iteration 105, Loss: 0.006340
+Epoch [41/10000], iteration 110, Loss: 0.006344
+Epoch [41/10000], iteration 115, Loss: 0.006342
+Epoch [41/10000], iteration 120, Loss: 0.006342
+Epoch [41/10000], iteration 125, Loss: 0.006336
+Epoch [41/10000], iteration 130, Loss: 0.006339
+Epoch [41/10000], iteration 135, Loss: 0.006359
+Epoch [41/10000], iteration 140, Loss: 0.006367
+Epoch [41/10000], iteration 145, Loss: 0.006360
+Epoch [41/10000], iteration 150, Loss: 0.006358
+Epoch [41/10000], iteration 155, Loss: 0.006356
+Epoch [41/10000], iteration 160, Loss: 0.006362
+Epoch [41/10000], iteration 165, Loss: 0.006362
+Epoch [41/10000], iteration 170, Loss: 0.006360
+Epoch [41/10000], iteration 175, Loss: 0.006360
+Epoch [41/10000], iteration 180, Loss: 0.006357
+Epoch [41/10000], iteration 185, Loss: 0.006358
+Epoch [41/10000], iteration 190, Loss: 0.006360
+Epoch [41/10000], iteration 195, Loss: 0.006350
+Epoch [41/10000], iteration 200, Loss: 0.006347
+Epoch [41/10000], iteration 205, Loss: 0.006348
+Epoch [41/10000], iteration 210, Loss: 0.006342
+Epoch [41/10000], iteration 215, Loss: 0.006342
+Epoch [41/10000], iteration 220, Loss: 0.006352
+Epoch [41/10000], iteration 225, Loss: 0.006352
+Epoch [41/10000], iteration 230, Loss: 0.006355
+Epoch [41/10000], iteration 235, Loss: 0.006360
+Epoch [41/10000], iteration 240, Loss: 0.006348
+Epoch [41/10000], iteration 245, Loss: 0.006351
+Epoch [41/10000], iteration 250, Loss: 0.006353
+Epoch [41/10000], iteration 255, Loss: 0.006362
+Epoch [41/10000], iteration 260, Loss: 0.006361
+Epoch [41/10000], iteration 265, Loss: 0.006358
+Epoch [41/10000], iteration 270, Loss: 0.006356
+Epoch [41/10000], iteration 275, Loss: 0.006360
+Epoch [41/10000], iteration 280, Loss: 0.006360
+Epoch [41/10000], iteration 285, Loss: 0.006357
+Epoch [41/10000], iteration 290, Loss: 0.006358
+Epoch [41/10000], iteration 295, Loss: 0.006369
+Epoch [41/10000], iteration 300, Loss: 0.006371
+Epoch [41/10000], iteration 305, Loss: 0.006372
+Epoch [41/10000], iteration 310, Loss: 0.006372
+Epoch [41/10000], iteration 315, Loss: 0.006373
+Epoch [41/10000], iteration 320, Loss: 0.006375
+Epoch [41/10000], iteration 325, Loss: 0.006377
+Epoch 40 took 888.42 seconds
+validating....
+Epoch 41, validation loss is 0.0065, training loss is 0.0064
+Validation loss does not decrease from 0.0065, num_epoch_no_improvement 3
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [42/10000], iteration 5, Loss: 0.006349
+Epoch [42/10000], iteration 10, Loss: 0.006227
+Epoch [42/10000], iteration 15, Loss: 0.006397
+Epoch [42/10000], iteration 20, Loss: 0.006555
+Epoch [42/10000], iteration 25, Loss: 0.006500
+Epoch [42/10000], iteration 30, Loss: 0.006476
+Epoch [42/10000], iteration 35, Loss: 0.006472
+Epoch [42/10000], iteration 40, Loss: 0.006507
+Epoch [42/10000], iteration 45, Loss: 0.006514
+Epoch [42/10000], iteration 50, Loss: 0.006487
+Epoch [42/10000], iteration 55, Loss: 0.006483
+Epoch [42/10000], iteration 60, Loss: 0.006463
+Epoch [42/10000], iteration 65, Loss: 0.006455
+Epoch [42/10000], iteration 70, Loss: 0.006452
+Epoch [42/10000], iteration 75, Loss: 0.006431
+Epoch [42/10000], iteration 80, Loss: 0.006421
+Epoch [42/10000], iteration 85, Loss: 0.006418
+Epoch [42/10000], iteration 90, Loss: 0.006399
+Epoch [42/10000], iteration 95, Loss: 0.006389
+Epoch [42/10000], iteration 100, Loss: 0.006378
+Epoch [42/10000], iteration 105, Loss: 0.006374
+Epoch [42/10000], iteration 110, Loss: 0.006370
+Epoch [42/10000], iteration 115, Loss: 0.006367
+Epoch [42/10000], iteration 120, Loss: 0.006363
+Epoch [42/10000], iteration 125, Loss: 0.006364
+Epoch [42/10000], iteration 130, Loss: 0.006378
+Epoch [42/10000], iteration 135, Loss: 0.006389
+Epoch [42/10000], iteration 140, Loss: 0.006393
+Epoch [42/10000], iteration 145, Loss: 0.006402
+Epoch [42/10000], iteration 150, Loss: 0.006403
+Epoch [42/10000], iteration 155, Loss: 0.006409
+Epoch [42/10000], iteration 160, Loss: 0.006399
+Epoch [42/10000], iteration 165, Loss: 0.006399
+Epoch [42/10000], iteration 170, Loss: 0.006397
+Epoch [42/10000], iteration 175, Loss: 0.006397
+Epoch [42/10000], iteration 180, Loss: 0.006396
+Epoch [42/10000], iteration 185, Loss: 0.006392
+Epoch [42/10000], iteration 190, Loss: 0.006396
+Epoch [42/10000], iteration 195, Loss: 0.006392
+Epoch [42/10000], iteration 200, Loss: 0.006393
+Epoch [42/10000], iteration 205, Loss: 0.006391
+Epoch [42/10000], iteration 210, Loss: 0.006390
+Epoch [42/10000], iteration 215, Loss: 0.006392
+Epoch [42/10000], iteration 220, Loss: 0.006387
+Epoch [42/10000], iteration 225, Loss: 0.006390
+Epoch [42/10000], iteration 230, Loss: 0.006386
+Epoch [42/10000], iteration 235, Loss: 0.006386
+Epoch [42/10000], iteration 240, Loss: 0.006385
+Epoch [42/10000], iteration 245, Loss: 0.006387
+Epoch [42/10000], iteration 250, Loss: 0.006386
+Epoch [42/10000], iteration 255, Loss: 0.006388
+Epoch [42/10000], iteration 260, Loss: 0.006386
+Epoch [42/10000], iteration 265, Loss: 0.006384
+Epoch [42/10000], iteration 270, Loss: 0.006390
+Epoch [42/10000], iteration 275, Loss: 0.006387
+Epoch [42/10000], iteration 280, Loss: 0.006387
+Epoch [42/10000], iteration 285, Loss: 0.006386
+Epoch [42/10000], iteration 290, Loss: 0.006384
+Epoch [42/10000], iteration 295, Loss: 0.006385
+Epoch [42/10000], iteration 300, Loss: 0.006388
+Epoch [42/10000], iteration 305, Loss: 0.006389
+Epoch [42/10000], iteration 310, Loss: 0.006389
+Epoch [42/10000], iteration 315, Loss: 0.006395
+Epoch [42/10000], iteration 320, Loss: 0.006395
+Epoch [42/10000], iteration 325, Loss: 0.006391
+Epoch 41 took 889.84 seconds
+validating....
+Epoch 42, validation loss is 0.0065, training loss is 0.0064
+Validation loss decreases from 0.0065 to 0.0065
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [43/10000], iteration 5, Loss: 0.006313
+Epoch [43/10000], iteration 10, Loss: 0.006212
+Epoch [43/10000], iteration 15, Loss: 0.006303
+Epoch [43/10000], iteration 20, Loss: 0.006353
+Epoch [43/10000], iteration 25, Loss: 0.006409
+Epoch [43/10000], iteration 30, Loss: 0.006390
+Epoch [43/10000], iteration 35, Loss: 0.006419
+Epoch [43/10000], iteration 40, Loss: 0.006404
+Epoch [43/10000], iteration 45, Loss: 0.006407
+Epoch [43/10000], iteration 50, Loss: 0.006393
+Epoch [43/10000], iteration 55, Loss: 0.006359
+Epoch [43/10000], iteration 60, Loss: 0.006371
+Epoch [43/10000], iteration 65, Loss: 0.006374
+Epoch [43/10000], iteration 70, Loss: 0.006382
+Epoch [43/10000], iteration 75, Loss: 0.006385
+Epoch [43/10000], iteration 80, Loss: 0.006386
+Epoch [43/10000], iteration 85, Loss: 0.006395
+Epoch [43/10000], iteration 90, Loss: 0.006408
+Epoch [43/10000], iteration 95, Loss: 0.006409
+Epoch [43/10000], iteration 100, Loss: 0.006420
+Epoch [43/10000], iteration 105, Loss: 0.006411
+Epoch [43/10000], iteration 110, Loss: 0.006421
+Epoch [43/10000], iteration 115, Loss: 0.006421
+Epoch [43/10000], iteration 120, Loss: 0.006414
+Epoch [43/10000], iteration 125, Loss: 0.006421
+Epoch [43/10000], iteration 130, Loss: 0.006408
+Epoch [43/10000], iteration 135, Loss: 0.006405
+Epoch [43/10000], iteration 140, Loss: 0.006387
+Epoch [43/10000], iteration 145, Loss: 0.006390
+Epoch [43/10000], iteration 150, Loss: 0.006383
+Epoch [43/10000], iteration 155, Loss: 0.006380
+Epoch [43/10000], iteration 160, Loss: 0.006382
+Epoch [43/10000], iteration 165, Loss: 0.006380
+Epoch [43/10000], iteration 170, Loss: 0.006378
+Epoch [43/10000], iteration 175, Loss: 0.006379
+Epoch [43/10000], iteration 180, Loss: 0.006373
+Epoch [43/10000], iteration 185, Loss: 0.006356
+Epoch [43/10000], iteration 190, Loss: 0.006348
+Epoch [43/10000], iteration 195, Loss: 0.006341
+Epoch [43/10000], iteration 200, Loss: 0.006334
+Epoch [43/10000], iteration 205, Loss: 0.006334
+Epoch [43/10000], iteration 210, Loss: 0.006337
+Epoch [43/10000], iteration 215, Loss: 0.006336
+Epoch [43/10000], iteration 220, Loss: 0.006339
+Epoch [43/10000], iteration 225, Loss: 0.006337
+Epoch [43/10000], iteration 230, Loss: 0.006332
+Epoch [43/10000], iteration 235, Loss: 0.006335
+Epoch [43/10000], iteration 240, Loss: 0.006332
+Epoch [43/10000], iteration 245, Loss: 0.006333
+Epoch [43/10000], iteration 250, Loss: 0.006326
+Epoch [43/10000], iteration 255, Loss: 0.006319
+Epoch [43/10000], iteration 260, Loss: 0.006323
+Epoch [43/10000], iteration 265, Loss: 0.006323
+Epoch [43/10000], iteration 270, Loss: 0.006320
+Epoch [43/10000], iteration 275, Loss: 0.006319
+Epoch [43/10000], iteration 280, Loss: 0.006316
+Epoch [43/10000], iteration 285, Loss: 0.006315
+Epoch [43/10000], iteration 290, Loss: 0.006314
+Epoch [43/10000], iteration 295, Loss: 0.006314
+Epoch [43/10000], iteration 300, Loss: 0.006317
+Epoch [43/10000], iteration 305, Loss: 0.006311
+Epoch [43/10000], iteration 310, Loss: 0.006316
+Epoch [43/10000], iteration 315, Loss: 0.006315
+Epoch [43/10000], iteration 320, Loss: 0.006318
+Epoch [43/10000], iteration 325, Loss: 0.006327
+Epoch 42 took 892.35 seconds
+validating....
+Epoch 43, validation loss is 0.0065, training loss is 0.0063
+Validation loss does not decrease from 0.0065, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [44/10000], iteration 5, Loss: 0.006201
+Epoch [44/10000], iteration 10, Loss: 0.006332
+Epoch [44/10000], iteration 15, Loss: 0.006297
+Epoch [44/10000], iteration 20, Loss: 0.006343
+Epoch [44/10000], iteration 25, Loss: 0.006373
+Epoch [44/10000], iteration 30, Loss: 0.006362
+Epoch [44/10000], iteration 35, Loss: 0.006331
+Epoch [44/10000], iteration 40, Loss: 0.006306
+Epoch [44/10000], iteration 45, Loss: 0.006328
+Epoch [44/10000], iteration 50, Loss: 0.006317
+Epoch [44/10000], iteration 55, Loss: 0.006308
+Epoch [44/10000], iteration 60, Loss: 0.006294
+Epoch [44/10000], iteration 65, Loss: 0.006291
+Epoch [44/10000], iteration 70, Loss: 0.006269
+Epoch [44/10000], iteration 75, Loss: 0.006280
+Epoch [44/10000], iteration 80, Loss: 0.006292
+Epoch [44/10000], iteration 85, Loss: 0.006289
+Epoch [44/10000], iteration 90, Loss: 0.006289
+Epoch [44/10000], iteration 95, Loss: 0.006296
+Epoch [44/10000], iteration 100, Loss: 0.006301
+Epoch [44/10000], iteration 105, Loss: 0.006312
+Epoch [44/10000], iteration 110, Loss: 0.006310
+Epoch [44/10000], iteration 115, Loss: 0.006307
+Epoch [44/10000], iteration 120, Loss: 0.006311
+Epoch [44/10000], iteration 125, Loss: 0.006317
+Epoch [44/10000], iteration 130, Loss: 0.006320
+Epoch [44/10000], iteration 135, Loss: 0.006315
+Epoch [44/10000], iteration 140, Loss: 0.006311
+Epoch [44/10000], iteration 145, Loss: 0.006318
+Epoch [44/10000], iteration 150, Loss: 0.006318
+Epoch [44/10000], iteration 155, Loss: 0.006323
+Epoch [44/10000], iteration 160, Loss: 0.006315
+Epoch [44/10000], iteration 165, Loss: 0.006306
+Epoch [44/10000], iteration 170, Loss: 0.006305
+Epoch [44/10000], iteration 175, Loss: 0.006303
+Epoch [44/10000], iteration 180, Loss: 0.006299
+Epoch [44/10000], iteration 185, Loss: 0.006292
+Epoch [44/10000], iteration 190, Loss: 0.006291
+Epoch [44/10000], iteration 195, Loss: 0.006292
+Epoch [44/10000], iteration 200, Loss: 0.006294
+Epoch [44/10000], iteration 205, Loss: 0.006306
+Epoch [44/10000], iteration 210, Loss: 0.006310
+Epoch [44/10000], iteration 215, Loss: 0.006310
+Epoch [44/10000], iteration 220, Loss: 0.006321
+Epoch [44/10000], iteration 225, Loss: 0.006320
+Epoch [44/10000], iteration 230, Loss: 0.006328
+Epoch [44/10000], iteration 235, Loss: 0.006320
+Epoch [44/10000], iteration 240, Loss: 0.006315
+Epoch [44/10000], iteration 245, Loss: 0.006318
+Epoch [44/10000], iteration 250, Loss: 0.006316
+Epoch [44/10000], iteration 255, Loss: 0.006320
+Epoch [44/10000], iteration 260, Loss: 0.006324
+Epoch [44/10000], iteration 265, Loss: 0.006322
+Epoch [44/10000], iteration 270, Loss: 0.006318
+Epoch [44/10000], iteration 275, Loss: 0.006317
+Epoch [44/10000], iteration 280, Loss: 0.006318
+Epoch [44/10000], iteration 285, Loss: 0.006316
+Epoch [44/10000], iteration 290, Loss: 0.006317
+Epoch [44/10000], iteration 295, Loss: 0.006317
+Epoch [44/10000], iteration 300, Loss: 0.006313
+Epoch [44/10000], iteration 305, Loss: 0.006306
+Epoch [44/10000], iteration 310, Loss: 0.006305
+Epoch [44/10000], iteration 315, Loss: 0.006304
+Epoch [44/10000], iteration 320, Loss: 0.006301
+Epoch [44/10000], iteration 325, Loss: 0.006302
+Epoch 43 took 887.84 seconds
+validating....
+Epoch 44, validation loss is 0.0064, training loss is 0.0063
+Validation loss decreases from 0.0065 to 0.0064
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [45/10000], iteration 5, Loss: 0.006109
+Epoch [45/10000], iteration 10, Loss: 0.006210
+Epoch [45/10000], iteration 15, Loss: 0.006299
+Epoch [45/10000], iteration 20, Loss: 0.006368
+Epoch [45/10000], iteration 25, Loss: 0.006408
+Epoch [45/10000], iteration 30, Loss: 0.006372
+Epoch [45/10000], iteration 35, Loss: 0.006413
+Epoch [45/10000], iteration 40, Loss: 0.006430
+Epoch [45/10000], iteration 45, Loss: 0.006433
+Epoch [45/10000], iteration 50, Loss: 0.006430
+Epoch [45/10000], iteration 55, Loss: 0.006414
+Epoch [45/10000], iteration 60, Loss: 0.006394
+Epoch [45/10000], iteration 65, Loss: 0.006387
+Epoch [45/10000], iteration 70, Loss: 0.006359
+Epoch [45/10000], iteration 75, Loss: 0.006345
+Epoch [45/10000], iteration 80, Loss: 0.006362
+Epoch [45/10000], iteration 85, Loss: 0.006330
+Epoch [45/10000], iteration 90, Loss: 0.006317
+Epoch [45/10000], iteration 95, Loss: 0.006307
+Epoch [45/10000], iteration 100, Loss: 0.006314
+Epoch [45/10000], iteration 105, Loss: 0.006307
+Epoch [45/10000], iteration 110, Loss: 0.006303
+Epoch [45/10000], iteration 115, Loss: 0.006296
+Epoch [45/10000], iteration 120, Loss: 0.006289
+Epoch [45/10000], iteration 125, Loss: 0.006281
+Epoch [45/10000], iteration 130, Loss: 0.006279
+Epoch [45/10000], iteration 135, Loss: 0.006271
+Epoch [45/10000], iteration 140, Loss: 0.006272
+Epoch [45/10000], iteration 145, Loss: 0.006272
+Epoch [45/10000], iteration 150, Loss: 0.006267
+Epoch [45/10000], iteration 155, Loss: 0.006262
+Epoch [45/10000], iteration 160, Loss: 0.006272
+Epoch [45/10000], iteration 165, Loss: 0.006264
+Epoch [45/10000], iteration 170, Loss: 0.006267
+Epoch [45/10000], iteration 175, Loss: 0.006263
+Epoch [45/10000], iteration 180, Loss: 0.006264
+Epoch [45/10000], iteration 185, Loss: 0.006261
+Epoch [45/10000], iteration 190, Loss: 0.006269
+Epoch [45/10000], iteration 195, Loss: 0.006274
+Epoch [45/10000], iteration 200, Loss: 0.006275
+Epoch [45/10000], iteration 205, Loss: 0.006279
+Epoch [45/10000], iteration 210, Loss: 0.006284
+Epoch [45/10000], iteration 215, Loss: 0.006284
+Epoch [45/10000], iteration 220, Loss: 0.006285
+Epoch [45/10000], iteration 225, Loss: 0.006280
+Epoch [45/10000], iteration 230, Loss: 0.006280
+Epoch [45/10000], iteration 235, Loss: 0.006284
+Epoch [45/10000], iteration 240, Loss: 0.006290
+Epoch [45/10000], iteration 245, Loss: 0.006290
+Epoch [45/10000], iteration 250, Loss: 0.006293
+Epoch [45/10000], iteration 255, Loss: 0.006299
+Epoch [45/10000], iteration 260, Loss: 0.006301
+Epoch [45/10000], iteration 265, Loss: 0.006300
+Epoch [45/10000], iteration 270, Loss: 0.006304
+Epoch [45/10000], iteration 275, Loss: 0.006310
+Epoch [45/10000], iteration 280, Loss: 0.006311
+Epoch [45/10000], iteration 285, Loss: 0.006307
+Epoch [45/10000], iteration 290, Loss: 0.006310
+Epoch [45/10000], iteration 295, Loss: 0.006314
+Epoch [45/10000], iteration 300, Loss: 0.006314
+Epoch [45/10000], iteration 305, Loss: 0.006325
+Epoch [45/10000], iteration 310, Loss: 0.006324
+Epoch [45/10000], iteration 315, Loss: 0.006323
+Epoch [45/10000], iteration 320, Loss: 0.006325
+Epoch [45/10000], iteration 325, Loss: 0.006323
+Epoch 44 took 893.69 seconds
+validating....
+Epoch 45, validation loss is 0.0064, training loss is 0.0063
+Validation loss does not decrease from 0.0064, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [46/10000], iteration 5, Loss: 0.006292
+Epoch [46/10000], iteration 10, Loss: 0.006278
+Epoch [46/10000], iteration 15, Loss: 0.006363
+Epoch [46/10000], iteration 20, Loss: 0.006287
+Epoch [46/10000], iteration 25, Loss: 0.006336
+Epoch [46/10000], iteration 30, Loss: 0.006391
+Epoch [46/10000], iteration 35, Loss: 0.006349
+Epoch [46/10000], iteration 40, Loss: 0.006377
+Epoch [46/10000], iteration 45, Loss: 0.006391
+Epoch [46/10000], iteration 50, Loss: 0.006389
+Epoch [46/10000], iteration 55, Loss: 0.006353
+Epoch [46/10000], iteration 60, Loss: 0.006338
+Epoch [46/10000], iteration 65, Loss: 0.006364
+Epoch [46/10000], iteration 70, Loss: 0.006355
+Epoch [46/10000], iteration 75, Loss: 0.006383
+Epoch [46/10000], iteration 80, Loss: 0.006426
+Epoch [46/10000], iteration 85, Loss: 0.006434
+Epoch [46/10000], iteration 90, Loss: 0.006422
+Epoch [46/10000], iteration 95, Loss: 0.006407
+Epoch [46/10000], iteration 100, Loss: 0.006397
+Epoch [46/10000], iteration 105, Loss: 0.006406
+Epoch [46/10000], iteration 110, Loss: 0.006392
+Epoch [46/10000], iteration 115, Loss: 0.006385
+Epoch [46/10000], iteration 120, Loss: 0.006376
+Epoch [46/10000], iteration 125, Loss: 0.006369
+Epoch [46/10000], iteration 130, Loss: 0.006371
+Epoch [46/10000], iteration 135, Loss: 0.006374
+Epoch [46/10000], iteration 140, Loss: 0.006366
+Epoch [46/10000], iteration 145, Loss: 0.006360
+Epoch [46/10000], iteration 150, Loss: 0.006354
+Epoch [46/10000], iteration 155, Loss: 0.006354
+Epoch [46/10000], iteration 160, Loss: 0.006347
+Epoch [46/10000], iteration 165, Loss: 0.006344
+Epoch [46/10000], iteration 170, Loss: 0.006350
+Epoch [46/10000], iteration 175, Loss: 0.006370
+Epoch [46/10000], iteration 180, Loss: 0.006375
+Epoch [46/10000], iteration 185, Loss: 0.006391
+Epoch [46/10000], iteration 190, Loss: 0.006392
+Epoch [46/10000], iteration 195, Loss: 0.006396
+Epoch [46/10000], iteration 200, Loss: 0.006397
+Epoch [46/10000], iteration 205, Loss: 0.006397
+Epoch [46/10000], iteration 210, Loss: 0.006396
+Epoch [46/10000], iteration 215, Loss: 0.006390
+Epoch [46/10000], iteration 220, Loss: 0.006395
+Epoch [46/10000], iteration 225, Loss: 0.006398
+Epoch [46/10000], iteration 230, Loss: 0.006399
+Epoch [46/10000], iteration 235, Loss: 0.006389
+Epoch [46/10000], iteration 240, Loss: 0.006386
+Epoch [46/10000], iteration 245, Loss: 0.006379
+Epoch [46/10000], iteration 250, Loss: 0.006385
+Epoch [46/10000], iteration 255, Loss: 0.006381
+Epoch [46/10000], iteration 260, Loss: 0.006378
+Epoch [46/10000], iteration 265, Loss: 0.006375
+Epoch [46/10000], iteration 270, Loss: 0.006369
+Epoch [46/10000], iteration 275, Loss: 0.006368
+Epoch [46/10000], iteration 280, Loss: 0.006371
+Epoch [46/10000], iteration 285, Loss: 0.006371
+Epoch [46/10000], iteration 290, Loss: 0.006369
+Epoch [46/10000], iteration 295, Loss: 0.006370
+Epoch [46/10000], iteration 300, Loss: 0.006369
+Epoch [46/10000], iteration 305, Loss: 0.006368
+Epoch [46/10000], iteration 310, Loss: 0.006366
+Epoch [46/10000], iteration 315, Loss: 0.006366
+Epoch [46/10000], iteration 320, Loss: 0.006364
+Epoch [46/10000], iteration 325, Loss: 0.006358
+Epoch 45 took 890.68 seconds
+validating....
+Epoch 46, validation loss is 0.0064, training loss is 0.0064
+Validation loss decreases from 0.0064 to 0.0064
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [47/10000], iteration 5, Loss: 0.006096
+Epoch [47/10000], iteration 10, Loss: 0.006283
+Epoch [47/10000], iteration 15, Loss: 0.006285
+Epoch [47/10000], iteration 20, Loss: 0.006274
+Epoch [47/10000], iteration 25, Loss: 0.006318
+Epoch [47/10000], iteration 30, Loss: 0.006303
+Epoch [47/10000], iteration 35, Loss: 0.006275
+Epoch [47/10000], iteration 40, Loss: 0.006282
+Epoch [47/10000], iteration 45, Loss: 0.006266
+Epoch [47/10000], iteration 50, Loss: 0.006257
+Epoch [47/10000], iteration 55, Loss: 0.006269
+Epoch [47/10000], iteration 60, Loss: 0.006291
+Epoch [47/10000], iteration 65, Loss: 0.006295
+Epoch [47/10000], iteration 70, Loss: 0.006317
+Epoch [47/10000], iteration 75, Loss: 0.006322
+Epoch [47/10000], iteration 80, Loss: 0.006304
+Epoch [47/10000], iteration 85, Loss: 0.006303
+Epoch [47/10000], iteration 90, Loss: 0.006317
+Epoch [47/10000], iteration 95, Loss: 0.006315
+Epoch [47/10000], iteration 100, Loss: 0.006321
+Epoch [47/10000], iteration 105, Loss: 0.006318
+Epoch [47/10000], iteration 110, Loss: 0.006324
+Epoch [47/10000], iteration 115, Loss: 0.006336
+Epoch [47/10000], iteration 120, Loss: 0.006322
+Epoch [47/10000], iteration 125, Loss: 0.006303
+Epoch [47/10000], iteration 130, Loss: 0.006303
+Epoch [47/10000], iteration 135, Loss: 0.006293
+Epoch [47/10000], iteration 140, Loss: 0.006305
+Epoch [47/10000], iteration 145, Loss: 0.006299
+Epoch [47/10000], iteration 150, Loss: 0.006310
+Epoch [47/10000], iteration 155, Loss: 0.006306
+Epoch [47/10000], iteration 160, Loss: 0.006303
+Epoch [47/10000], iteration 165, Loss: 0.006297
+Epoch [47/10000], iteration 170, Loss: 0.006290
+Epoch [47/10000], iteration 175, Loss: 0.006279
+Epoch [47/10000], iteration 180, Loss: 0.006281
+Epoch [47/10000], iteration 185, Loss: 0.006283
+Epoch [47/10000], iteration 190, Loss: 0.006277
+Epoch [47/10000], iteration 195, Loss: 0.006281
+Epoch [47/10000], iteration 200, Loss: 0.006280
+Epoch [47/10000], iteration 205, Loss: 0.006278
+Epoch [47/10000], iteration 210, Loss: 0.006272
+Epoch [47/10000], iteration 215, Loss: 0.006269
+Epoch [47/10000], iteration 220, Loss: 0.006264
+Epoch [47/10000], iteration 225, Loss: 0.006269
+Epoch [47/10000], iteration 230, Loss: 0.006258
+Epoch [47/10000], iteration 235, Loss: 0.006253
+Epoch [47/10000], iteration 240, Loss: 0.006251
+Epoch [47/10000], iteration 245, Loss: 0.006252
+Epoch [47/10000], iteration 250, Loss: 0.006257
+Epoch [47/10000], iteration 255, Loss: 0.006261
+Epoch [47/10000], iteration 260, Loss: 0.006266
+Epoch [47/10000], iteration 265, Loss: 0.006271
+Epoch [47/10000], iteration 270, Loss: 0.006279
+Epoch [47/10000], iteration 275, Loss: 0.006278
+Epoch [47/10000], iteration 280, Loss: 0.006279
+Epoch [47/10000], iteration 285, Loss: 0.006281
+Epoch [47/10000], iteration 290, Loss: 0.006281
+Epoch [47/10000], iteration 295, Loss: 0.006285
+Epoch [47/10000], iteration 300, Loss: 0.006282
+Epoch [47/10000], iteration 305, Loss: 0.006281
+Epoch [47/10000], iteration 310, Loss: 0.006278
+Epoch [47/10000], iteration 315, Loss: 0.006272
+Epoch [47/10000], iteration 320, Loss: 0.006271
+Epoch [47/10000], iteration 325, Loss: 0.006270
+Epoch 46 took 894.76 seconds
+validating....
+Epoch 47, validation loss is 0.0064, training loss is 0.0063
+Validation loss decreases from 0.0064 to 0.0064
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [48/10000], iteration 5, Loss: 0.006169
+Epoch [48/10000], iteration 10, Loss: 0.005986
+Epoch [48/10000], iteration 15, Loss: 0.006134
+Epoch [48/10000], iteration 20, Loss: 0.006145
+Epoch [48/10000], iteration 25, Loss: 0.006131
+Epoch [48/10000], iteration 30, Loss: 0.006159
+Epoch [48/10000], iteration 35, Loss: 0.006187
+Epoch [48/10000], iteration 40, Loss: 0.006194
+Epoch [48/10000], iteration 45, Loss: 0.006175
+Epoch [48/10000], iteration 50, Loss: 0.006170
+Epoch [48/10000], iteration 55, Loss: 0.006184
+Epoch [48/10000], iteration 60, Loss: 0.006203
+Epoch [48/10000], iteration 65, Loss: 0.006195
+Epoch [48/10000], iteration 70, Loss: 0.006202
+Epoch [48/10000], iteration 75, Loss: 0.006212
+Epoch [48/10000], iteration 80, Loss: 0.006195
+Epoch [48/10000], iteration 85, Loss: 0.006176
+Epoch [48/10000], iteration 90, Loss: 0.006180
+Epoch [48/10000], iteration 95, Loss: 0.006182
+Epoch [48/10000], iteration 100, Loss: 0.006191
+Epoch [48/10000], iteration 105, Loss: 0.006188
+Epoch [48/10000], iteration 110, Loss: 0.006194
+Epoch [48/10000], iteration 115, Loss: 0.006189
+Epoch [48/10000], iteration 120, Loss: 0.006195
+Epoch [48/10000], iteration 125, Loss: 0.006186
+Epoch [48/10000], iteration 130, Loss: 0.006187
+Epoch [48/10000], iteration 135, Loss: 0.006198
+Epoch [48/10000], iteration 140, Loss: 0.006202
+Epoch [48/10000], iteration 145, Loss: 0.006204
+Epoch [48/10000], iteration 150, Loss: 0.006200
+Epoch [48/10000], iteration 155, Loss: 0.006209
+Epoch [48/10000], iteration 160, Loss: 0.006219
+Epoch [48/10000], iteration 165, Loss: 0.006214
+Epoch [48/10000], iteration 170, Loss: 0.006222
+Epoch [48/10000], iteration 175, Loss: 0.006217
+Epoch [48/10000], iteration 180, Loss: 0.006210
+Epoch [48/10000], iteration 185, Loss: 0.006216
+Epoch [48/10000], iteration 190, Loss: 0.006222
+Epoch [48/10000], iteration 195, Loss: 0.006233
+Epoch [48/10000], iteration 200, Loss: 0.006226
+Epoch [48/10000], iteration 205, Loss: 0.006236
+Epoch [48/10000], iteration 210, Loss: 0.006240
+Epoch [48/10000], iteration 215, Loss: 0.006244
+Epoch [48/10000], iteration 220, Loss: 0.006254
+Epoch [48/10000], iteration 225, Loss: 0.006258
+Epoch [48/10000], iteration 230, Loss: 0.006257
+Epoch [48/10000], iteration 235, Loss: 0.006254
+Epoch [48/10000], iteration 240, Loss: 0.006254
+Epoch [48/10000], iteration 245, Loss: 0.006252
+Epoch [48/10000], iteration 250, Loss: 0.006250
+Epoch [48/10000], iteration 255, Loss: 0.006246
+Epoch [48/10000], iteration 260, Loss: 0.006239
+Epoch [48/10000], iteration 265, Loss: 0.006239
+Epoch [48/10000], iteration 270, Loss: 0.006239
+Epoch [48/10000], iteration 275, Loss: 0.006240
+Epoch [48/10000], iteration 280, Loss: 0.006238
+Epoch [48/10000], iteration 285, Loss: 0.006246
+Epoch [48/10000], iteration 290, Loss: 0.006244
+Epoch [48/10000], iteration 295, Loss: 0.006242
+Epoch [48/10000], iteration 300, Loss: 0.006237
+Epoch [48/10000], iteration 305, Loss: 0.006238
+Epoch [48/10000], iteration 310, Loss: 0.006239
+Epoch [48/10000], iteration 315, Loss: 0.006237
+Epoch [48/10000], iteration 320, Loss: 0.006235
+Epoch [48/10000], iteration 325, Loss: 0.006232
+Epoch 47 took 895.30 seconds
+validating....
+Epoch 48, validation loss is 0.0064, training loss is 0.0062
+Validation loss does not decrease from 0.0064, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [49/10000], iteration 5, Loss: 0.006482
+Epoch [49/10000], iteration 10, Loss: 0.006481
+Epoch [49/10000], iteration 15, Loss: 0.006428
+Epoch [49/10000], iteration 20, Loss: 0.006455
+Epoch [49/10000], iteration 25, Loss: 0.006392
+Epoch [49/10000], iteration 30, Loss: 0.006346
+Epoch [49/10000], iteration 35, Loss: 0.006405
+Epoch [49/10000], iteration 40, Loss: 0.006375
+Epoch [49/10000], iteration 45, Loss: 0.006354
+Epoch [49/10000], iteration 50, Loss: 0.006349
+Epoch [49/10000], iteration 55, Loss: 0.006356
+Epoch [49/10000], iteration 60, Loss: 0.006350
+Epoch [49/10000], iteration 65, Loss: 0.006363
+Epoch [49/10000], iteration 70, Loss: 0.006368
+Epoch [49/10000], iteration 75, Loss: 0.006372
+Epoch [49/10000], iteration 80, Loss: 0.006374
+Epoch [49/10000], iteration 85, Loss: 0.006361
+Epoch [49/10000], iteration 90, Loss: 0.006368
+Epoch [49/10000], iteration 95, Loss: 0.006382
+Epoch [49/10000], iteration 100, Loss: 0.006365
+Epoch [49/10000], iteration 105, Loss: 0.006364
+Epoch [49/10000], iteration 110, Loss: 0.006368
+Epoch [49/10000], iteration 115, Loss: 0.006364
+Epoch [49/10000], iteration 120, Loss: 0.006363
+Epoch [49/10000], iteration 125, Loss: 0.006352
+Epoch [49/10000], iteration 130, Loss: 0.006351
+Epoch [49/10000], iteration 135, Loss: 0.006344
+Epoch [49/10000], iteration 140, Loss: 0.006339
+Epoch [49/10000], iteration 145, Loss: 0.006323
+Epoch [49/10000], iteration 150, Loss: 0.006323
+Epoch [49/10000], iteration 155, Loss: 0.006320
+Epoch [49/10000], iteration 160, Loss: 0.006324
+Epoch [49/10000], iteration 165, Loss: 0.006322
+Epoch [49/10000], iteration 170, Loss: 0.006311
+Epoch [49/10000], iteration 175, Loss: 0.006306
+Epoch [49/10000], iteration 180, Loss: 0.006305
+Epoch [49/10000], iteration 185, Loss: 0.006304
+Epoch [49/10000], iteration 190, Loss: 0.006309
+Epoch [49/10000], iteration 195, Loss: 0.006303
+Epoch [49/10000], iteration 200, Loss: 0.006299
+Epoch [49/10000], iteration 205, Loss: 0.006293
+Epoch [49/10000], iteration 210, Loss: 0.006290
+Epoch [49/10000], iteration 215, Loss: 0.006284
+Epoch [49/10000], iteration 220, Loss: 0.006278
+Epoch [49/10000], iteration 225, Loss: 0.006272
+Epoch [49/10000], iteration 230, Loss: 0.006271
+Epoch [49/10000], iteration 235, Loss: 0.006269
+Epoch [49/10000], iteration 240, Loss: 0.006262
+Epoch [49/10000], iteration 245, Loss: 0.006260
+Epoch [49/10000], iteration 250, Loss: 0.006258
+Epoch [49/10000], iteration 255, Loss: 0.006259
+Epoch [49/10000], iteration 260, Loss: 0.006256
+Epoch [49/10000], iteration 265, Loss: 0.006255
+Epoch [49/10000], iteration 270, Loss: 0.006256
+Epoch [49/10000], iteration 275, Loss: 0.006256
+Epoch [49/10000], iteration 280, Loss: 0.006257
+Epoch [49/10000], iteration 285, Loss: 0.006257
+Epoch [49/10000], iteration 290, Loss: 0.006261
+Epoch [49/10000], iteration 295, Loss: 0.006258
+Epoch [49/10000], iteration 300, Loss: 0.006255
+Epoch [49/10000], iteration 305, Loss: 0.006249
+Epoch [49/10000], iteration 310, Loss: 0.006244
+Epoch [49/10000], iteration 315, Loss: 0.006239
+Epoch [49/10000], iteration 320, Loss: 0.006239
+Epoch [49/10000], iteration 325, Loss: 0.006235
+Epoch 48 took 893.52 seconds
+validating....
+Epoch 49, validation loss is 0.0063, training loss is 0.0062
+Validation loss decreases from 0.0064 to 0.0063
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [50/10000], iteration 5, Loss: 0.006192
+Epoch [50/10000], iteration 10, Loss: 0.006227
+Epoch [50/10000], iteration 15, Loss: 0.006271
+Epoch [50/10000], iteration 20, Loss: 0.006253
+Epoch [50/10000], iteration 25, Loss: 0.006193
+Epoch [50/10000], iteration 30, Loss: 0.006182
+Epoch [50/10000], iteration 35, Loss: 0.006186
+Epoch [50/10000], iteration 40, Loss: 0.006177
+Epoch [50/10000], iteration 45, Loss: 0.006169
+Epoch [50/10000], iteration 50, Loss: 0.006177
+Epoch [50/10000], iteration 55, Loss: 0.006173
+Epoch [50/10000], iteration 60, Loss: 0.006174
+Epoch [50/10000], iteration 65, Loss: 0.006190
+Epoch [50/10000], iteration 70, Loss: 0.006175
+Epoch [50/10000], iteration 75, Loss: 0.006181
+Epoch [50/10000], iteration 80, Loss: 0.006149
+Epoch [50/10000], iteration 85, Loss: 0.006136
+Epoch [50/10000], iteration 90, Loss: 0.006133
+Epoch [50/10000], iteration 95, Loss: 0.006125
+Epoch [50/10000], iteration 100, Loss: 0.006115
+Epoch [50/10000], iteration 105, Loss: 0.006121
+Epoch [50/10000], iteration 110, Loss: 0.006129
+Epoch [50/10000], iteration 115, Loss: 0.006139
+Epoch [50/10000], iteration 120, Loss: 0.006142
+Epoch [50/10000], iteration 125, Loss: 0.006153
+Epoch [50/10000], iteration 130, Loss: 0.006149
+Epoch [50/10000], iteration 135, Loss: 0.006145
+Epoch [50/10000], iteration 140, Loss: 0.006153
+Epoch [50/10000], iteration 145, Loss: 0.006154
+Epoch [50/10000], iteration 150, Loss: 0.006158
+Epoch [50/10000], iteration 155, Loss: 0.006165
+Epoch [50/10000], iteration 160, Loss: 0.006167
+Epoch [50/10000], iteration 165, Loss: 0.006166
+Epoch [50/10000], iteration 170, Loss: 0.006166
+Epoch [50/10000], iteration 175, Loss: 0.006163
+Epoch [50/10000], iteration 180, Loss: 0.006165
+Epoch [50/10000], iteration 185, Loss: 0.006167
+Epoch [50/10000], iteration 190, Loss: 0.006173
+Epoch [50/10000], iteration 195, Loss: 0.006173
+Epoch [50/10000], iteration 200, Loss: 0.006178
+Epoch [50/10000], iteration 205, Loss: 0.006177
+Epoch [50/10000], iteration 210, Loss: 0.006171
+Epoch [50/10000], iteration 215, Loss: 0.006168
+Epoch [50/10000], iteration 220, Loss: 0.006167
+Epoch [50/10000], iteration 225, Loss: 0.006166
+Epoch [50/10000], iteration 230, Loss: 0.006174
+Epoch [50/10000], iteration 235, Loss: 0.006173
+Epoch [50/10000], iteration 240, Loss: 0.006172
+Epoch [50/10000], iteration 245, Loss: 0.006171
+Epoch [50/10000], iteration 250, Loss: 0.006172
+Epoch [50/10000], iteration 255, Loss: 0.006178
+Epoch [50/10000], iteration 260, Loss: 0.006188
+Epoch [50/10000], iteration 265, Loss: 0.006182
+Epoch [50/10000], iteration 270, Loss: 0.006177
+Epoch [50/10000], iteration 275, Loss: 0.006183
+Epoch [50/10000], iteration 280, Loss: 0.006184
+Epoch [50/10000], iteration 285, Loss: 0.006188
+Epoch [50/10000], iteration 290, Loss: 0.006187
+Epoch [50/10000], iteration 295, Loss: 0.006185
+Epoch [50/10000], iteration 300, Loss: 0.006180
+Epoch [50/10000], iteration 305, Loss: 0.006188
+Epoch [50/10000], iteration 310, Loss: 0.006191
+Epoch [50/10000], iteration 315, Loss: 0.006191
+Epoch [50/10000], iteration 320, Loss: 0.006192
+Epoch [50/10000], iteration 325, Loss: 0.006191
+Epoch 49 took 888.47 seconds
+validating....
+Epoch 50, validation loss is 0.0063, training loss is 0.0062
+Validation loss does not decrease from 0.0063, num_epoch_no_improvement 0
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [51/10000], iteration 5, Loss: 0.006127
+Epoch [51/10000], iteration 10, Loss: 0.006096
+Epoch [51/10000], iteration 15, Loss: 0.006170
+Epoch [51/10000], iteration 20, Loss: 0.006123
+Epoch [51/10000], iteration 25, Loss: 0.006104
+Epoch [51/10000], iteration 30, Loss: 0.006059
+Epoch [51/10000], iteration 35, Loss: 0.006046
+Epoch [51/10000], iteration 40, Loss: 0.006048
+Epoch [51/10000], iteration 45, Loss: 0.006046
+Epoch [51/10000], iteration 50, Loss: 0.006055
+Epoch [51/10000], iteration 55, Loss: 0.006068
+Epoch [51/10000], iteration 60, Loss: 0.006060
+Epoch [51/10000], iteration 65, Loss: 0.006071
+Epoch [51/10000], iteration 70, Loss: 0.006070
+Epoch [51/10000], iteration 75, Loss: 0.006067
+Epoch [51/10000], iteration 80, Loss: 0.006070
+Epoch [51/10000], iteration 85, Loss: 0.006066
+Epoch [51/10000], iteration 90, Loss: 0.006055
+Epoch [51/10000], iteration 95, Loss: 0.006065
+Epoch [51/10000], iteration 100, Loss: 0.006068
+Epoch [51/10000], iteration 105, Loss: 0.006059
+Epoch [51/10000], iteration 110, Loss: 0.006071
+Epoch [51/10000], iteration 115, Loss: 0.006078
+Epoch [51/10000], iteration 120, Loss: 0.006087
+Epoch [51/10000], iteration 125, Loss: 0.006099
+Epoch [51/10000], iteration 130, Loss: 0.006109
+Epoch [51/10000], iteration 135, Loss: 0.006113
+Epoch [51/10000], iteration 140, Loss: 0.006108
+Epoch [51/10000], iteration 145, Loss: 0.006104
+Epoch [51/10000], iteration 150, Loss: 0.006100
+Epoch [51/10000], iteration 155, Loss: 0.006099
+Epoch [51/10000], iteration 160, Loss: 0.006103
+Epoch [51/10000], iteration 165, Loss: 0.006113
+Epoch [51/10000], iteration 170, Loss: 0.006118
+Epoch [51/10000], iteration 175, Loss: 0.006120
+Epoch [51/10000], iteration 180, Loss: 0.006121
+Epoch [51/10000], iteration 185, Loss: 0.006122
+Epoch [51/10000], iteration 190, Loss: 0.006125
+Epoch [51/10000], iteration 195, Loss: 0.006120
+Epoch [51/10000], iteration 200, Loss: 0.006121
+Epoch [51/10000], iteration 205, Loss: 0.006134
+Epoch [51/10000], iteration 210, Loss: 0.006139
+Epoch [51/10000], iteration 215, Loss: 0.006138
+Epoch [51/10000], iteration 220, Loss: 0.006141
+Epoch [51/10000], iteration 225, Loss: 0.006136
+Epoch [51/10000], iteration 230, Loss: 0.006135
+Epoch [51/10000], iteration 235, Loss: 0.006133
+Epoch [51/10000], iteration 240, Loss: 0.006125
+Epoch [51/10000], iteration 245, Loss: 0.006123
+Epoch [51/10000], iteration 250, Loss: 0.006124
+Epoch [51/10000], iteration 255, Loss: 0.006131
+Epoch [51/10000], iteration 260, Loss: 0.006128
+Epoch [51/10000], iteration 265, Loss: 0.006129
+Epoch [51/10000], iteration 270, Loss: 0.006126
+Epoch [51/10000], iteration 275, Loss: 0.006132
+Epoch [51/10000], iteration 280, Loss: 0.006130
+Epoch [51/10000], iteration 285, Loss: 0.006132
+Epoch [51/10000], iteration 290, Loss: 0.006134
+Epoch [51/10000], iteration 295, Loss: 0.006139
+Epoch [51/10000], iteration 300, Loss: 0.006136
+Epoch [51/10000], iteration 305, Loss: 0.006136
+Epoch [51/10000], iteration 310, Loss: 0.006138
+Epoch [51/10000], iteration 315, Loss: 0.006135
+Epoch [51/10000], iteration 320, Loss: 0.006133
+Epoch [51/10000], iteration 325, Loss: 0.006128
+Epoch 50 took 894.48 seconds
+validating....
+Epoch 51, validation loss is 0.0063, training loss is 0.0061
+Validation loss decreases from 0.0063 to 0.0063
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Best.pt
+Saving model  /home/gridsan/nchutisilp/datasets/ModelGenesisOutputs/ModelGenesisNNUNetPretrainingV2_noNorm_correct_orientation/Genesis_OCT_Latest.pt
+Epoch [52/10000], iteration 5, Loss: 0.006224
+Epoch [52/10000], iteration 10, Loss: 0.006025
+Epoch [52/10000], iteration 15, Loss: 0.006114
+Epoch [52/10000], iteration 20, Loss: 0.006135
+Epoch [52/10000], iteration 25, Loss: 0.006103
+Epoch [52/10000], iteration 30, Loss: 0.006105
+Epoch [52/10000], iteration 35, Loss: 0.006118
+Epoch [52/10000], iteration 40, Loss: 0.006147
+Epoch [52/10000], iteration 45, Loss: 0.006134
+Epoch [52/10000], iteration 50, Loss: 0.006127
+Epoch [52/10000], iteration 55, Loss: 0.006081
+Epoch [52/10000], iteration 60, Loss: 0.006088
+Epoch [52/10000], iteration 65, Loss: 0.006124
+Epoch [52/10000], iteration 70, Loss: 0.006130
+Epoch [52/10000], iteration 75, Loss: 0.006131
+Epoch [52/10000], iteration 80, Loss: 0.006106
+Epoch [52/10000], iteration 85, Loss: 0.006097
+Epoch [52/10000], iteration 90, Loss: 0.006096
+Epoch [52/10000], iteration 95, Loss: 0.006089
+Epoch [52/10000], iteration 100, Loss: 0.006079
+Epoch [52/10000], iteration 105, Loss: 0.006070
+Epoch [52/10000], iteration 110, Loss: 0.006062
+Epoch [52/10000], iteration 115, Loss: 0.006076
+Epoch [52/10000], iteration 120, Loss: 0.006087
+Epoch [52/10000], iteration 125, Loss: 0.006084
+Epoch [52/10000], iteration 130, Loss: 0.006077
+Epoch [52/10000], iteration 135, Loss: 0.006071
+Epoch [52/10000], iteration 140, Loss: 0.006078
+Epoch [52/10000], iteration 145, Loss: 0.006081
+Epoch [52/10000], iteration 150, Loss: 0.006085
+Epoch [52/10000], iteration 155, Loss: 0.006084
+Epoch [52/10000], iteration 160, Loss: 0.006082
+Epoch [52/10000], iteration 165, Loss: 0.006091
+Epoch [52/10000], iteration 170, Loss: 0.006090
+Epoch [52/10000], iteration 175, Loss: 0.006098
+Epoch [52/10000], iteration 180, Loss: 0.006100

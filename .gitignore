@@ -21,3 +21,4 @@ datasets/**/*
 generated_cubes/
 pretrained_weights/
 notebooks/predictions/
+**/.ipynb_checkpoints/

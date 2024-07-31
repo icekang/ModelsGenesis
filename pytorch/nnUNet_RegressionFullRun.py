@@ -24,6 +24,7 @@ def main(config=None):
     val_loader = dm.val_dataloader()
 
     # print(model) # 19073665 # 30785994 
+    config["data"]["normalize_params"] = dm.normalize_params
 
 
     # Model

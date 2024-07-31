@@ -7,7 +7,6 @@ warnings.filterwarnings('ignore')
 import numpy as np
 from torch import nn
 import torch
-from torchsummary import summary
 import sys
 from utils import *
 import unet3d
@@ -73,7 +72,6 @@ model.to(device)
 
 print("Total CUDA devices: ", torch.cuda.device_count())
 
-# summary(model, (1,conf.input_rows,conf.input_cols,conf.input_deps), batch_size=-1)
 scaler = torch.cuda.amp.GradScaler()
 criterion = nn.MSELoss()
 
