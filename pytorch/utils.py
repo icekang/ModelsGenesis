@@ -230,7 +230,7 @@ class PairDataGenerator(Dataset):
                 # Outpainting
                 x = image_out_painting(x)
 
-        return torch.Tensor(x.copy()), torch.Tensor(y.copy())
+        return torch.Tensor(x.copy()).permute((0, 3, 2, 1)), torch.Tensor(y.copy()).permute((0, 3, 2, 1))
 
 
 def generate_pair(img, batch_size, config, status="test"):
@@ -733,6 +733,8 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
         self.num_workers = self.config['data']['num_workers']
         self.batch_size = self.config['data']['batch_size']
 
+        self.normalize_params = dict()
+
     def setup(self, stage: str) -> None:
         """Define the split and data before putting them into dataloader
 
@@ -763,7 +765,10 @@ class KFoldNNUNetTabularDataModule(L.LightningDataModule):
             # Get the train split to normalize the target
             train_subject_ids, _ = self._getSplit('fit', outputModalityDf=outputModalityDf)
             trainDF = outputModalityDf[outputModalityDf['USUBJID'].isin(train_subject_ids)]
-            outputModalityDf[self.outputMetrics] = (outputModalityDf[self.outputMetrics] - trainDF[self.outputMetrics].min(axis=0)) / (trainDF[self.outputMetrics].max(axis=0) - trainDF[self.outputMetrics].min(axis=0))
+            self.normalize_params['min'] = trainDF[self.outputMetrics].min(axis=0)[0]
+            self.normalize_params['max'] = trainDF[self.outputMetrics].max(axis=0)[0]
+            print('Normalization parameters:', self.normalize_params)
+            outputModalityDf[self.outputMetrics] = (outputModalityDf[self.outputMetrics] - self.normalize_params['min']) / (self.normalize_params['max'] - self.normalize_params['min'])
         
         train_subject_ids, val_subject_ids = self._getSplit(stage, outputModalityDf=outputModalityDf)
 
@@ -1021,6 +1026,8 @@ class nnUNetRegressionClassification(L.LightningModule):
 
         y_hat = self.encoder(x)
         y_hat = self.head(y_hat[-1])
+        if self.config['data']['target_normalization'] == 'minmax':
+            y_hat = y_hat * (self.config["data"]["normalize_params"]['max'] - self.config["data"]["normalize_params"]['min']) + self.config["data"]["normalize_params"]['min']
         loss = self.criterion(y_hat, y)
 
         for i, metric in enumerate(self.config['data']['output_metrics']):
@@ -1038,8 +1045,9 @@ class nnUNetRegressionClassification(L.LightningModule):
         if self.config['model']['head']['task'] == 'regression':
             self.log('val_y_hat1', y_hat[0].detach().cpu().item(), on_step=True, on_epoch=False)
             self.log('val_y1', y[0].cpu().item(), on_step=True, on_epoch=False)
-            self.log('val_y_hat2', y_hat[1].detach().cpu().item(), on_step=True, on_epoch=False)
-            self.log('val_y2', y[1].cpu().item(), on_step=True, on_epoch=False)
+            if len(y_hat) > 1:
+                self.log('val_y_hat2', y_hat[1].detach().cpu().item(), on_step=True, on_epoch=False)
+                self.log('val_y2', y[1].cpu().item(), on_step=True, on_epoch=False)
             #TODO: save plt.fig and plot with wandb Image
             self.logger.experiment.log(
                 {'val_scatter_plot': wandb.plot.scatter(
@@ -1067,6 +1075,8 @@ class nnUNetRegressionClassification(L.LightningModule):
 
         y_hat = self.encoder(x)
         y_hat = self.head(y_hat[-1])
+        if self.config['data']['target_normalization'] == 'minmax':
+            y_hat = y_hat * (self.config["data"]["normalize_params"]['max'] - self.config["data"]["normalize_params"]['min']) + self.config["data"]["normalize_params"]['min']
         print('y, y_hat', y, y_hat)
         print('y.shape, y_hat.shape', y.shape, y_hat.shape)
 
