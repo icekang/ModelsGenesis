@@ -38,6 +38,7 @@ def get_sorted_patient_images(patient_dir: Path, verbose=True):
 
 def read_an_image(image_absolute_path: Path):
     image = cv2.imread(str(image_absolute_path), cv2.IMREAD_GRAYSCALE)
+    image = cv2.resize(image, (224, 224))
     image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
     return image
 
