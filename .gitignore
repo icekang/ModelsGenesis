@@ -20,3 +20,4 @@ datasets/**/*
 !datasets/luna16/download.sh
 generated_cubes/
 pretrained_weights/
+notebooks/predictions/
